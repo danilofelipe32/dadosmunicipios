@@ -255,80 +255,87 @@
   .alert-box strong { color: var(--primary-light); display: block; margin-bottom: 4px; }
 
   @media print {
-    body { background: white !important; color: #000 !important; font-size: 10pt; line-height: 1.4; }
+    body { background: white !important; color: #000 !important; font-size: 10.5pt; line-height: 1.5; margin: 0; padding: 0; }
     .city-nav, .info-btn, .insight-modal, .badges-row, .btn-pdf, .alert-icon { display: none !important; }
-    .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+    .container { max-width: 100% !important; padding: 20px 40px !important; margin: 0 !important; width: 100% !important; }
     
     header { 
-      padding: 40px 30px !important; 
-      background: #0F52BA !important; 
-      color: white !important;
-      margin-bottom: 40px; 
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      padding: 60px 0 40px 0 !important; 
+      margin-bottom: 20px !important; 
+      background: none !important; 
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      border: none !important;
     }
     header h1 { 
-      color: white !important; 
-      -webkit-text-fill-color: white !important; 
-      text-transform: uppercase; 
-      font-size: 28pt !important; 
+      color: #777 !important; 
+      -webkit-text-fill-color: #777 !important; 
+      font-size: 32pt !important; 
+      font-weight: 800 !important; 
       margin: 0 !important;
       letter-spacing: 2px;
+      line-height: 1.1;
     }
-    header h2 { color: rgba(255,255,255,0.8) !important; font-size: 12pt !important; margin-top: 5px !important; text-align: left !important; }
+    header h2 { 
+      color: #999 !important; 
+      font-size: 14pt !important; 
+      margin-top: 10px !important; 
+      text-transform: uppercase;
+      letter-spacing: 2px !important;
+      font-weight: 400 !important;
+    }
     
     .section-title { 
       color: #0F52BA !important; 
       border-bottom: 2px solid #0F52BA !important; 
-      padding-bottom: 5px !important; 
-      margin-top: 40px !important;
-      font-size: 12pt !important;
+      padding-bottom: 6px !important; 
+      margin: 50px 0 25px 0 !important;
+      font-size: 13pt !important;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
+      display: block !important;
+      width: 100%;
     }
     .section-title::after { display: none; }
 
     .kpi-grid { 
-      display: flex !important; 
-      flex-wrap: wrap;
-      gap: 0 !important; 
-      border: none !important; 
-      margin: 20px 0 40px 0 !important; 
+      display: grid !important; 
+      grid-template-columns: repeat(3, 1fr) !important; 
+      gap: 20px !important;
+      margin-bottom: 40px !important;
     }
     .card-premium { 
       background: none !important; 
       border: none !important;
-      border-right: 1px solid #ddd !important;
       box-shadow: none !important; 
-      padding: 10px 20px !important;
-      flex: 1;
-      min-width: 150px;
-      page-break-inside: avoid;
+      padding: 0 !important;
     }
-    .card-premium:last-child { border-right: none !important; }
-    .kpi-label { color: #666 !important; font-size: 8pt !important; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px !important; }
-    .kpi-val { color: #000 !important; font-size: 22pt !important; font-weight: 900 !important; margin: 0 !important; }
-    .kpi-src { display: none; }
+    .kpi-label { color: #888 !important; font-size: 7.5pt !important; text-transform: uppercase; font-weight: 700; margin-bottom: 5px !important; }
+    .kpi-val { color: #0F52BA !important; font-size: 24pt !important; font-weight: 900 !important; margin: 0 !important; }
 
-    .table-container { border: none !important; margin-bottom: 30px !important; }
-    table { width: 100% !important; border-collapse: collapse !important; }
-    th { border-bottom: 2px solid #000 !important; color: #000 !important; font-size: 9pt !important; padding: 10px 5px !important; text-align: left !important; background: none !important; }
-    td { border-bottom: 1px solid #eee !important; color: #333 !important; font-size: 9pt !important; padding: 10px 5px !important; }
+    .table-container { border: none !important; margin-bottom: 40px !important; }
+    table { width: 100% !important; border-collapse: collapse !important; border-top: 2px solid #000; }
+    th { border-bottom: 1px solid #ddd !important; color: #000 !important; font-size: 9pt !important; padding: 12px 8px !important; text-align: left !important; text-transform: uppercase; font-weight: 800; }
+    td { border-bottom: 1px solid #f0f0f0 !important; color: #444 !important; font-size: 10.5pt !important; padding: 12px 8px !important; }
     
     .alert-box { 
-      background: #fdfdfd !important; border: none !important; 
-      border-left: 5px solid #0F52BA !important; padding: 20px !important; 
-      margin: 20px 0 !important;
+      background: none !important; border: none !important; 
+      border-left: 4px solid #0F52BA !important; padding: 10px 20px !important; 
+      margin: 30px 0 !important;
     }
     .alert-box strong { color: #000 !important; font-size: 11pt; }
 
-    .chart-card { border: none !important; background: none !important; padding: 0 !important; margin-bottom: 40px !important; }
-    .chart-card h3 { color: #0F52BA !important; border-bottom: 1px solid #eee; padding-bottom: 10px; font-weight: 700; }
-    .chart-wrap { height: 250px !important; }
-    @page { margin: 1cm; padding: 0; }
+    /* Quebras de página específicas */
+    #saneamento-section { page-break-before: always; }
+    #visualizacao-section { page-break-before: always; }
+
+    .chart-card { border: none !important; background: none !important; margin-bottom: 30px !important; page-break-inside: avoid; }
+    .chart-card h3 { color: #0F52BA !important; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 11pt; }
+    .chart-wrap { height: 280px !important; }
+    @page { size: A4; margin: 15mm; }
   }
 
   .btn-pdf {
@@ -393,8 +400,9 @@
 
 <div class="container">
   
-  <div class="section-title">📌 Indicadores Gerais de Impacto</div>
-  <div class="kpi-grid">
+  <section id="impacto-section">
+    <div class="section-title">📌 Indicadores Gerais de Impacto</div>
+    <div class="kpi-grid">
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('pop')">i</div>
       <div class="kpi-label">População Total</div>
@@ -455,9 +463,11 @@
       <div class="kpi-val t-red" id="k-gra">-</div>
       <div class="kpi-src">DATASUS (10-19 Anos)</div>
     </div>
-  </div>
+    </div>
+  </section>
 
-  <div class="section-title">💼 Dimensão Socioeconômica</div>
+  <section id="socio-section">
+    <div class="section-title">💼 Dimensão Socioeconômica</div>
   <div class="table-container">
     <table>
       <thead>
@@ -479,9 +489,11 @@
         </tr>
       </tbody>
     </table>
-  </div>
+    </div>
+  </section>
 
-  <div class="section-title">🛡️ Proteção e Risco Social</div>
+  <section id="protecao-section">
+    <div class="section-title">🛡️ Proteção e Risco Social</div>
   <div class="table-container">
     <table>
       <thead>
@@ -517,9 +529,11 @@
       <p id="insight-desc">Explicação técnica sobre o indicador.</p>
       <div class="insight-badge" id="insight-local">Insight baseado nos dados locais.</div>
     </div>
-  </div>
+    </div>
+  </section>
 
-  <div class="section-title">💧 Saneamento Básico</div>
+  <section id="saneamento-section">
+    <div class="section-title">💧 Saneamento Básico</div>
   <div class="table-container">
     <table>
       <thead>
@@ -545,9 +559,11 @@
         </tr>
       </tbody>
     </table>
-  </div>
+    </div>
+  </section>
 
-  <div class="section-title">📈 Painel de Visualização Analítica</div>
+  <section id="visualizacao-section">
+    <div class="section-title">📈 Painel de Visualização Analítica</div>
   <div class="charts-grid">
     <div class="chart-card">
       <div class="info-btn" onclick="showInsight('cSan')">i</div>
@@ -565,7 +581,7 @@
       <div class="chart-wrap"><canvas id="cLetal"></canvas></div>
     </div>
   </div>
-
+</section>
 </div>
 
 <script>
@@ -715,43 +731,83 @@ function initTabs() {
 
 function generatePDF() {
   const city = document.getElementById('city-select').value;
-  const element = document.querySelector('.container');
   const header = document.querySelector('header');
   
-  // Criar clone estruturado para o PDF
+  // Criar container mestre para o PDF
   const content = document.createElement('div');
-  content.style.padding = '20px';
   content.style.background = '#ffffff';
-  
-  // Título do Relatório
-  const reportHeading = document.createElement('div');
-  reportHeading.style.textAlign = 'right';
-  reportHeading.style.fontSize = '8pt';
-  reportHeading.style.color = '#999';
-  reportHeading.style.marginBottom = '10px';
-  reportHeading.innerText = `Gerado em: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`;
-  content.appendChild(reportHeading);
 
-  content.appendChild(header.cloneNode(true));
-  content.appendChild(element.cloneNode(true));
+  // Helper para metadados (topo de cada página)
+  const getMeta = () => `
+    <div style="display:flex; justify-content:space-between; font-size:8pt; color:#999; border-bottom:1px solid #777; padding-bottom:5px; margin-bottom:15px; font-family:Inter,sans-serif;">
+      <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</span>
+      <span>Mapeamento Sociodemográfico Regional - 12 Municípios</span>
+    </div>`;
 
-  // Limpeza fina do conteúdo clonado
+  // Helper para rodapé (fim de cada página)
+  const getFooter = (num) => `
+    <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:8pt; color:#777; border-top:1px solid #777; padding-top:5px; font-family:Inter,sans-serif;">
+      <span>https://dadosmunicipios2direc.vercel.app</span>
+      <span>${num}/3</span>
+    </div>`;
+
+  // PÁGINA 1: Header + Impacto + Socio + Proteção
+  const p1 = document.createElement('div');
+  p1.style.padding = '15mm 20mm';
+  p1.innerHTML = getMeta() + 
+                 header.outerHTML + 
+                 document.getElementById('impacto-section').outerHTML + 
+                 document.getElementById('socio-section').outerHTML + 
+                 document.getElementById('protecao-section').outerHTML + 
+                 document.querySelector('.alert-box').outerHTML +
+                 getFooter(1);
+
+  // PÁGINA 2: Saneamento + Charts 1 e 2
+  const p2 = document.createElement('div');
+  p2.style.padding = '15mm 20mm';
+  p2.style.pageBreakBefore = 'always';
+  p2.innerHTML = getMeta() + 
+                 document.getElementById('saneamento-section').outerHTML + 
+                 `<div class="section-title">📈 Painel de Visualização Analítica</div>` +
+                 document.querySelectorAll('.chart-card')[0].outerHTML + 
+                 document.querySelectorAll('.chart-card')[1].outerHTML + 
+                 getFooter(2);
+
+  // PÁGINA 3: Chart Letalidade
+  const p3 = document.createElement('div');
+  p3.style.padding = '15mm 20mm';
+  p3.style.pageBreakBefore = 'always';
+  p3.innerHTML = getMeta() + 
+                 document.querySelectorAll('.chart-card')[2].outerHTML + 
+                 getFooter(3);
+
+  content.appendChild(p1);
+  content.appendChild(p2);
+  content.appendChild(p3);
+
+  // Limpeza de botões e ícones
   content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon').forEach(el => el.remove());
+  
+  // Forçar títulos azuis sólidos no PDF
+  content.querySelectorAll('.section-title').forEach(el => {
+    el.style.color = '#0F52BA';
+    el.style.borderBottom = '2px solid #0F52BA';
+  });
 
   const opt = {
-    margin: [10, 10, 10, 10],
-    filename: `Relatorio_Sociodemografico_${city}.pdf`,
-    image: { type: 'jpeg', quality: 1.0 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    margin: 0,
+    filename: `Relatorio_${city}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 3, useCORS: true, logging: false, letterRendering: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  // Mostrar indicador de carregamento (opcional, mas bom pra UX)
-  const originalText = document.querySelector('.btn-pdf span').innerText;
-  document.querySelector('.btn-pdf span').innerText = 'Gerando...';
+  const btn = document.querySelector('.btn-pdf span');
+  const oldText = btn.innerText;
+  btn.innerText = 'Gerando...';
 
   html2pdf().set(opt).from(content).save().then(() => {
-    document.querySelector('.btn-pdf span').innerText = originalText;
+    btn.innerText = oldText;
   });
 }
 
@@ -797,7 +853,6 @@ function selectCity(cityId) {
 function renderCharts(agu, esg, letal, name) {
   Chart.defaults.color = '#8d909e';
   Chart.defaults.font.family = 'Inter';
-  Chart.defaults.font.weight = '500';
 
   if(activeChartSan) activeChartSan.destroy();
   activeChartSan = new Chart(document.getElementById('cSan'), {
@@ -807,19 +862,10 @@ function renderCharts(agu, esg, letal, name) {
       datasets: [{
         data: [agu, 74.1, esg, 25.8],
         backgroundColor: ['#10b981','#065f46','#ef4444','#991b1b'],
-        borderRadius: 8,
-        barThickness: 40
+        borderRadius: 4
       }]
     },
-    options: { 
-      plugins:{legend:{display:false}}, 
-      scales:{
-        y:{max:100, grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false}},
-        x:{grid:{display:false}, border:{display:false}}
-      }, 
-      responsive:true, 
-      maintainAspectRatio:false 
-    }
+    options: { plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false }
   });
 
   if(activeChartAge) activeChartAge.destroy();
@@ -830,26 +876,10 @@ function renderCharts(agu, esg, letal, name) {
       datasets: [{
         data: [30, 60, 10], 
         backgroundColor: ['#0F52BA','#b0c6ff','#f59e0b'],
-        borderWidth: 0,
-        hoverOffset: 10
+        borderWidth: 0
       }]
     },
-    options: { 
-      plugins:{
-        legend:{
-          position:'bottom', 
-          labels:{
-            color:'#e3e2e8', 
-            padding: 20,
-            usePointStyle: true,
-            pointStyle: 'circle'
-          }
-        }
-      }, 
-      responsive:true, 
-      maintainAspectRatio:false, 
-      cutout:'75%'
-    }
+    options: { plugins: { legend: { position: 'bottom' } }, responsive:true, maintainAspectRatio:false, cutout:'70%' }
   });
 
   if(activeChartLetal) activeChartLetal.destroy();
@@ -858,18 +888,15 @@ function renderCharts(agu, esg, letal, name) {
     data: {
       labels: ['2023 (Ref)','2024 (Proj)'],
       datasets: [{
-        data: [letal*1.15, letal], 
-        backgroundColor: ['rgba(255,255,255,0.1)','#0F52BA'],
-        borderRadius: 8,
+        data: [0, letal], // Proporção do modelo: 2023 vazio, 2024 blue
+        backgroundColor: ['rgba(0,0,0,0.05)','#0F52BA'],
+        borderRadius: 4,
         barThickness: 50
       }]
     },
     options: { 
       plugins:{legend:{display:false}}, 
-      scales:{
-        y:{grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false}},
-        x:{grid:{display:false}, border:{display:false}}
-      }, 
+      scales:{ y:{ beginAtZero: true, max:100 } },
       responsive:true, 
       maintainAspectRatio:false 
     }
