@@ -44,13 +44,39 @@
     backdrop-filter: var(--blur);
     padding: 20px 32px; 
     display: flex; 
-    gap: 12px; 
-    overflow-x: auto; 
+    flex-direction: column;
+    gap: 16px; 
     position: sticky; 
     top: 0; 
     z-index: 100;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
+  .nav-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .search-container {
+    display: flex;
+    align-items: center;
+    background: var(--surface-low);
+    border-radius: 12px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+    width: 100%;
+    max-width: 400px;
+  }
+  .search-input {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    padding: 4px 8px;
+    width: 100%;
+    outline: none;
+    font-size: 0.9rem;
+  }
+  .search-input::placeholder { color: var(--text-dim); }
   .city-btn { 
     background: var(--surface-low); 
     border: none; 
@@ -243,7 +269,13 @@
 </head>
 <body>
 
-<nav class="city-nav" id="nav-container"></nav>
+<nav class="city-nav">
+  <div class="search-container">
+    <span style="opacity:0.5; margin-right:8px;">🔍</span>
+    <input type="text" id="city-search" class="search-input" placeholder="Buscar município..." oninput="filterCities()">
+  </div>
+  <div class="nav-scroll" id="nav-container"></div>
+</nav>
 
 <header>
   <h1><img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" width="36" style="filter:invert(1)"/> Mapeamento Sociodemográfico</h1>
@@ -556,6 +588,20 @@ function closeInsight() {
 window.onclick = function(event) {
   const modal = document.getElementById('insight-modal');
   if (event.target == modal) closeInsight();
+}
+
+function filterCities() {
+  const query = document.getElementById('city-search').value.toLowerCase();
+  const buttons = document.querySelectorAll('.city-btn');
+  
+  buttons.forEach(btn => {
+    const cityName = btn.innerText.toLowerCase();
+    if (cityName.includes(query)) {
+      btn.style.display = 'inline-block';
+    } else {
+      btn.style.display = 'none';
+    }
+  });
 }
 
 let activeChartSan, activeChartAge, activeChartLetal;
