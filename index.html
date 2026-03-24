@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Mapeamento Sociodemográfico Regional - 12 Municípios</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -253,11 +254,53 @@
   .alert-icon { font-size: 24px; }
   .alert-box strong { color: var(--primary-light); display: block; margin-bottom: 4px; }
 
+  @media print {
+    body { background: white !important; color: black !important; }
+    .city-nav, .info-btn, .insight-modal, .badges-row, .btn-pdf { display: none !important; }
+    .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+    .card-premium { 
+      background: white !important; 
+      border: 1px solid #ddd !important; 
+      box-shadow: none !important; 
+      color: black !important; 
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .kpi-val { color: var(--primary) !important; font-size: 1.8rem !important; }
+    .section-title { color: black !important; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    .table-container { border: 1px solid #eee !important; box-shadow: none !important; overflow: visible !important; }
+    table { min-width: 100% !important; }
+    th { background: #f8f9fa !important; border-bottom: 1px solid #eee !important; color: black !important; }
+    td { color: #333 !important; border-bottom: 1px solid #eee !important; }
+    .chart-card { background: white !important; border: 1px solid #eee !important; page-break-inside: avoid; }
+    .chart-wrap { height: 250px !important; }
+    @page { margin: 1cm; }
+  }
+
+  .btn-pdf {
+    background: transparent;
+    border: 1px solid var(--primary-light);
+    color: var(--primary-light);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 15px;
+    white-space: nowrap;
+  }
+  .btn-pdf:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-1px); }
   @media (max-width: 768px) {
     .container { padding: 0 16px; }
     .section-title { font-size: 1.25rem; margin: 40px 0 20px; }
     .chart-wrap { height: 220px; }
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .btn-pdf span { display: none; }
+    .btn-pdf { padding: 10px; }
   }
 
   @media (max-width: 480px) {
@@ -278,6 +321,10 @@
     <select id="city-select" class="city-select" onchange="selectCity(this.value)">
       <!-- Populando via JS -->
     </select>
+    <button class="btn-pdf" onclick="generatePDF()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span>Relatório PDF</span>
+    </button>
   </div>
 </nav>
 
@@ -610,6 +657,30 @@ function initTabs() {
     select.appendChild(opt);
   });
   selectCity('Parnamirim');
+}
+
+function generatePDF() {
+  const city = document.getElementById('city-select').value;
+  const element = document.querySelector('.container');
+  const header = document.querySelector('header');
+  
+  // Criar clone do header para o PDF para garantir que apareça bem
+  const content = document.createElement('div');
+  content.appendChild(header.cloneNode(true));
+  content.appendChild(element.cloneNode(true));
+
+  // Ajustar estilos para oPDF (remover IDs repetidos se necessário ou botões extras)
+  content.querySelectorAll('.info-btn, .btn-pdf').forEach(el => el.remove());
+
+  const opt = {
+    margin: [10, 10, 10, 10],
+    filename: `Relatorio_Sociodemografico_${city}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0d0e12' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(content).save();
 }
 
 function selectCity(cityId) {
