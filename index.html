@@ -552,7 +552,8 @@ const InsightsDB = {
 function showInsight(id) {
   const modal = document.getElementById('insight-modal');
   const data = InsightsDB[id];
-  const city = document.querySelector('.city-btn.active').innerText;
+  const select = document.getElementById('city-select');
+  const city = select.options[select.selectedIndex].text;
   
   document.getElementById('insight-title').innerText = data.t;
   document.getElementById('insight-desc').innerText = data.d;
