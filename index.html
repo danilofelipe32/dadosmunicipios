@@ -255,26 +255,52 @@
   .alert-box strong { color: var(--primary-light); display: block; margin-bottom: 4px; }
 
   @media print {
-    body { background: white !important; color: black !important; }
-    .city-nav, .info-btn, .insight-modal, .badges-row, .btn-pdf { display: none !important; }
+    body { background: white !important; color: #1a1a1a !important; font-size: 11pt; }
+    .city-nav, .info-btn, .insight-modal, .badges-row, .btn-pdf, .alert-icon { display: none !important; }
     .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+    header { padding: 20px 0 !important; border-bottom: 3px solid #0F52BA; margin-bottom: 30px; background: none !important; }
+    header h1 { color: #0F52BA !important; -webkit-text-fill-color: initial !important; justify-content: flex-start !important; font-size: 24pt !important; }
+    header h2 { color: #555 !important; font-size: 14pt !important; letter-spacing: 1px !important; text-align: left !important; }
+    
+    .section-title { 
+      color: #0F52BA !important; 
+      border-bottom: 1px solid #eee !important; 
+      padding-bottom: 8px !important; 
+      margin-top: 30px !important;
+      font-size: 14pt !important;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .section-title::after { display: none; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr) !important; gap: 15px !important; border: none !important; }
     .card-premium { 
       background: white !important; 
-      border: 1px solid #ddd !important; 
+      border: none !important;
+      border-left: 2px solid #eee !important;
       box-shadow: none !important; 
-      color: black !important; 
+      padding: 15px !important;
       page-break-inside: avoid;
-      break-inside: avoid;
     }
-    .kpi-val { color: var(--primary) !important; font-size: 1.8rem !important; }
-    .section-title { color: black !important; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-    .table-container { border: 1px solid #eee !important; box-shadow: none !important; overflow: visible !important; }
-    table { min-width: 100% !important; }
-    th { background: #f8f9fa !important; border-bottom: 1px solid #eee !important; color: black !important; }
-    td { color: #333 !important; border-bottom: 1px solid #eee !important; }
-    .chart-card { background: white !important; border: 1px solid #eee !important; page-break-inside: avoid; }
-    .chart-wrap { height: 250px !important; }
-    @page { margin: 1cm; }
+    .kpi-label { color: #777 !important; font-size: 8pt !important; }
+    .kpi-val { color: #1a1a1a !important; font-size: 18pt !important; font-weight: 700 !important; }
+    .kpi-src { display: none; }
+
+    .table-container { border: none !important; margin-bottom: 20px !important; }
+    table { width: 100% !important; border-collapse: collapse !important; }
+    th { background: #fcfcfc !important; border-bottom: 2px solid #0F52BA !important; color: #1a1a1a !important; font-size: 9pt !important; padding: 12px 8px !important; }
+    td { border-bottom: 1px solid #efefef !important; color: #444 !important; font-size: 10pt !important; padding: 12px 8px !important; }
+    
+    .alert-box { 
+      background: #f8f9fa !important; border: 1px solid #eee !important; 
+      border-left: 4px solid #0F52BA !important; padding: 15px !important; 
+    }
+    .alert-box strong { color: #0F52BA !important; }
+
+    .chart-card { border: 1px solid #f0f0f0 !important; background: white !important; padding: 20px !important; }
+    .chart-card h3 { color: #777 !important; border-bottom: 1px solid #f9f9f9; padding-bottom: 5px; }
+    .chart-wrap { height: 200px !important; }
+    @page { margin: 1.5cm; }
   }
 
   .btn-pdf {
@@ -664,23 +690,41 @@ function generatePDF() {
   const element = document.querySelector('.container');
   const header = document.querySelector('header');
   
-  // Criar clone do header para o PDF para garantir que apareça bem
+  // Criar clone estruturado para o PDF
   const content = document.createElement('div');
+  content.style.padding = '20px';
+  content.style.background = '#ffffff';
+  
+  // Título do Relatório
+  const reportHeading = document.createElement('div');
+  reportHeading.style.textAlign = 'right';
+  reportHeading.style.fontSize = '8pt';
+  reportHeading.style.color = '#999';
+  reportHeading.style.marginBottom = '10px';
+  reportHeading.innerText = `Gerado em: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`;
+  content.appendChild(reportHeading);
+
   content.appendChild(header.cloneNode(true));
   content.appendChild(element.cloneNode(true));
 
-  // Ajustar estilos para oPDF (remover IDs repetidos se necessário ou botões extras)
-  content.querySelectorAll('.info-btn, .btn-pdf').forEach(el => el.remove());
+  // Limpeza fina do conteúdo clonado
+  content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon').forEach(el => el.remove());
 
   const opt = {
     margin: [10, 10, 10, 10],
     filename: `Relatorio_Sociodemografico_${city}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0d0e12' },
+    image: { type: 'jpeg', quality: 1.0 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(content).save();
+  // Mostrar indicador de carregamento (opcional, mas bom pra UX)
+  const originalText = document.querySelector('.btn-pdf span').innerText;
+  document.querySelector('.btn-pdf span').innerText = 'Gerando...';
+
+  html2pdf().set(opt).from(content).save().then(() => {
+    document.querySelector('.btn-pdf span').innerText = originalText;
+  });
 }
 
 function selectCity(cityId) {
