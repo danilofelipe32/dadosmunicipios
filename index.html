@@ -9,20 +9,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d0e12;
-    --surface: #121317;
-    --surface-low: #1a1b20;
-    --surface-card: rgba(31, 31, 36, 0.6);
+    --bg: #06070a;
+    --surface: #0a0c10;
+    --surface-low: #0f1218;
+    --surface-card: rgba(255, 255, 255, 0.02);
     --primary: #0F52BA;
-    --primary-light: #b0c6ff;
+    --primary-light: #5294e2;
     --success: #10b981;
     --danger: #ef4444;
     --warning: #f59e0b;
-    --text: #e3e2e8;
-    --text-muted: #8d909e;
-    --text-dim: #434653;
-    --radius: 16px;
-    --blur: blur(20px);
+    --text: #ffffff;
+    --text-muted: #94a3b8;
+    --text-dim: #475569;
+    --radius: 20px;
+    --blur: blur(24px);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { 
@@ -137,20 +137,23 @@
   
   /* Cards Premium */
   .card-premium {
-    background: var(--surface-card);
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
     backdrop-filter: var(--blur);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radius);
-    padding: 28px;
+    padding: 32px;
     position: relative;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
   .card-premium:hover {
-    border-color: rgba(15, 82, 186, 0.5);
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(15, 82, 186, 0.15);
+    border-color: rgba(15, 82, 186, 0.4);
+    background: linear-gradient(135deg, rgba(15, 82, 186, 0.05) 0%, rgba(255,255,255,0.02) 100%);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 15px rgba(15, 82, 186, 0.1);
   }
   .card-premium::before {
     content: '';
@@ -160,9 +163,9 @@
     pointer-events: none;
   }
 
-  .kpi-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
-  .kpi-val { font-size: 2.4rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 10px; transition: color 0.3s; }
-  .kpi-src { font-size: 0.65rem; color: var(--text-dim); }
+  .kpi-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; opacity: 0.8; }
+  .kpi-val { font-size: 2.8rem; font-weight: 900; letter-spacing: -2px; margin: 0; }
+  .kpi-src { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
 
   /* Buttons & Insights */
   .info-btn {
@@ -215,22 +218,30 @@
 
   /* Tables */
   .table-container { 
-    background: var(--surface-card); 
+    background: rgba(255, 255, 255, 0.01); 
     border-radius: var(--radius); 
     overflow-x: auto; 
-    border: 1px solid rgba(255,255,255,0.05); 
+    border: 1px solid rgba(255, 255, 255, 0.05); 
     margin-bottom: 40px; 
     -webkit-overflow-scrolling: touch;
+    backdrop-filter: blur(10px);
   }
   table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
   th { padding: 16px; background: rgba(255, 255, 255, 0.02); color: var(--text); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
   td { padding: 16px; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 0.85rem; }
 
   /* Charts */
-  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 32px; margin-bottom: 80px; }
-  .chart-card { background: var(--surface-card); border-radius: var(--radius); padding: 24px; border: 1px solid rgba(255,255,255,0.05); position: relative; }
-  .chart-card h3 { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px; }
-  .chart-wrap { height: 250px; }
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 32px; margin-bottom: 80px; }
+  .chart-card { 
+    background: rgba(255, 255, 255, 0.01); 
+    border-radius: var(--radius); 
+    padding: 32px; 
+    border: 1px solid rgba(255, 255, 255, 0.05); 
+    position: relative; 
+    backdrop-filter: blur(10px);
+  }
+  .chart-card h3 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 24px; letter-spacing: 2px; opacity: 0.8; }
+  .chart-wrap { height: 300px; }
 
   /* Status Colors */
   .t-blue { color: #3b82f6; }
