@@ -271,71 +271,66 @@
     .container { max-width: 100% !important; padding: 20px 40px !important; margin: 0 !important; width: 100% !important; }
     
     header { 
-      padding: 60px 0 40px 0 !important; 
+      padding: 40px 0 30px 0 !important; 
       margin-bottom: 20px !important; 
       background: none !important; 
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       text-align: center !important;
-      border: none !important;
+      border-bottom: 2px solid #000 !important;
     }
     header h1 { 
-      color: #777 !important; 
-      -webkit-text-fill-color: #777 !important; 
-      font-size: 32pt !important; 
+      color: #000 !important; 
+      -webkit-text-fill-color: #000 !important; 
+      font-size: 28pt !important; 
       font-weight: 800 !important; 
       margin: 0 !important;
-      letter-spacing: 2px;
-      line-height: 1.1;
+      letter-spacing: 1px;
     }
     header h2 { 
-      color: #999 !important; 
-      font-size: 14pt !important; 
-      margin-top: 10px !important; 
+      color: #000 !important; 
+      font-size: 12pt !important; 
+      margin-top: 5px !important; 
       text-transform: uppercase;
-      letter-spacing: 2px !important;
-      font-weight: 400 !important;
+      font-weight: 600 !important;
     }
     
     .section-title { 
-      color: #0F52BA !important; 
-      border-bottom: 2px solid #0F52BA !important; 
-      padding-bottom: 6px !important; 
-      margin: 50px 0 25px 0 !important;
-      font-size: 13pt !important;
+      color: #000 !important; 
+      border-bottom: 1.5px solid #000 !important; 
+      padding-bottom: 4px !important; 
+      margin: 40px 0 20px 0 !important;
+      font-size: 12pt !important;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
       display: block !important;
       width: 100%;
     }
-    .section-title::after { display: none; }
 
     .kpi-grid { 
       display: grid !important; 
       grid-template-columns: repeat(3, 1fr) !important; 
-      gap: 20px !important;
-      margin-bottom: 40px !important;
+      gap: 15px !important;
+      margin-bottom: 30px !important;
     }
     .card-premium { 
       background: none !important; 
-      border: none !important;
+      border: 1px solid #eee !important;
       box-shadow: none !important; 
-      padding: 0 !important;
+      padding: 10px !important;
     }
-    .kpi-label { color: #888 !important; font-size: 7.5pt !important; text-transform: uppercase; font-weight: 700; margin-bottom: 5px !important; }
-    .kpi-val { color: #0F52BA !important; font-size: 24pt !important; font-weight: 900 !important; margin: 0 !important; }
+    .kpi-label { color: #000 !important; font-size: 8pt !important; text-transform: uppercase; font-weight: 700; }
+    .kpi-val { color: #000 !important; font-size: 22pt !important; font-weight: 900 !important; margin: 0 !important; }
 
-    .table-container { border: none !important; margin-bottom: 40px !important; }
-    table { width: 100% !important; border-collapse: collapse !important; border-top: 2px solid #000; }
-    th { border-bottom: 1px solid #ddd !important; color: #000 !important; font-size: 9pt !important; padding: 12px 8px !important; text-align: left !important; text-transform: uppercase; font-weight: 800; }
-    td { border-bottom: 1px solid #f0f0f0 !important; color: #444 !important; font-size: 10.5pt !important; padding: 12px 8px !important; }
+    .table-container { border: none !important; margin-bottom: 30px !important; }
+    table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #000 !important; }
+    th { border: 1px solid #000 !important; background: #f9f9f9 !important; color: #000 !important; font-size: 9pt !important; padding: 10px !important; text-align: left !important; font-weight: 800; }
+    td { border: 1px solid #000 !important; color: #000 !important; font-size: 10pt !important; padding: 10px !important; }
     
     .alert-box { 
-      background: none !important; border: none !important; 
-      border-left: 4px solid #0F52BA !important; padding: 10px 20px !important; 
-      margin: 30px 0 !important;
+      background: #f9f9f9 !important; border: 1px solid #000 !important; 
+      padding: 15px !important; margin: 25px 0 !important;
     }
     .alert-box strong { color: #000 !important; font-size: 11pt; }
 
@@ -395,7 +390,11 @@
     </select>
     <button class="btn-pdf" onclick="generatePDF()">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-      <span>Relatório PDF</span>
+      <span>Relatório Simples</span>
+    </button>
+    <button class="btn-pdf" onclick="generateABNTReport()" style="border-color: #ffffff; color: #ffffff;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <span>Relatório ABNT</span>
     </button>
   </div>
 </nav>
@@ -713,7 +712,6 @@ function showInsight(id) {
   document.getElementById('insight-title').innerText = data.t;
   document.getElementById('insight-desc').innerText = data.d;
   document.getElementById('insight-local').innerText = `Contexto para ${city}: ${data.i}`;
-  
   modal.style.display = 'flex';
 }
 
@@ -721,7 +719,6 @@ function closeInsight() {
   document.getElementById('insight-modal').style.display = 'none';
 }
 
-// Fechar modal ao clicar fora
 window.onclick = function(event) {
   const modal = document.getElementById('insight-modal');
   if (event.target == modal) closeInsight();
@@ -729,9 +726,7 @@ window.onclick = function(event) {
 
 function initTabs() {
   const select = document.getElementById('city-select');
-  
   Object.keys(DB).forEach((city) => {
-    // Dropdown options
     const opt = document.createElement('option');
     opt.value = city;
     opt.innerText = city;
@@ -744,25 +739,22 @@ function generatePDF() {
   const city = document.getElementById('city-select').value;
   const header = document.querySelector('header');
   
-  // Criar container mestre para o PDF
   const content = document.createElement('div');
   content.style.background = '#ffffff';
+  content.style.color = '#000000';
 
-  // Helper para metadados (topo de cada página)
   const getMeta = () => `
-    <div style="display:flex; justify-content:space-between; font-size:8pt; color:#999; border-bottom:1px solid #777; padding-bottom:5px; margin-bottom:15px; font-family:Inter,sans-serif;">
+    <div style="display:flex; justify-content:space-between; font-size:8pt; color:#000; border-bottom:1px solid #000; padding-bottom:5px; margin-bottom:15px; font-family:Inter,sans-serif;">
       <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</span>
       <span>Mapeamento Sociodemográfico Regional - 12 Municípios</span>
     </div>`;
 
-  // Helper para rodapé (fim de cada página)
   const getFooter = (num) => `
-    <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:8pt; color:#777; border-top:1px solid #777; padding-top:5px; font-family:Inter,sans-serif;">
+    <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:8pt; color:#000; border-top:1px solid #000; padding-top:5px; font-family:Inter,sans-serif;">
       <span>https://dadosmunicipios2direc.vercel.app</span>
       <span>${num}/3</span>
     </div>`;
 
-  // PÁGINA 1: Header + Impacto + Socio + Proteção
   const p1 = document.createElement('div');
   p1.style.padding = '15mm 20mm';
   p1.innerHTML = getMeta() + 
@@ -773,18 +765,16 @@ function generatePDF() {
                  document.querySelector('.alert-box').outerHTML +
                  getFooter(1);
 
-  // PÁGINA 2: Saneamento + Charts 1 e 2
   const p2 = document.createElement('div');
   p2.style.padding = '15mm 20mm';
   p2.style.pageBreakBefore = 'always';
   p2.innerHTML = getMeta() + 
                  document.getElementById('saneamento-section').outerHTML + 
-                 `<div class="section-title">📈 Painel de Visualização Analítica</div>` +
+                 `<div class="section-title">Painel de Visualização Analitica</div>` +
                  document.querySelectorAll('.chart-card')[0].outerHTML + 
                  document.querySelectorAll('.chart-card')[1].outerHTML + 
                  getFooter(2);
 
-  // PÁGINA 3: Chart Letalidade
   const p3 = document.createElement('div');
   p3.style.padding = '15mm 20mm';
   p3.style.pageBreakBefore = 'always';
@@ -796,21 +786,26 @@ function generatePDF() {
   content.appendChild(p2);
   content.appendChild(p3);
 
-  // Limpeza de botões e ícones
   content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon').forEach(el => el.remove());
   
-  // Forçar títulos azuis sólidos no PDF
   content.querySelectorAll('.section-title').forEach(el => {
-    el.style.color = '#0F52BA';
-    el.style.borderBottom = '2px solid #0F52BA';
+    el.style.color = '#000000';
+    el.style.borderBottom = '1px solid #000000';
+    el.style.margin = '30px 0 15px 0';
+  });
+
+  content.querySelectorAll('.kpi-val, .kpi-label, th, td, h1, h2, p, span, strong').forEach(el => {
+    el.style.color = '#000000';
+    if (el.tagName === 'H1') el.style.webkitTextFillColor = '#000000';
   });
 
   const opt = {
     margin: 0,
     filename: `Relatorio_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 3, useCORS: true, logging: false, letterRendering: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] }
   };
 
   const btn = document.querySelector('.btn-pdf span');
@@ -820,6 +815,165 @@ function generatePDF() {
   html2pdf().set(opt).from(content).save().then(() => {
     btn.innerText = oldText;
   });
+}
+
+function generateABNTReport() {
+  const city = document.getElementById('city-select').value;
+  const d = DB[city];
+  const date = new Date();
+  const year = date.getFullYear();
+  
+  const content = document.createElement('div');
+  content.style.backgroundColor = '#ffffff';
+  content.style.color = '#000000';
+  content.style.fontFamily = '"Times New Roman", Times, serif';
+  content.style.fontSize = '12pt';
+  content.style.lineHeight = '1.5';
+  content.style.textAlign = 'justify';
+
+  // CSS for ABNT
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .abnt-page { padding: 20mm 20mm 20mm 30mm; box-sizing: border-box; position: relative; width: 100%; }
+    .page-break { page-break-after: always; }
+    .abnt-center { text-align: center; }
+    .abnt-bold { font-weight: bold; }
+    .abnt-upper { text-transform: uppercase; }
+    .abnt-title { font-size: 14pt; margin: 50mm 0; }
+    .abnt-footer { position: absolute; bottom: 20mm; left: 0; width: 100%; text-align: center; }
+    .abnt-section-title { font-size: 12pt; font-weight: bold; text-transform: uppercase; margin: 24pt 0 12pt 0; page-break-before: always; }
+    .abnt-section-title.first { page-break-before: auto; }
+    .abnt-subsection-title { font-size: 12pt; font-weight: bold; margin: 18pt 0 12pt 0; }
+    .abnt-table { width: 100%; border-collapse: collapse; margin: 12pt 0; page-break-inside: avoid; }
+    .abnt-table th, .abnt-table td { border: 1px solid black; padding: 8pt; font-size: 10pt; }
+    .abnt-table th { background-color: #f2f2f2; }
+    .abnt-summary-item { display: flex; justify-content: space-between; margin-bottom: 8pt; }
+  `;
+  content.appendChild(style);
+
+  // 1. CAPA
+  const capa = document.createElement('div');
+  capa.className = 'abnt-page abnt-center abnt-upper abnt-bold page-break';
+  capa.innerHTML = `
+    <div style="margin-top: 0;">Mapeamento Sociodemográfico Regional - 12 Municípios</div>
+    <div class="abnt-title">Diagnóstico Sociodemográfico e de Vulnerabilidade:<br>Município de ${city} - RN</div>
+    <div class="abnt-footer">${city}<br>${year}</div>
+  `;
+  content.appendChild(capa);
+
+  // 2. FOLHA DE ROSTO
+  const rosto = document.createElement('div');
+  rosto.className = 'abnt-page abnt-center abnt-upper page-break';
+  rosto.innerHTML = `
+    <div class="abnt-bold">Mapeamento Sociodemográfico Regional</div>
+    <div class="abnt-bold" style="margin: 30mm 0 20mm 0; font-size: 14pt;">${city}</div>
+    <div style="margin-left: 50%; text-align: justify; text-transform: none; font-size: 10pt;">
+      Relatório técnico de indicadores sociais, demográficos e de infraestrutura do município de ${city}, 
+      desenvolvido para fins de análise regional e planejamento de políticas públicas.
+    </div>
+    <div class="abnt-footer abnt-bold">${city}<br>${year}</div>
+  `;
+  content.appendChild(rosto);
+
+  // 3. SUMÁRIO
+  const sumario = document.createElement('div');
+  sumario.className = 'abnt-page page-break';
+  sumario.innerHTML = `
+    <div class="abnt-center abnt-bold abnt-upper" style="margin-bottom: 30pt;">Sumário</div>
+    <div class="abnt-summary-item"><span>1 INTRODUÇÃO</span><span>4</span></div>
+    <div class="abnt-summary-item"><span>2 INDICADORES GERAIS</span><span>5</span></div>
+    <div class="abnt-summary-item"><span>3 DIMENSÃO SOCIOECONÔMICA</span><span>6</span></div>
+    <div class="abnt-summary-item"><span>4 PROTEÇÃO E RISCO SOCIAL</span><span>7</span></div>
+    <div class="abnt-summary-item"><span>5 SANEAMENTO BÁSICO</span><span>8</span></div>
+    <div class="abnt-summary-item"><span>6 CONCLUSÃO</span><span>9</span></div>
+    <div class="abnt-summary-item"><span>REFERÊNCIAS</span><span>10</span></div>
+  `;
+  content.appendChild(sumario);
+
+  // 4. CONTEÚDO (Intro, Indicadores, etc.)
+  const texto = document.createElement('div');
+  texto.className = 'abnt-page';
+  texto.innerHTML = `
+    <div class="abnt-section-title first">1 INTRODUÇÃO</div>
+    <p>Este relatório apresenta um diagnóstico detalhado do município de ${city}, localizado no estado do Rio Grande do Norte. A análise abrange indicadores demográficos, socioeconômicos e de infraestrutura básica, com o objetivo de fornecer subsídios para o entendimento das vulnerabilidades locais.</p>
+    
+    <div class="abnt-section-title">2 INDICADORES GERAIS</div>
+    <p>Os indicadores gerais fornecem uma visão panorâmica da estrutura demográfica e econômica do município. Para ${city}, destacam-se os seguintes valores:</p>
+    <table class="abnt-table">
+      <tr><th>Indicador</th><th>Valor</th><th>Fonte</th></tr>
+      <tr><td>População Total</td><td>${d.pop}</td><td>IBGE (2022)</td></tr>
+      <tr><td>Domicílios</td><td>${d.dom}</td><td>IBGE (2022)</td></tr>
+      <tr><td>IDHM</td><td>${d.idh}</td><td>PNUD</td></tr>
+      <tr><td>PIB Per Capita</td><td>${d.pib}</td><td>IBGE</td></tr>
+      <tr><td>Taxa de Alfabetização</td><td>${d.alf}</td><td>IBGE (2022)</td></tr>
+      <tr><td>Densidade Demográfica</td><td>${d.den} hab/km²</td><td>IBGE</td></tr>
+    </table>
+
+    <div class="abnt-section-title">3 DIMENSÃO SOCIOECONÔMICA</div>
+    <p>A análise socioeconômica de ${city} revela o perfil das famílias e a dependência de programas de assistência governamental:</p>
+    <table class="abnt-table">
+      <thead>
+        <tr><th>Características das Famílias</th><th>% Crianças/Adolescentes</th><th>Renda e Dependência</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>${d.ts_fam}</td>
+          <td>${d.ts_cri}</td>
+          <td>${d.ts_ren}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>O município possui ${d.bf} famílias beneficiárias do Programa Bolsa Família, o que reflete o nível de vulnerabilidade econômica local.</p>
+
+    <div class="abnt-section-title">4 PROTEÇÃO E RISCO SOCIAL</div>
+    <p>Considerando os fatores de risco e segurança pública, o diagnóstico para ${city} indica:</p>
+    <table class="abnt-table">
+      <thead>
+        <tr><th>Áreas de Conflito</th><th>Trabalho Infantil / Segurança</th><th>Uso de Substâncias</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>${d.tr_fac}</td>
+          <td>${d.tr_tra}</td>
+          <td>${d.tr_dro}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="background:#f9f9f9; padding: 10pt; border-left: 3pt solid black; margin-top: 15pt;">
+      <strong>Análise Crítica:</strong> ${d.al}
+    </div>
+
+    <div class="abnt-section-title">5 SANEAMENTO BÁSICO</div>
+    <p>O acesso a serviços básicos de saneamento é um dos principais indicadores de saúde pública. Comparação de ${city} com a média estadual:</p>
+    <table class="abnt-table">
+      <tr><th>Serviço</th><th>Índice Municipal</th><th>Média RN</th></tr>
+      <tr><td>Água Potável</td><td>${d.agu}</td><td>74,1%</td></tr>
+      <tr><td>Esgotamento Sanitário</td><td>${d.esg}</td><td>25,8%</td></tr>
+    </table>
+    <p>Observa-se que o esgotamento sanitário em ${city} apresenta um índice de ${d.esg}, o que exige atenção das autoridades competentes.</p>
+
+    <div class="abnt-section-title">6 CONCLUSÃO</div>
+    <p>Com base nos indicadores apresentados, conclui-se que o município de ${city} apresenta desafios significativos em áreas críticas, especialmente no que tange ao saneamento básico e à proteção social de jovens em áreas de risco. O IDHM de ${d.idh} posiciona o município em um patamar que demanda políticas públicas integradas para a melhoria da qualidade de vida.</p>
+    <p>Recomenda-se a priorização de investimentos em infraestrutura sanitária e no fortalecimento das redes de proteção à criança e ao adolescente, visando mitigar os impactos da vulnerabilidade social identificada.</p>
+
+    <div class="abnt-section-title">REFERÊNCIAS</div>
+    <p>INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA (IBGE). <b>Censo Demográfico 2022</b>. Rio de Janeiro: IBGE, 2023.</p>
+    <p>BRASIL. Ministério do Desenvolvimento e Assistência Social. <b>Cadastro Único</b>. Brasília, 2024.</p>
+    <p>PROGRAMA DAS NAÇÕES UNIDAS PARA O DESENVOLVIMENTO (PNUD). <b>Índice de Desenvolvimento Humano Municipal</b>, 2021.</p>
+    <p>RIO GRANDE DO NORTE. Secretaria de Segurança Pública e Defesa Social (SESED). <b>Relatórios de Crimes Violentos Letais Intencionais</b>. Natal, 2024.</p>
+  `;
+  content.appendChild(texto);
+
+  const opt = {
+    margin: 0,
+    filename: `Relatorio_ABNT_${city}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] }
+  };
+
+  html2pdf().set(opt).from(content).save();
 }
 
 function selectCity(cityId) {
@@ -897,17 +1051,26 @@ function renderCharts(agu, esg, letal, name) {
   activeChartLetal = new Chart(document.getElementById('cLetal'), {
     type: 'bar',
     data: {
-      labels: ['2023 (Ref)','2024 (Proj)'],
+      labels: ['2023 (Referência)','2024 (Projeção)'],
       datasets: [{
-        data: [0, letal], // Proporção do modelo: 2023 vazio, 2024 blue
-        backgroundColor: ['rgba(0,0,0,0.05)','#0F52BA'],
+        data: [100, letal], 
+        backgroundColor: ['rgba(255, 255, 255, 0.1)','#0F52BA'],
         borderRadius: 4,
-        barThickness: 50
+        barThickness: 45
       }]
     },
     options: { 
-      plugins:{legend:{display:false}}, 
-      scales:{ y:{ beginAtZero: true, max:100 } },
+      plugins:{
+        legend:{display:false},
+        tooltip: { callbacks: { label: (ctx) => `Índice: ${ctx.raw}%` } }
+      }, 
+      scales:{ 
+        y:{ 
+          beginAtZero: true, 
+          max: 120,
+          ticks: { callback: (v) => v + '%' }
+        } 
+      },
       responsive:true, 
       maintainAspectRatio:false 
     }
