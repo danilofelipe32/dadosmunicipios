@@ -341,7 +341,36 @@
     .chart-card { border: none !important; background: none !important; margin-bottom: 30px !important; page-break-inside: avoid; }
     .chart-card h3 { color: #0F52BA !important; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 11pt; }
     .chart-wrap { height: 280px !important; }
-    @page { size: A4; margin: 15mm; }
+    @page { size: A4 landscape; margin: 10mm; }
+    
+    .container { max-width: 100% !important; padding: 10mm !important; }
+    .kpi-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 10px !important; }
+    .charts-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+    
+    footer { display: block !important; position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 9pt; color: #666; padding: 5mm 0; border-top: 1px solid #eee; background: white; }
+    a { color: #075e54; text-decoration: none; font-weight: bold; }
+  }
+
+  /* Footer Styling */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0,0,0,0.2);
+  }
+  footer a {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+  }
+  footer a:hover {
+    color: #25D366;
+    transform: translateY(-2px);
   }
 
   .btn-pdf {
@@ -478,25 +507,23 @@
   </section>
 
   <section id="socio-section">
-    <div class="section-title">💼 Dimensão Socioeconômica</div>
+    <div class="section-title">💼 Dimensão Socioeconômica e Demográfica</div>
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th>Município</th>
-          <th>Nº Famílias / Características</th>
-          <th>% Crianças/Adolescentes</th>
-          <th>Renda e Dependência</th>
-          <th>Bolsa Família / Vulnerabilidade</th>
+          <th>CADÚNICO</th>
+          <th>BENEFICIÁRIOS BOLSA FAMÍLIA</th>
+          <th>TAXA DESEMPREGO / INFORMALIDADE</th>
+          <th>ÍNDICE DE VULNERABILIDADE</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong id="ts-name" style="color:#fff;font-size:1.1rem">-</strong></td>
-          <td id="ts-fam">-</td>
-          <td id="ts-cri">-</td>
-          <td id="ts-ren">-</td>
-          <td id="ts-bf">-</td>
+          <td id="ts-cadunico">-</td>
+          <td id="ts-bf-detalhe">-</td>
+          <td id="ts-desemprego">-</td>
+          <td id="ts-vulnerabilidade">-</td>
         </tr>
       </tbody>
     </table>
@@ -509,20 +536,18 @@
     <table>
       <thead>
         <tr>
-          <th>Município</th>
-          <th>Áreas com Facções / Conflito</th>
-          <th>Trabalho Infantil / Segurança</th>
-          <th>Uso de Drogas Local</th>
-          <th>Pontos de Exploração Sexual</th>
+          <th>CONFLITO ARMADO / FACÇÕES</th>
+          <th>ROTAS INSEGURAS PARA ESCOLA</th>
+          <th>TRABALHO INFANTIL / SEGURANÇA</th>
+          <th>USO DE DROGAS LOCAL</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong id="tr-name" style="color:#fff;font-size:1.1rem">-</strong></td>
           <td id="tr-fac">-</td>
-          <td id="tr-tra">-</td>
-          <td id="tr-dro">-</td>
-          <td id="tr-exp">-</td>
+          <td id="tr-rotas">-</td>
+          <td id="tr-trabalho">-</td>
+          <td id="tr-drogas">-</td>
         </tr>
       </tbody>
     </table>
@@ -549,24 +574,48 @@
     <table>
       <thead>
         <tr>
-          <th>Indicador</th>
-          <th>Índice Municipal</th>
-          <th>Média Estadual (RN)</th>
-          <th>Situação / Gravidade</th>
+          <th>INDICADOR</th>
+          <th id="sa-city-label">MUNICIPIO/RN</th>
+          <th>MÉDIA ESTADUAL (RN)</th>
+          <th>MÉDIA NACIONAL</th>
+          <th>FONTE</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Cobertura de Água Potável</strong></td>
+          <td>Cobertura de Água Potável</td>
           <td id="sa-agu" class="t-green font-bold">-</td>
           <td>~74,1%</td>
-          <td>Geralmente abastecido</td>
+          <td>83,1%</td>
+          <td>Inst. Água e San / CAERN</td>
         </tr>
         <tr>
-          <td><strong>Cobertura de Esgotamento</strong></td>
+          <td>Cobertura de Esgotamento Sanitário</td>
           <td id="sa-esg" class="t-red font-bold">-</td>
           <td>~25,8%</td>
-          <td>Déficit Sanitário Elevado</td>
+          <td>59,7%</td>
+          <td>Inst. Água e San / CAERN</td>
+        </tr>
+        <tr>
+          <td>Habitantes sem esgoto coletado</td>
+          <td id="sa-hab-esgoto" class="t-red font-bold">-</td>
+          <td>--</td>
+          <td>--</td>
+          <td>Cálculo Estimado</td>
+        </tr>
+        <tr>
+          <td>Habitantes sem água potável</td>
+          <td id="sa-hab-agua" class="t-red font-bold">-</td>
+          <td>--</td>
+          <td>--</td>
+          <td>Inst. Água e San</td>
+        </tr>
+        <tr>
+          <td>ETE Unidade Local</td>
+          <td id="sa-ete">-</td>
+          <td>--</td>
+          <td>--</td>
+          <td>Prefeitura / CAERN</td>
         </tr>
       </tbody>
     </table>
@@ -574,7 +623,7 @@
   </section>
 
   <section id="visualizacao-section">
-    <div class="section-title">📈 Painel de Visualização Analítica</div>
+    <div class="section-title">📈 Painel de Visualização Analitica</div>
   <div class="charts-grid">
     <div class="chart-card">
       <div class="info-btn" onclick="showInsight('cSan')">i</div>
@@ -593,98 +642,211 @@
     </div>
   </div>
 </section>
+
+<section id="fontes-section">
+  <div class="section-title">📚 Fontes Consultadas</div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Fonte</th>
+          <th>Dados Obtidos</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>IBGE – Censo Demográfico 2022</td><td>População, domicílios, densidade, alfabetização, PIB per capita, IDHM</td><td><a href="https://ibge.gov.br" target="_blank">ibge.gov.br</a></td></tr>
+        <tr><td>Prefeitura Municipal</td><td>Gravidez na adolescência, programas habitacionais, saneamento, ETE</td><td>Portal Municipal</td></tr>
+        <tr><td>DATASUS / Ministério da Saúde</td><td>Taxa de gravidez na adolescência (10–19 anos), saúde materno-infantil</td><td><a href="https://datasus.saude.gov.br" target="_blank">datasus.saude.gov.br</a></td></tr>
+        <tr><td>MDS / Gov.br – Bolsa Família</td><td>Número de famílias beneficiárias (nov/2025)</td><td><a href="https://gov.br/mds" target="_blank">gov.br/mds</a></td></tr>
+        <tr><td>Instituto Água e Saneamento</td><td>Cobertura de água e esgoto, prestador CAERN</td><td><a href="https://aguaesaneamento.org.br" target="_blank">aguaesaneamento.org.br</a></td></tr>
+        <tr><td>CAERN – Companhia de Águas</td><td>Obras de saneamento, ETE Passagem de Areia, ampliação da rede</td><td><a href="https://caern.rn.gov.br" target="_blank">caern.rn.gov.br</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 </div>
+
+<footer>
+  <a href="https://wa.me/5584999780963" target="_blank">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.891 11.887-11.891 3.181 0 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.481 8.403 0 6.556-5.332 11.89-11.888 11.891-2.012 0-3.987-.511-5.727-1.483l-6.265 1.704zm6.113-1.885c1.554.922 3.191 1.411 4.887 1.412 5.533 0 10.038-4.505 10.038-10.039 0-2.684-1.045-5.208-2.942-7.105-1.897-1.897-4.422-2.942-7.104-2.942-5.534 0-10.038 4.505-10.038 10.038 0 1.933.559 3.816 1.615 5.426l-.994 3.633 3.737-.993zm11.234-7.221c-.302-.15-.1.745-.17 1.282-1.341-.58-2.433-1.527-3.238-2.659-.282-.395-.141-1.282.215-1.742.353-.46-.353-1.218-.543-1.442-.19-.224-.543-.112-.767.112-.224.224-.543 1.25-.543 1.545 0 .295.112 1.393.456 2.378.895 2.569 2.511 4.598 4.29 5.86.33.232.553.3 1.05.3.498 0 1.62-.647 1.844-1.218.224-.571.224-1.062.158-1.218-.067-.156-.412-.303-.715-.453z"/></svg>
+    Produzido por Danilo Arruda
+  </a>
+</footer>
 
 <script>
 let activeChartSan = null;
 let activeChartAge = null;
 let activeChartLetal = null;
 
-// Mock data object containing 12 cities adapted for standard KPIs
 const DB = {
   "Parnamirim": {
     pop:"252.716", dom:"116.679", idh:"0,766", pib:"R$ 30.107", alf:"94,9%", den:"2.037,9", bf:"21.600", agu:"94,7%", esg:"7,1%", gra:"20,7%",
-    ts_fam:"~ 116.679 domicílios. Maior polo urbano metropolitano analisado.", ts_cri:"~ 29% (est.)<br>Escolarização: 98,9%", ts_ren:"Remuneração méda formal: R$ 2.000 (Abaixo média est.)", ts_bf:"21.600 famílias beneficiárias",
-    tr_fac:"<span class='badge b-danger'>ALTO RISCO</span><br>PCC e Sindicato presentes. Confrontos na BR.", tr_tra:"Registrado em feiras e cruzamentos. Resgates (MPT-RN).", tr_dro:"Tráfico central ativo.", tr_exp:"<span class='badge b-danger'>CRÍTICO</span><br>Operações da PF atestam alta exploração na internet.",
-    al:"Apenas 7,1% da população de Parnamirim possui cobertura de esgoto, indicando ~237 mil sem rede formal.",
+    ts_cadunico: "116.679 domicílios. Maior polo urbano metropolitano analisado.",
+    ts_bf_detalhe: "21.600 famílias (nov/2025 - Gov.br / MDS)",
+    ts_desemprego: "Mercado formal em crescimento: +2.100 vagas (jan–out/2025). Saldo positivo desde 2020",
+    ts_vulnerabilidade: "IVJ: 6,81 (12º mais vulnerável do RN p/ cidades >200 mil hab). Redução de 5% 2021 vs 2019.",
+    tr_fac: "<span class='badge b-danger'>ALTO RISCO</span><br>PCC e Sindicato presentes. Confrontos na BR.",
+    tr_rotas: "PRESENTE. Vias afetadas por confrontos armados e tráfico. Conflitos em bairros: Cohabinal, Nova Parnamirim e Nova Esperança.",
+    tr_trabalho: "REGISTRADO. Adolescentes (14 e 16 anos) resgatadas em creche (set/2025). Jornada >10h/dia. MPT-RN em ação.",
+    tr_drogas: "PRESENTE. Tráfico ativo em condomínios e bairros periféricos. Operações constantes em 2025.",
+    al: "Apenas 7,1% da população de Parnamirim possui cobertura de esgoto, indicando ~237 mil sem rede formal.",
+    sa_hab_esgoto: "~237.124", sa_hab_agua: "~13.524", sa_ete: "Investimento R$ 300 milhões – 99,9% concluída (nov/2024)",
     s_agu: 94.7, s_esg: 7.1, letal: 85
   },
   "S.J. Mipibu": {
     pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%",
-    ts_fam:"~ 16.000 domicílios. Polo satélite agro e industrial.", ts_cri:"~ 31% (est.)<br>Escolarização: 96,3%", ts_ren:"Renda fortemente ancorada em empregos do comercio primario.", ts_bf:"Alta dependência do CADúnico",
-    tr_fac:"<span class='badge b-danger'>ALTO RISCO</span><br>CV vs Sindicato RN. Homicídios frequentes por território.", tr_tra:"Presente, especialmente em feiras rurais.", tr_dro:"Rota parasita da BR-101.", tr_exp:"Prisões recentes chocantes envolvendo órgãos públicos (mar/25).",
-    al:"Vias esburacadas em bairros afastados facilitam emboscadas e dificultam patrulha. Saneamento quase nulo (<5%).",
+    ts_cadunico: "~ 16.000 domicílios. Polo satélite agro e industrial.",
+    ts_bf_detalhe: "~ 9.500 famílias beneficiárias.",
+    ts_desemprego: "Dependência de comércio local e agricultura.",
+    ts_vulnerabilidade: "Alta dependência do CADúnico e vulnerabilidade social média.",
+    tr_fac: "<span class='badge b-danger'>ALTO RISCO</span><br>CV vs Sindicato RN. Homicídios frequentes por território.",
+    tr_rotas: "Vias rurais com baixa iluminação e patrulhamento dificultado.",
+    tr_trabalho: "Presente, especialmente em feiras rurais e colheitas sazonais.",
+    tr_drogas: "Rota parasita da BR-101. Distribuição em bairros periféricos.",
+    al: "Vias esburacadas em bairros afastados facilitam emboscadas e dificultam patrulha. Saneamento quase nulo (<5%).",
+    sa_hab_esgoto: "~44.900", sa_hab_agua: "~7.100", sa_ete: "Sistemas de fossa rudimentar predominantes.",
     s_agu: 85, s_esg: 5.0, letal: 92
   },
   "Nísia Floresta": {
     pop:"31.942", dom:"~ 11.200", idh:"0,622", pib:"R$ 17.949", alf:"82,4%", den:"104,3", bf:"~ 7.200", agu:"79,0%", esg:"~ 3,0%", gra:"~ 18,2%",
-    ts_fam:"Crescimento populacional altíssimo de 34% em 10 anos.", ts_cri:"~ 30% (est.)<br>Escolarização regular.", ts_ren:"Litoral (turismo) vs. Interior (agrícola).", ts_bf:"Crescimento de ocupações irregulares.",
-    tr_fac:"<span class='badge b-danger'>CRÍTICO</span><br>Sede da Pen. Alcaçuz. Dominio de comandos dentro e fora.", tr_tra:"Aliciamento próximo a presídios relatado.", tr_dro:"Eixo distribuidor estadual.", tr_exp:"Campanhas municipais constantes focadas em comunidades carentes.",
-    al:"A presença do complexo carcerário gera um polo criminoso externo de suporte (famílias e comparsas de detentos).",
+    ts_cadunico: "~ 11.200 domicílios. Crescimento populacional de 34% em 10 anos.",
+    ts_bf_detalhe: "~ 7.200 famílias (Crescimento de ocupações irregulares).",
+    ts_desemprego: "Litoral (turismo) vs. Interior (agrícola). Baixa qualificação formal.",
+    ts_vulnerabilidade: "Vulnerabilidade acentuada por núcleos de pobreza isolados.",
+    tr_fac: "<span class='badge b-danger'>CRÍTICO</span><br>Sede da Pen. Alcaçuz. Dominio de comandos dentro e fora.",
+    tr_rotas: "Acesso a praias com pontos de sombra e vulnerabilidade a assaltos.",
+    tr_trabalho: "Aliciamento próximo a presídios relatado. Vulnerabilidade infantil.",
+    tr_drogas: "Eixo distribuidor estadual devido à proximidade com complexo carcerário.",
+    al: "A presença do complexo carcerário gera um polo criminoso externo de suporte (famílias e comparsas de detentos).",
+    sa_hab_esgoto: "~31.000", sa_hab_agua: "~6.700", sa_ete: "Rede inexistente na maior parte do território.",
     s_agu: 79, s_esg: 3.0, letal: 95
   },
   "Canguaretama": {
     pop:"29.668", dom:"~ 10.100", idh:"0,579", pib:"R$ 20.761", alf:"78,1%", den:"120,4", bf:"~ 8.100", agu:"76,5%", esg:"~ 2,5%", gra:"~ 21,0%",
-    ts_fam:"Baixo IDHM. Estruturas predominantemente carentes.", ts_cri:"Mortalidade infantil preocupante (17,86).", ts_ren:"Baixa formalidade. Usina afeta economia base.", ts_bf:"Altíssima gravidade socioeconômica assistida.",
-    tr_fac:"<span class='badge b-danger'>CRÍTICO</span><br>Op Tifão e tribunais do crime instalados no Agreste.", tr_tra:"Altamente vulnerável.", tr_dro:"Redes organizadas de assaltos.", tr_exp:"<span class='badge b-danger'>AÇÕES PF</span> 8 menores resgatados em OP recente de combate.",
-    al:"A dependência extrema do Bolsa Família e a altíssima vulnerabilidade social expõem os jovens à cooptação precoce pelo tráfico.",
+    ts_cadunico: "~ 10.100 domicílios. Estruturas predominantemente carentes.",
+    ts_bf_detalhe: "~ 8.100 famílias. Altíssima dependência governamental.",
+    ts_desemprego: "Baixa formalidade. Usina afeta economia base.",
+    ts_vulnerabilidade: "IDHM baixo reflete carência estrutural histórica.",
+    tr_fac: "<span class='badge b-danger'>CRÍTICO</span><br>Op Tifão e tribunais do crime instalados no Agreste.",
+    tr_rotas: "Rotas de transporte alternativo com histórico de insegurança.",
+    tr_trabalho: "Altamente vulnerável. Casos registrados em áreas de canavial.",
+    tr_drogas: "Redes organizadas de assaltos e tráfico regional.",
+    al: "A dependência extrema do Bolsa Família e a altíssima vulnerabilidade social expõem os jovens à cooptação precoce pelo tráfico.",
+    sa_hab_esgoto: "~28.900", sa_hab_agua: "~6.900", sa_ete: "Investimento em saneamento parado.",
     s_agu: 76, s_esg: 2.5, letal: 78
   },
   "Goianinha": {
     pop:"26.741", dom:"~ 9.200", idh:"0,638", pib:"R$ 20.240", alf:"81,5%", den:"139,1", bf:"~ 5.500", agu:"82,0%", esg:"~ 8,0%", gra:"~ 17,5%",
-    ts_fam:"Polo regional dinâmico do Agreste (comércio vibrante).", ts_cri:"Escolaridade mediana. Mortalidade (16,3).", ts_ren:"Formalização via pólo cerâmico/comercio.", ts_bf:"Perfil menos dependente face aos vizinhos.",
-    tr_fac:"<span class='badge b-danger'>ALTO RISCO</span><br>Op. Hades. Execução de empresários e retaliação.", tr_tra:"Menor escala sistemática registrada.", tr_dro:"Movimentação urbana de facções.", tr_exp:"Campanhas (Maio Laranja) fortemente aplicadas.",
-    al:"Sendo um polo comercial, o dinheiro físico atrai ordens de roubo lideradas por organizações intermunicipais.",
+    ts_cadunico: "~ 9.200 domicílios. Polo regional dinâmico do Agreste.",
+    ts_bf_detalhe: "~ 5.500 famílias beneficiárias.",
+    ts_desemprego: "Formalização via pólo cerâmico/comercio.",
+    ts_vulnerabilidade: "Vulnerabilidade média. Perfil menos dependente face aos vizinhos.",
+    tr_fac: "<span class='badge b-danger'>ALTO RISCO</span><br>Op. Hades. Execução de empresários e retaliação.",
+    tr_rotas: "Centro urbano com circulação de pessoas estranhas à comunidade.",
+    tr_trabalho: "Menor escala sistemática registrada, mas presente em pequenos comércios.",
+    tr_drogas: "Movimentação urbana de facções aproveitando o fluxo comercial.",
+    al: "Sendo um polo comercial, o dinheiro físico atrai ordens de roubo lideradas por organizações intermunicipais.",
+    sa_hab_esgoto: "~24.600", sa_hab_agua: "~4.800", sa_ete: "Projeto de ampliação da rede em andamento.",
     s_agu: 82, s_esg: 8.0, letal: 70
   },
   "Monte Alegre": {
     pop:"23.031", dom:"~ 7.800", idh:"0,609", pib:"R$ 15.142", alf:"79,8%", den:"109,0", bf:"~ 4.200", agu:"74,0%", esg:"~ 3,0%", gra:"~ 16,8%",
-    ts_fam:"Entre as rendas mais baixas do bloco examinado.", ts_cri:"Mortalidade infantil = 11,9. (Melhor que a média agreste).", ts_ren:"Sobrevivência rural e repasses constitucionais.", ts_bf:"Significativo índice de pobreza extrema.",
-    tr_fac:"<span class='badge b-warning'>PRESENTE</span><br>Associações criminosas locais de furto organizado (Op Ruptura).", tr_tra:"-", tr_dro:"Foco em repressão de base.", tr_exp:"Esforços focais isolados.",
-    al:"Estagnação econômica acentua migração de capitais criminosos.",
+    ts_cadunico: "~ 7.800 domicílios. Rendas entre as mais baixas do bloco.",
+    ts_bf_detalhe: "~ 4.200 famílias em situação de pobreza extrema.",
+    ts_desemprego: "Sobrevivência rural e repasses constitucionais.",
+    ts_vulnerabilidade: "Vulnerabilidade rural elevada.",
+    tr_fac: "<span class='badge b-warning'>PRESENTE</span><br>Associações criminosas locais de furto organizado.",
+    tr_rotas: "Vias vicinais extensas e sem monitoramento.",
+    tr_trabalho: "Dados escassos, mas risco potencial em áreas rurais isoladas.",
+    tr_drogas: "Foco em repressão de pequenas bocas de fumo.",
+    al: "Estagnação econômica acentua migração de capitais criminosos para cidades vizinhas.",
+    sa_hab_esgoto: "~22.300", sa_hab_agua: "~6.000", sa_ete: "Falta de infraestrutura básica de tratamento.",
     s_agu: 74, s_esg: 3.0, letal: 55
   },
   "Tibau do Sul": {
     pop:"16.929", dom:"~ 6.000", idh:"0,645", pib:"R$ 30.000 (est)", alf:"88,2%", den:"164,8", bf:"~ 2.500", agu:"89,0%", esg:"~ 15,0%", gra:"~ 14,0%",
-    ts_fam:"Turismo fortíssimo (Distrito de Pipa).", ts_cri:"Mortalidade infantil preocupante (23,2).", ts_ren:"PIB puxado pelo turismo, gerando desigualdade brutal.", ts_bf:"Muitos trabalhadores informais no turismo.",
-    tr_fac:"<span class='badge b-danger'>CRÍTICO</span><br>Disputa feroz pelas vendas no polo festivo; mortes em via principal.", tr_tra:"Exploração no turismo desorganizado.", tr_dro:"O pólo mais lucrativo do RN fora de Natal.", tr_exp:"<span class='badge b-danger'>ZONA VERMELHA</span> Turismo sexual fortíssimo; OP Tutela com resgates em 2026.",
-    al:"O contraste gritante: Pipa luxuosa x periferia refém do tráfico armado gerando letalidade na margem turística.",
+    ts_cadunico: "~ 6.000 domicílios. Turismo fortíssimo (Pipa).",
+    ts_bf_detalhe: "~ 2.500 famílias. Muitos informais no turismo.",
+    ts_desemprego: "PIB puxado pelo turismo, gerando desigualdade brutal.",
+    ts_vulnerabilidade: "Contraste extremo entre área turística e periferia.",
+    tr_fac: "<span class='badge b-danger'>CRÍTICO</span><br>Disputa feroz pelas vendas no polo festivo.",
+    tr_rotas: "Acesso à Pipa com risco de assaltos em horários de pico.",
+    tr_trabalho: "Exploração no turismo desorganizado e trabalho informal infantil.",
+    tr_drogas: "O pólo mais lucrativo do RN fora de Natal para venda de sintéticas.",
+    al: "O contraste gritante: Pipa luxuosa x periferia refém do tráfico armado gerando letalidade na margem turística.",
+    sa_hab_esgoto: "~14.400", sa_hab_agua: "~1.800", sa_ete: "Sistemas privados em hotéis vs. carência na vila.",
     s_agu: 89, s_esg: 15.0, letal: 80
   },
   "Arez": {
     pop:"13.251", dom:"~ 4.500", idh:"0,606", pib:"R$ 15.000 (est)", alf:"77,5%", den:"114,8", bf:"~ 2.800", agu:"70,0%", esg:"~ 2,0%", gra:"~ 18,0%",
-    ts_fam:"Economia fragilizada e dependência agrícola.", ts_cri:"Mortalidade infantil: 15,5.", ts_ren:"Fundo de Part. Municipal essencial.", ts_bf:"Maioria das famílias inscritas em programas.",
-    tr_fac:"<span class='badge b-warning'>PRESENTE</span><br>Incêndios recentes (2023) à rede pública em prol de ordens do SDC.", tr_tra:"-", tr_dro:"Bocas de fumo interligadas.", tr_exp:"Não nominalmente destaque isolado.",
-    al:"Eventos de vandalismo organizado ditados de dentro dos presídios afetaram a infraestrutura recente.",
+    ts_cadunico: "~ 4.500 domicílios. Economia fragilizada.",
+    ts_bf_detalhe: "~ 2.800 famílias inscritas em programas.",
+    ts_desemprego: "Dependência agrícola e Fundo de Part. Municipal.",
+    ts_vulnerabilidade: "Vulnerabilidade social em áreas de assentamento.",
+    tr_fac: "<span class='badge b-warning'>PRESENTE</span><br>Incêndios recentes à rede pública (SDC).",
+    tr_rotas: "Caminhos de terra isolados para escolas rurais.",
+    tr_trabalho: "Registros de trabalho em regime familiar na agricultura.",
+    tr_drogas: "Bocas de fumo interligadas com a região de Goianinha.",
+    al: "Eventos de vandalismo organizado ditados de dentro dos presídios afetaram a infraestrutura recente.",
+    sa_hab_esgoto: "~13.000", sa_hab_agua: "~4.000", sa_ete: "Infraestrutura precária e obsoleta.",
     s_agu: 70, s_esg: 2.0, letal: 45
   },
   "Vera Cruz": {
     pop:"10.735", dom:"~ 3.600", idh:"0,587", pib:"R$ 10.436", alf:"75,2%", den:"127,6", bf:"~ 2.400", agu:"68,0%", esg:"< 2,0%", gra:"~ 19,0%",
-    ts_fam:"Menor PIB per capita diagnosticado (R$ 10.436).", ts_cri:"99,6% em idade escolar matriculada (Ponto positivo!).", ts_ren:"Renda paupérrima geral.", ts_bf:"Dependência máxima do MDS.",
-    tr_fac:"<span class='badge b-warning'>PRESENTE</span><br>Rotas limítrofes sofrem com guerra no RN.", tr_tra:"Vulnerabilidade financeira força menores da lavoura.", tr_dro:"Reflexo das cidades satélites maiores.", tr_exp:"Gravidade proporcional do estado.",
-    al:"Economia baseada extremamente em agricultura de subsistência e prefeitura; sem esgotamento sanitário (0%).",
+    ts_cadunico: "~ 3.600 domicílios. Menor PIB per capita diagnosticado.",
+    ts_bf_detalhe: "~ 2.400 famílias. Dependência máxima do MDS.",
+    ts_desemprego: "Renda paupérrima geral e falta de indústrias.",
+    ts_vulnerabilidade: "IDHM baixo e carência de serviços básicos.",
+    tr_fac: "<span class='badge b-warning'>PRESENTE</span><br>Rotas limítrofes sofrem com guerra no RN.",
+    tr_rotas: "Extensas áreas sem policiamento fixo.",
+    tr_trabalho: "Vulnerabilidade financeira força menores da lavoura.",
+    tr_drogas: "Reflexo das cidades satélites maiores. Ponto de passagem.",
+    al: "Economia baseada extremamente em agricultura de subsistência e prefeitura; sem esgotamento sanitário (0%).",
+    sa_hab_esgoto: "~10.500", sa_hab_agua: "~3.400", sa_ete: "Inexistência de rede de esgoto tratada.",
     s_agu: 68, s_esg: 2.0, letal: 35
   },
   "Baía Formosa": {
     pop:"8.824", dom:"~ 3.000", idh:"0,609", pib:"R$ 38.064", alf:"84,0%", den:"35,6", bf:"~ 1.800", agu:"75,0%", esg:"~ 5,0%", gra:"~ 16,5%",
-    ts_fam:"Baixa densidade (35,6). Distopias de PIB turístico x Real.", ts_cri:"Média estadual estável.", ts_ren:"Distorcida. Alta Renda concentrada vs Pescador artesanal.", ts_bf:"-",
-    tr_fac:"<span class='badge b-warning'>PRESENTE</span><br>Op. Kraken e Leviatã contra facções ameaçando civis.", tr_tra:"Fiscalização costeira intensa.", tr_dro:"Loteamento e distribuição local de entorpecentes.", tr_exp:"Prefeitura e escolas com rígido monitoramento.",
-    al:"Expansão das fronteiras das facções até as vilas pesqueiras turísticas. A Op. Kraken relatou monitoramento da polícia pelo crime.",
+    ts_cadunico: "~ 3.000 domicílios. Baixa densidade demográfica.",
+    ts_bf_detalhe: "~ 1.800 famílias beneficiárias.",
+    ts_desemprego: "Distorção entre PIB turístico e renda local.",
+    ts_vulnerabilidade: "Vulnerabilidade de pescadores artesanais.",
+    tr_fac: "<span class='badge b-warning'>PRESENTE</span><br>Op. Kraken e Leviatã contra facções.",
+    tr_rotas: "Áreas litorâneas isoladas com risco para lazer e transporte.",
+    tr_trabalho: "Fiscalização costeira intensa contra exploração.",
+    tr_drogas: "Loteamento e distribuição local de entorpecentes.",
+    al: "Expansão das fronteiras das facções até as vilas pesqueiras turísticas. A Op. Kraken relatou monitoramento da polícia.",
+    sa_hab_esgoto: "~8.300", sa_hab_agua: "~2.200", sa_ete: "Tratamento de esgoto local incipiente.",
     s_agu: 75, s_esg: 5.0, letal: 40
   },
   "Senador G. Avelino": {
     pop:"4.065", dom:"~ 1.400", idh:"0,570", pib:"R$ 13.500", alf:"73,5%", den:"155,7", bf:"~ 1.100", agu:"65,0%", esg:"< 1,0%", gra:"~ 20,0%",
-    ts_fam:"Menor extensão territorial do RN.", ts_cri:"Área diminuta.", ts_ren:"Foco rural ribeirinho e lagoas.", ts_bf:"Quase 100% da linha limítrofe de pobreza.",
-    tr_fac:"<span class='badge b-success'>BAIXO/CONTROLADO</span><br>Escondedouro ocasional; prisões pontuais encomendadas.", tr_tra:"-", tr_dro:"Impacto irrisório em escala comercial.", tr_exp:"Programação escolar intensiva contra abusos (Caminhada da Proteção).",
-    al:"Indicadores sociais cruéis como IDHM de 0,570. Total abandono de grandes polos empresariais.",
+    ts_cadunico: "~ 1.400 domicílios. Menor extensão territorial do RN.",
+    ts_bf_detalhe: "~ 1.100 famílias na linha de pobreza.",
+    ts_desemprego: "Foco rural ribeirinho e lagoas.",
+    ts_vulnerabilidade: "Indicadores sociais cruéis como IDHM de 0,570.",
+    tr_fac: "<span class='badge b-success'>BAIXO/CONTROLADO</span><br>Escondedouro ocasional.",
+    tr_rotas: "Ambiente rural pacato mas com isolamento geográfico.",
+    tr_trabalho: "Atividades de subsistência familiar.",
+    tr_drogas: "Impacto irrisório em escala comercial.",
+    al: "Total abandono de grandes polos empresariais. Carência de esgotamento total.",
+    sa_hab_esgoto: "~4.000", sa_hab_agua: "~1.400", sa_ete: "Nenhuma rede coletora registrada.",
     s_agu: 65, s_esg: 1.0, letal: 10
   },
   "Vila Flor": {
     pop:"3.174", dom:"~ 1.000", idh:"0,576", pib:"R$ 15.709", alf:"74,0%", den:"66,6", bf:"~ 850", agu:"67,0%", esg:"< 1,0%", gra:"~ 18,5%",
-    ts_fam:"A menor em contingente da pesquisa (3.174 hab).", ts_cri:"Taxa de letalidade e mortalidade muito flutuante (amostragem min).", ts_ren:"Economia micro e baseada na prefeitura local.", ts_bf:"Altíssima gravidade.",
-    tr_fac:"<span class='badge b-success'>BAIXO</span><br>Aparato policial básico. Eventos isolados comuns (furtos).", tr_tra:"-", tr_dro:"Atuação em pequeno retalho.", tr_exp:"Ausência de dados concretos.",
-    al:"Com menor PIB absoluto, qualquer redução nos repasses federais coloca o limite de decência sanitária em colapso.",
-    s_agu: 67, s_esg: 1.0, letal: 5
+    ts_cadunico: "~ 1.000 domicílios. Menor em contingente.",
+    ts_bf_detalhe: "~ 850 famílias beneficiárias.",
+    ts_desemprego: "Economia micro e baseada na prefeitura local.",
+    ts_vulnerabilidade: "Altíssima gravidade socioeconômica.",
+    tr_fac: "<span class='badge b-success'>BAIXO</span><br>Aparato policial básico.",
+    tr_rotas: "Segurança comunitária preservada pelo tamanho da cidade.",
+    tr_trabalho: "Sem dados concretos de exploração sistemática.",
+    tr_drogas: "Atuação em pequeno retalho local.",
+    al: "Com menor PIB absoluto, qualquer redução nos repasses federais coloca o limite de decência sanitária em colapso.",
+    sa_hab_esgoto: "~3.100", sa_hab_agua: "~1.000", sa_ete: "Inexistência de rede tratada.",
   }
 };
 
@@ -805,7 +967,7 @@ function generatePDF() {
     filename: `Relatorio_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
     pagebreak: { mode: ['css', 'legacy'] }
   };
 
@@ -910,33 +1072,32 @@ function generateABNTReport() {
       <tr><td>Densidade Demográfica</td><td>${d.den} hab/km²</td><td>IBGE</td></tr>
     </table>
 
-    <div class="abnt-section-title">3 DIMENSÃO SOCIOECONÔMICA</div>
-    <p>A análise socioeconômica de ${city} revela o perfil das famílias e a dependência de programas de assistência governamental:</p>
     <table class="abnt-table">
       <thead>
-        <tr><th>Características das Famílias</th><th>% Crianças/Adolescentes</th><th>Renda e Dependência</th></tr>
+        <tr><th>Características / CadÚnico</th><th>Bolsa Família</th><th>Desemprego / Informação</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td>${d.ts_fam}</td>
-          <td>${d.ts_cri}</td>
-          <td>${d.ts_ren}</td>
+          <td>${d.ts_cadunico}</td>
+          <td>${d.ts_bf_detalhe}</td>
+          <td>${d.ts_desemprego}</td>
         </tr>
       </tbody>
     </table>
-    <p>O município possui ${d.bf} famílias beneficiárias do Programa Bolsa Família, o que reflete o nível de vulnerabilidade econômica local.</p>
+    <p>O nível de vulnerabilidade identificado para o município é: ${d.ts_vulnerabilidade}.</p>
 
     <div class="abnt-section-title">4 PROTEÇÃO E RISCO SOCIAL</div>
     <p>Considerando os fatores de risco e segurança pública, o diagnóstico para ${city} indica:</p>
     <table class="abnt-table">
       <thead>
-        <tr><th>Áreas de Conflito</th><th>Trabalho Infantil / Segurança</th><th>Uso de Substâncias</th></tr>
+        <tr><th>Conflito / Facções</th><th>Rotas Inseguras</th><th>Trabalho Infantil / Segurança</th><th>Uso de Drogas Local</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>${d.tr_fac}</td>
-          <td>${d.tr_tra}</td>
-          <td>${d.tr_dro}</td>
+          <td>${d.tr_rotas}</td>
+          <td>${d.tr_trabalho}</td>
+          <td>${d.tr_drogas}</td>
         </tr>
       </tbody>
     </table>
@@ -970,7 +1131,7 @@ function generateABNTReport() {
     filename: `Relatorio_ABNT_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
     pagebreak: { mode: ['css', 'legacy'] }
   };
 
@@ -996,22 +1157,26 @@ function selectCity(cityId) {
   document.getElementById('k-esg').innerText = d.esg;
   document.getElementById('k-gra').innerText = d.gra;
   
-  // Tables
-  document.getElementById('ts-name').innerText = cityId;
-  document.getElementById('ts-fam').innerHTML = d.ts_fam;
-  document.getElementById('ts-cri').innerHTML = d.ts_cri;
-  document.getElementById('ts-ren').innerHTML = d.ts_ren;
-  document.getElementById('ts-bf').innerHTML = d.ts_bf;
+  // Tables - Socioeconômica
+  document.getElementById('ts-cadunico').innerHTML = d.ts_cadunico;
+  document.getElementById('ts-bf-detalhe').innerHTML = d.ts_bf_detalhe;
+  document.getElementById('ts-desemprego').innerHTML = d.ts_desemprego;
+  document.getElementById('ts-vulnerabilidade').innerHTML = d.ts_vulnerabilidade;
 
-  document.getElementById('tr-name').innerText = cityId;
+  // Tables - Proteção
   document.getElementById('tr-fac').innerHTML = d.tr_fac;
-  document.getElementById('tr-tra').innerHTML = d.tr_tra;
-  document.getElementById('tr-dro').innerHTML = d.tr_dro;
-  document.getElementById('tr-exp').innerHTML = d.tr_exp;
+  document.getElementById('tr-rotas').innerHTML = d.tr_rotas;
+  document.getElementById('tr-trabalho').innerHTML = d.tr_trabalho;
+  document.getElementById('tr-drogas').innerHTML = d.tr_drogas;
 
+  // Alert & Saneamento
   document.getElementById('al-text').innerText = d.al;
+  document.getElementById('sa-city-label').innerText = `${cityId.toUpperCase()}/RN`;
   document.getElementById('sa-agu').innerText = d.agu;
   document.getElementById('sa-esg').innerText = d.esg;
+  document.getElementById('sa-hab-esgoto').innerText = d.sa_hab_esgoto;
+  document.getElementById('sa-hab-agua').innerText = d.sa_hab_agua;
+  document.getElementById('sa-ete').innerText = d.sa_ete;
   
   renderCharts(d.s_agu, d.s_esg, d.letal, cityId);
 }
