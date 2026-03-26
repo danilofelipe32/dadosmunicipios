@@ -670,7 +670,7 @@
 
 <footer>
   <a href="https://wa.me/5584999780963" target="_blank">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.891 11.887-11.891 3.181 0 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.481 8.403 0 6.556-5.332 11.89-11.888 11.891-2.012 0-3.987-.511-5.727-1.483l-6.265 1.704zm6.113-1.885c1.554.922 3.191 1.411 4.887 1.412 5.533 0 10.038-4.505 10.038-10.039 0-2.684-1.045-5.208-2.942-7.105-1.897-1.897-4.422-2.942-7.104-2.942-5.534 0-10.038 4.505-10.038 10.038 0 1.933.559 3.816 1.615 5.426l-.994 3.633 3.737-.993zm11.234-7.221c-.302-.15-.1.745-.17 1.282-1.341-.58-2.433-1.527-3.238-2.659-.282-.395-.141-1.282.215-1.742.353-.46-.353-1.218-.543-1.442-.19-.224-.543-.112-.767.112-.224.224-.543 1.25-.543 1.545 0 .295.112 1.393.456 2.378.895 2.569 2.511 4.598 4.29 5.86.33.232.553.3 1.05.3.498 0 1.62-.647 1.844-1.218.224-.571.224-1.062.158-1.218-.067-.156-.412-.303-.715-.453z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
     Produzido por Danilo Arruda
   </a>
 </footer>
@@ -905,6 +905,8 @@ function generatePDF() {
   const content = document.createElement('div');
   content.style.background = '#ffffff';
   content.style.color = '#000000';
+  content.style.width = '297mm'; // A4 Landscape width
+  content.style.overflow = 'hidden';
 
   const getMeta = () => `
     <div style="display:flex; justify-content:space-between; font-size:8pt; color:#000; border-bottom:1px solid #000; padding-bottom:5px; margin-bottom:15px; font-family:Inter,sans-serif;">
@@ -968,7 +970,7 @@ function generatePDF() {
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-    pagebreak: { mode: ['css', 'legacy'] }
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
   const btn = document.querySelector('.btn-pdf span');
@@ -993,6 +995,8 @@ function generateABNTReport() {
   content.style.fontSize = '12pt';
   content.style.lineHeight = '1.5';
   content.style.textAlign = 'justify';
+  content.style.width = '297mm'; // A4 Landscape width
+  content.style.overflow = 'hidden';
 
   // CSS for ABNT
   const style = document.createElement('style');
@@ -1131,8 +1135,8 @@ function generateABNTReport() {
     filename: `Relatorio_ABNT_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-    pagebreak: { mode: ['css', 'legacy'] }
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape', compress: true },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
   html2pdf().set(opt).from(content).save();
