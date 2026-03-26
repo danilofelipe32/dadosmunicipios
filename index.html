@@ -900,76 +900,52 @@ function initTabs() {
 
 function generatePDF() {
   const city = document.getElementById('city-select').value;
-  const header = document.querySelector('header');
+  const header = document.querySelector('header').cloneNode(true);
   
   const content = document.createElement('div');
+  content.className = 'pdf-report-container';
   content.style.background = '#ffffff';
   content.style.color = '#000000';
-  content.style.width = '297mm'; // A4 Landscape width
-  content.style.overflow = 'hidden';
+  content.style.width = '297mm';
+  content.style.padding = '15mm';
+  content.style.fontFamily = 'Inter, sans-serif';
 
-  const getMeta = () => `
-    <div style="display:flex; justify-content:space-between; font-size:8pt; color:#000; border-bottom:1px solid #000; padding-bottom:5px; margin-bottom:15px; font-family:Inter,sans-serif;">
+  const printStyle = document.createElement('style');
+  printStyle.innerHTML = `
+    .pdf-report-container section { page-break-inside: avoid; margin-bottom: 25px; }
+    .pdf-report-container .card-premium, .pdf-report-container .chart-card, .pdf-report-container .table-container { page-break-inside: avoid; border: 1px solid #ddd !important; background: none !important; margin-bottom: 15px; }
+    .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 35px 0 15px 0; font-weight: bold; }
+    .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 25px; }
+    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pdf-report-container * { color: #000 !important; -webkit-text-fill-color: #000 !important; }
+    .pdf-meta { display: flex; justify-content: space-between; font-size: 8pt; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 20px; font-weight: bold; }
+  `;
+  content.appendChild(printStyle);
+
+  const metaHeader = `
+    <div class="pdf-meta">
       <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</span>
-      <span>Mapeamento Sociodemográfico Regional - 12 Municípios</span>
+      <span>RELATÓRIO EXECUTIVO - ${city.toUpperCase()}</span>
+      <span>Página 1</span>
     </div>`;
 
-  const getFooter = (num) => `
-    <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:8pt; color:#000; border-top:1px solid #000; padding-top:5px; font-family:Inter,sans-serif;">
-      <span>https://dadosmunicipios2direc.vercel.app</span>
-      <span>${num}/3</span>
-    </div>`;
-
-  const p1 = document.createElement('div');
-  p1.style.padding = '15mm 20mm';
-  p1.innerHTML = getMeta() + 
-                 header.outerHTML + 
-                 document.getElementById('impacto-section').outerHTML + 
-                 document.getElementById('socio-section').outerHTML + 
-                 document.getElementById('protecao-section').outerHTML + 
-                 document.querySelector('.alert-box').outerHTML +
-                 getFooter(1);
-
-  const p2 = document.createElement('div');
-  p2.style.padding = '15mm 20mm';
-  p2.style.pageBreakBefore = 'always';
-  p2.innerHTML = getMeta() + 
-                 document.getElementById('saneamento-section').outerHTML + 
-                 `<div class="section-title">Painel de Visualização Analitica</div>` +
-                 document.querySelectorAll('.chart-card')[0].outerHTML + 
-                 document.querySelectorAll('.chart-card')[1].outerHTML + 
-                 getFooter(2);
-
-  const p3 = document.createElement('div');
-  p3.style.padding = '15mm 20mm';
-  p3.style.pageBreakBefore = 'always';
-  p3.innerHTML = getMeta() + 
-                 document.querySelectorAll('.chart-card')[2].outerHTML + 
-                 getFooter(3);
-
-  content.appendChild(p1);
-  content.appendChild(p2);
-  content.appendChild(p3);
-
-  content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon').forEach(el => el.remove());
+  let reportHTML = metaHeader + header.outerHTML;
+  reportHTML += document.getElementById('impacto-section').outerHTML;
+  reportHTML += document.getElementById('socio-section').outerHTML;
+  reportHTML += document.getElementById('protecao-section').outerHTML;
+  reportHTML += document.querySelector('.alert-box').outerHTML;
+  reportHTML += document.getElementById('saneamento-section').outerHTML;
+  reportHTML += document.getElementById('visualizacao-section').outerHTML;
   
-  content.querySelectorAll('.section-title').forEach(el => {
-    el.style.color = '#000000';
-    el.style.borderBottom = '1px solid #000000';
-    el.style.margin = '30px 0 15px 0';
-  });
-
-  content.querySelectorAll('.kpi-val, .kpi-label, th, td, h1, h2, p, span, strong').forEach(el => {
-    el.style.color = '#000000';
-    if (el.tagName === 'H1') el.style.webkitTextFillColor = '#000000';
-  });
-
+  content.innerHTML += reportHTML;
+  content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon, .badges-row').forEach(el => el.remove());
+  
   const opt = {
-    margin: 0,
-    filename: `Relatorio_${city}.pdf`,
+    margin: [10, 10],
+    filename: `Relatorio_Executivo_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape', compress: true },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
@@ -1076,6 +1052,7 @@ function generateABNTReport() {
       <tr><td>Densidade Demográfica</td><td>${d.den} hab/km²</td><td>IBGE</td></tr>
     </table>
 
+    <div class="abnt-section-title">3 DIMENSÃO SOCIOECONÔMICA</div>
     <table class="abnt-table">
       <thead>
         <tr><th>Características / CadÚnico</th><th>Bolsa Família</th><th>Desemprego / Informação</th></tr>
@@ -1105,7 +1082,7 @@ function generateABNTReport() {
         </tr>
       </tbody>
     </table>
-    <div style="background:#f9f9f9; padding: 10pt; border-left: 3pt solid black; margin-top: 15pt;">
+    <div style="background:#f9f9f9; padding: 10pt; border-left: 3pt solid black; margin-top: 15pt; page-break-inside: avoid;">
       <strong>Análise Crítica:</strong> ${d.al}
     </div>
 
@@ -1131,7 +1108,7 @@ function generateABNTReport() {
   content.appendChild(texto);
 
   const opt = {
-    margin: 0,
+    margin: [10, 10, 10, 15],
     filename: `Relatorio_ABNT_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false },
