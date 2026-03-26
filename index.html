@@ -906,19 +906,29 @@ function generatePDF() {
   content.className = 'pdf-report-container';
   content.style.background = '#ffffff';
   content.style.color = '#000000';
-  content.style.width = '297mm';
-  content.style.padding = '15mm';
+  content.style.width = '277mm'; // Largura disponível real (A4 Paisagem 297mm - margens)
+  content.style.padding = '10mm';
   content.style.fontFamily = 'Inter, sans-serif';
 
   const printStyle = document.createElement('style');
   printStyle.innerHTML = `
-    .pdf-report-container section { page-break-inside: avoid; margin-bottom: 25px; }
-    .pdf-report-container .card-premium, .pdf-report-container .chart-card, .pdf-report-container .table-container { page-break-inside: avoid; border: 1px solid #ddd !important; background: none !important; margin-bottom: 15px; }
-    .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 35px 0 15px 0; font-weight: bold; }
-    .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 25px; }
-    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pdf-report-container { box-sizing: border-box; }
+    .pdf-report-container section { page-break-inside: avoid; margin-bottom: 20px; }
+    .pdf-report-container .card-premium, .pdf-report-container .chart-card, .pdf-report-container .table-container { 
+      page-break-inside: avoid; border: 1px solid #ddd !important; background: none !important; margin-bottom: 15px; 
+      padding: 10px !important;
+    }
+    .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 25px 0 10px 0; font-weight: bold; font-size: 14pt; }
+    .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; width: 100%; }
+    .pdf-report-container .card-premium { min-width: 0; }
+    .pdf-report-container .kpi-val { font-size: 16pt !important; }
+    .pdf-report-container .kpi-label { font-size: 8pt !important; }
+    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .pdf-report-container table { width: 100%; font-size: 9pt; border-collapse: collapse; }
+    .pdf-report-container th, .pdf-report-container td { padding: 6px !important; border: 1px solid #eee; }
     .pdf-report-container * { color: #000 !important; -webkit-text-fill-color: #000 !important; }
-    .pdf-meta { display: flex; justify-content: space-between; font-size: 8pt; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 20px; font-weight: bold; }
+    .pdf-meta { display: flex; justify-content: space-between; font-size: 8pt; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; }
+    .pdf-report-container .alert-box { border: 2px solid #000 !important; background: #f9f9f9 !important; padding: 10px !important; margin: 15px 0; }
   `;
   content.appendChild(printStyle);
 
@@ -926,16 +936,16 @@ function generatePDF() {
     <div class="pdf-meta">
       <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</span>
       <span>RELATÓRIO EXECUTIVO - ${city.toUpperCase()}</span>
-      <span>Página 1</span>
+      <span>EMISSÃO OFICIAL</span>
     </div>`;
 
   let reportHTML = metaHeader + header.outerHTML;
   reportHTML += document.getElementById('impacto-section').outerHTML;
   reportHTML += document.getElementById('socio-section').outerHTML;
-  reportHTML += document.getElementById('protecao-section').outerHTML;
-  reportHTML += document.querySelector('.alert-box').outerHTML;
+  reportHTML += document.getElementById('protecao-section').outerHTML; // Contém a alert-box internamente
   reportHTML += document.getElementById('saneamento-section').outerHTML;
   reportHTML += document.getElementById('visualizacao-section').outerHTML;
+  reportHTML += document.getElementById('fontes-section').outerHTML;
   
   content.innerHTML += reportHTML;
   content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon, .badges-row').forEach(el => el.remove());
