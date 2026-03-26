@@ -907,33 +907,34 @@ function generatePDF() {
   content.style.background = '#ffffff';
   content.style.color = '#000000';
   content.style.width = '275mm';
-  content.style.padding = '10mm';
+  content.style.padding = '8mm';
   content.style.fontFamily = 'Inter, sans-serif';
 
   const printStyle = document.createElement('style');
   printStyle.innerHTML = `
-    .pdf-report-container { box-sizing: border-box; display: block; }
-    .pdf-report-container section { display: block; clear: both; page-break-inside: avoid; margin-bottom: 40px; width: 100%; position: relative; }
+    .pdf-report-container { box-sizing: border-box; display: block; overflow: hidden; }
+    .pdf-report-container section { display: block; clear: both; page-break-inside: avoid; margin-bottom: 25px; width: 100%; position: relative; }
+    .pdf-report-container section:last-of-type { margin-bottom: 0 !important; page-break-after: avoid !important; }
     .pdf-report-container .card-premium, .pdf-report-container .table-container { 
-      page-break-inside: avoid; border: 1px solid #ddd !important; margin-bottom: 15px; 
-      padding: 12px !important; display: block;
+      page-break-inside: avoid; border: 1px solid #ddd !important; margin-bottom: 12px; 
+      padding: 10px !important; display: block;
     }
-    .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 30px 0 15px 0; font-weight: bold; font-size: 14pt; display: block; width: 100%; }
-    .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; width: 100%; }
+    .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 25px 0 10px 0; font-weight: bold; font-size: 14pt; display: block; width: 100%; }
+    .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; width: 100%; }
     .pdf-report-container .kpi-val { font-size: 16pt !important; }
     .pdf-report-container .kpi-label { font-size: 8pt !important; }
-    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; margin-bottom: 20px; }
+    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; margin-bottom: 15px; }
     .pdf-report-container .chart-card { 
       page-break-inside: avoid; border: 1px solid #ddd !important; padding: 10px !important; 
-      height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .pdf-report-container .chart-card h3 { font-size: 10pt; margin-bottom: 10px; text-align: center; color: #000; }
-    .pdf-report-container img.chart-img { max-width: 100%; max-height: 250px; object-fit: contain; display: block; }
-    .pdf-report-container table { width: 100%; font-size: 9pt; border-collapse: collapse; margin-bottom: 15px; }
-    .pdf-report-container th, .pdf-report-container td { padding: 8px !important; border: 1px solid #ddd; text-align: left; }
+    .pdf-report-container .chart-card h3 { font-size: 9pt; margin-bottom: 8px; text-align: center; color: #000; }
+    .pdf-report-container img.chart-img { max-width: 100%; max-height: 240px; object-fit: contain; display: block; }
+    .pdf-report-container table { width: 100%; font-size: 9pt; border-collapse: collapse; margin-bottom: 10px; }
+    .pdf-report-container th, .pdf-report-container td { padding: 6px !important; border: 1px solid #ddd; text-align: left; }
     .pdf-report-container * { color: #000 !important; -webkit-text-fill-color: #000 !important; }
-    .pdf-meta { display: flex; justify-content: space-between; font-size: 8pt; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 20px; font-weight: bold; }
-    .pdf-report-container .alert-box { border: 2px solid #000 !important; background: #f9f9f9 !important; padding: 12px !important; margin: 20px 0; page-break-inside: avoid; display: block; }
+    .pdf-meta { display: flex; justify-content: space-between; font-size: 8pt; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; }
+    .pdf-report-container .alert-box { border: 2px solid #000 !important; background: #f9f9f9 !important; padding: 10px !important; margin: 15px 0; page-break-inside: avoid; display: block; }
   `;
   content.appendChild(printStyle);
 
@@ -941,7 +942,7 @@ function generatePDF() {
     <div class="pdf-meta">
       <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</span>
       <span>RELATÓRIO EXECUTIVO - ${city.toUpperCase()}</span>
-      <span>EMISSÃO DE ALTA FIDELIDADE</span>
+      <span>MAPEAMENTO SOCIODEMOGRÁFICO</span>
     </div>`;
 
   let reportHTML = metaHeader + header.outerHTML;
@@ -958,13 +959,11 @@ function generatePDF() {
     const img = document.createElement('img');
     img.className = 'chart-img';
     img.src = originalCanvases[i].toDataURL('image/png');
-    // Remover info-btns e wraps para o PDF
     const parent = c.parentNode;
     parent.innerHTML = ''; 
     parent.appendChild(img);
   });
   
-  // Garantir que a grid tenha 2 colunas no PDF
   const grid = visionClone.querySelector('.charts-grid');
   if(grid) grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
 
@@ -975,7 +974,7 @@ function generatePDF() {
   content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon, .badges-row').forEach(el => el.remove());
   
   const opt = {
-    margin: [10, 10, 10, 10],
+    margin: [10, 10, 10, 10], // Margens de 10mm em todos os lados (A4 Landscape)
     filename: `Relatorio_Executivo_${city}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
