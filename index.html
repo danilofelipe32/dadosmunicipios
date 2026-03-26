@@ -906,7 +906,7 @@ function generatePDF() {
   content.className = 'pdf-report-container';
   content.style.background = '#ffffff';
   content.style.color = '#000000';
-  content.style.width = '277mm'; // Largura disponível real (A4 Paisagem 297mm - margens)
+  content.style.width = '277mm';
   content.style.padding = '10mm';
   content.style.fontFamily = 'Inter, sans-serif';
 
@@ -920,10 +920,11 @@ function generatePDF() {
     }
     .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 25px 0 10px 0; font-weight: bold; font-size: 14pt; }
     .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; width: 100%; }
-    .pdf-report-container .card-premium { min-width: 0; }
     .pdf-report-container .kpi-val { font-size: 16pt !important; }
     .pdf-report-container .kpi-label { font-size: 8pt !important; }
-    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .pdf-report-container .chart-card { min-height: 250px; }
+    .pdf-report-container img.chart-img { width: 100%; height: auto; display: block; }
     .pdf-report-container table { width: 100%; font-size: 9pt; border-collapse: collapse; }
     .pdf-report-container th, .pdf-report-container td { padding: 6px !important; border: 1px solid #eee; }
     .pdf-report-container * { color: #000 !important; -webkit-text-fill-color: #000 !important; }
@@ -942,9 +943,24 @@ function generatePDF() {
   let reportHTML = metaHeader + header.outerHTML;
   reportHTML += document.getElementById('impacto-section').outerHTML;
   reportHTML += document.getElementById('socio-section').outerHTML;
-  reportHTML += document.getElementById('protecao-section').outerHTML; // Contém a alert-box internamente
+  reportHTML += document.getElementById('protecao-section').outerHTML;
   reportHTML += document.getElementById('saneamento-section').outerHTML;
-  reportHTML += document.getElementById('visualizacao-section').outerHTML;
+  
+  // Clonar seção de visualização para processar gráficos
+  const visionClone = document.getElementById('visualizacao-section').cloneNode(true);
+  
+  // Converter Canvases para Imagens (toDataURL)
+  const originalCanvases = document.querySelectorAll('#visualizacao-section canvas');
+  const cloneCanvases = visionClone.querySelectorAll('canvas');
+  
+  cloneCanvases.forEach((c, i) => {
+    const img = document.createElement('img');
+    img.className = 'chart-img';
+    img.src = originalCanvases[i].toDataURL('image/png');
+    c.parentNode.replaceChild(img, c);
+  });
+  
+  reportHTML += visionClone.outerHTML;
   reportHTML += document.getElementById('fontes-section').outerHTML;
   
   content.innerHTML += reportHTML;
