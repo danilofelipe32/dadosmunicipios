@@ -1105,8 +1105,8 @@ function generatePDF() {
     /* FONTES */
     .fontes-table th { font-size:7pt; }
     .fontes-table td { font-size:8pt; }
-    /* PAGE BREAK */
-    .pb { page-break-before:always; margin-top:0; }
+    /* PAGE BREAK — nunca forçado, apenas evitar corte interno */
+    .no-break { page-break-inside: avoid; }
     /* FOOTER */
     .pdf-footer { border-top:1px solid #ddd; padding-top:4px; margin-top:8mm; display:flex; justify-content:space-between; font-size:7pt; color:#666!important; }
     /* HIDE dark-mode elements */
@@ -1198,33 +1198,32 @@ function generatePDF() {
     </div>
 
     <!-- SANEAMENTO -->
-    <div class="pdf-sec pb">💧 Saneamento Básico</div>
-    <table>
+    <div class="pdf-sec">💧 Saneamento Básico</div>
+    <table class="no-break">
       <thead><tr><th>Indicador</th><th>${city} / RN</th><th>Média Estadual (RN)</th><th>Média Nacional</th><th>Fonte</th></tr></thead>
       <tbody>
         <tr><td>Cobertura de Água Potável</td><td class="green" style="font-weight:700">${el('sa-agu')}</td><td>~74,1%</td><td>83,1%</td><td>CAERN / Inst. Água e San.</td></tr>
         <tr><td>Cobertura de Esgotamento Sanitário</td><td class="red" style="font-weight:700">${el('sa-esg')}</td><td>~25,8%</td><td>59,7%</td><td>CAERN / Inst. Água e San.</td></tr>
         <tr><td>Habitantes sem esgoto coletado</td><td class="red" style="font-weight:700">${el('sa-hab-esgoto')}</td><td colspan="2" style="font-size:8pt;color:#555!important">Maior carência regional identificada.</td><td>Cálculo Estimado</td></tr>
-        <tr><td>Habitantes sem água tratada</td><td class="red" style="font-weight:700">${el('sa-hab-agua-tratada')}</td><td colspan="2" style="font-size:8pt;color:#555!important">Cobertura parcial, dependência de poços.</td><td>Cálculo Estimado</td></tr>
+        <tr><td>Habitantes sem água tratada</td><td class="red" style="font-weight:700">${el('sa-hab-agua-tratada')}</td><td colspan="2" style="font-size:8pt;color:#555!important">Cobertura parcial — dependência de poços.</td><td>Cálculo Estimado</td></tr>
         <tr><td>Estação de Tratamento (ETE)</td><td colspan="3">${el('sa-ete')}</td><td>PM / CAERN</td></tr>
       </tbody>
     </table>
 
-    <!-- VISUALIZAÇÕES -->
+    <!-- GRÁFICOS -->
     <div class="pdf-sec">📈 Painel de Visualização Analítica</div>
-    <div class="charts-row">
+    <div class="charts-row no-break">
       <div class="chart-box"><div class="cht">Saneamento vs Média RN (%)</div><img src="${canvasToImg('cSan')}"></div>
       <div class="chart-box"><div class="cht">Distribuição Etária (Estimativa)</div><img src="${canvasToImg('cAge')}"></div>
       <div class="chart-box"><div class="cht">Letalidade e Conflitos</div><img src="${canvasToImg('cLetal')}"></div>
     </div>
 
-    <!-- RADAR -->
-    <div class="pdf-sec">🎯 Maturidade Sociodemográfica</div>
-    <div class="radar-box"><img src="${canvasToImg('cRadar')}" style="max-height:200px;"></div>
-
-    <!-- COMPARATIVO IDHM -->
-    <div class="pdf-sec pb">📊 Análise Comparativa Regional (IDHM)</div>
-    <div class="idhm-box"><img src="${canvasToImg('cIDHM')}"></div>
+    <!-- RADAR + IDHM LADO A LADO -->
+    <div class="pdf-sec">🎯 Maturidade Sociodemográfica &amp; 📊 Comparativo Regional (IDHM)</div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:6mm;margin-bottom:5mm;" class="no-break">
+      <div class="radar-box" style="margin-bottom:0"><img src="${canvasToImg('cRadar')}" style="max-height:180px;"></div>
+      <div class="idhm-box" style="margin-bottom:0"><img src="${canvasToImg('cIDHM')}" style="height:180px;"></div>
+    </div>
 
     <!-- FONTES -->
     <div class="pdf-sec">📚 Fontes Consultadas</div>
@@ -1255,9 +1254,9 @@ function generatePDF() {
     margin: [8, 8, 8, 8],
     filename: `Relatorio_${city.replace(/\s/g,'_')}_${dateStr.replace(/\//g,'-')}.pdf`,
     image: { type: 'jpeg', quality: 0.97 },
-    html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
+    html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0, windowWidth: 1040 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape', compress: true },
-    pagebreak: { mode: ['css', 'legacy'] }
+    pagebreak: { mode: 'avoid-all' }
   };
 
   const btns = document.querySelectorAll('.btn-pdf span');
