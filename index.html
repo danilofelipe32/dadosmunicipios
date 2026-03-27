@@ -655,7 +655,7 @@
   </section>
 
   <section id="executiva-section">
-    <div class="section-title"><span class="s-icon">🧐</span> Análise Executiva Sênior</div>
+    <div class="section-title"><span class="s-icon">🧐</span> Diagnóstico Estratégico Integrado</div>
     <div class="exec-card">
        <p id="analysis-text">Selecionando análise...</p>
     </div>
@@ -997,21 +997,81 @@ const DB = {
 };
 
 const InsightsDB = {
-  pop: { t: "População Total", d: "Refere-se ao contingente de pessoas residentes no município no momento do Censo.", i: "Municípios com crescimento acima de 20% em 10 anos indicam forte pressão sobre serviços públicos." },
-  dom: { t: "Domicílios", d: "Estimativa de unidades habitacionais ocupadas ou disponíveis.", i: "A densidade de pessoas por domicílio ajuda a mapear áreas de possível hacinamento ou expansão imobiliária." },
-  idh: { t: "IDHM", d: "Índice de Desenvolvimento Humano Municipal (Longevidade, Educação e Renda).", i: "Valores abaixo de 0.600 indicam necessidade urgente de políticas estruturais de base." },
-  pib: { t: "PIB Per Capita", d: "Soma de riquezas produzidas dividida pelo número de habitantes.", i: "Um PIB alto com IDH baixo sugere má distribuição de renda ou economia de enclave (como petróleo/turismo)." },
-  alf: { t: "Alfabetização", d: "Percentual da população com 15 anos ou mais que sabe ler e escrever.", i: "Taxas abaixo de 80% são indicadores críticos de exclusão social histórica." },
-  den: { t: "Densidade Demográfica", d: "Relação entre o número de habitantes e a área territorial (hab/km²).", i: "Alta densidade urbana exige gestão eficiente de resíduos e mobilidade." },
-  bf: { t: "Bolsa Família", d: "Número de famílias beneficiárias do programa de transferência de renda.", i: "Mais de 30% da população em programas indica alta dependência e vulnerabilidade socioeconômica." },
-  agu: { t: "Água Potável", d: "Percentual de domicílios com acesso à rede de abastecimento de água.", i: "Acesso universal (>95%) é o padrão esperado para cidades em desenvolvimento pleno." },
-  esg: { t: "Esgotamento", d: "Percentual de domicílios com esgotamento sanitário adequado.", i: "O maior gargalo do RN. Índices abaixo de 10% representam risco grave à saúde pública." },
-  gra: { t: "Gravidez Adol.", d: "Percentual de nascidos vivos de mães com idade entre 10 e 19 anos.", i: "Indicador de falta de acesso a educação sexual e planeamento familiar." },
-  cSan: { t: "Gráfico de Saneamento", d: "Comparativo direto entre o município e a média do Rio Grande do Norte.", i: "Visualize a distância do município em relação à meta de universalização." },
-  cAge: { t: "Estrutura Etária", d: "Distribuição da população por grandes grupos de idade.", i: "Populações jovens (0-18) demandam investimentos em educação e primeiro emprego." },
-  cLetal: { t: "Gráfico de Segurança", d: "Estimativa de crimes violentos e letais intencionais.", i: "Tendências de queda indicam eficácia de policiamento ou acordos locais." },
-  cRadar: { t: "Maturidade Sociodemográfica", d: "Análise multidimensional de indicadores chave.", i: "O formato do radar indica o equilíbrio ou disparidade entre desenvolvimento social e infraestrutura." },
-  cIDHM: { t: "Análise Comparativa Regional", d: "Comparação do IDHM entre os 12 municípios da região.", i: "Identifique a posição relativa do município no ranking regional de desenvolvimento." }
+  pop: { 
+    t: "População Total", 
+    d: "Refere-se ao contingente de pessoas que residem habitualmente no município. Este dado é a base para o cálculo de repasses governamentais (FPM) e para o dimensionamento de todos os serviços públicos, como número de leitos hospitalares e vagas em escolas.", 
+    i: "Crescimentos populacionais muito rápidos (acima de 20% em uma década) geram pressão imediata sobre a infraestrutura urbana e serviços de saúde." 
+  },
+  dom: { 
+    t: "Domicílios", 
+    d: "Representa o total de unidades habitacionais (casas, apartamentos) onde residem as famílias. Este indicador ajuda a entender o déficit habitacional e a planejar a expansão das redes de energia elétrica, saneamento e coleta de lixo.", 
+    i: "Uma alta densidade de pessoas por domicílio pode indicar carência habitacional ou áreas de ocupação irregular que necessitam de intervenção urbana." 
+  },
+  idh: { 
+    t: "IDHM", 
+    d: "O Índice de Desenvolvimento Humano Municipal avalia três dimensões básicas: Longevidade (saúde), Educação (conhecimento) e Renda (padrão de vida). É a medida mais completa para avaliar se o crescimento econômico está se traduzindo em bem-estar real para a população.", 
+    i: "Valores de IDHM abaixo de 0,600 são considerados baixos e exigem políticas públicas integradas para enfrentar a pobreza e a falta de escolaridade." 
+  },
+  pib: { 
+    t: "PIB Per Capita", 
+    d: "É a soma de todas as riquezas produzidas no município (indústria, comércio, serviços) dividida pelo número de moradores. Indica a produtividade econômica da cidade, mas não mostra como essa riqueza é distribuída entre as pessoas.", 
+    i: "Cidades com PIB alto e IDH baixo geralmente possuem 'economias de enclave' (como grandes usinas ou polos turísticos isolados) onde a riqueza não circula na economia local." 
+  },
+  alf: { 
+    t: "Alfabetização (15+)", 
+    d: "Percentual da população adulta que domina as habilidades básicas de leitura e escrita. É um indicador fundamental de inclusão social, pois a alfabetização é o primeiro passo para o acesso ao mercado de trabalho qualificado e ao exercício da cidadania.", 
+    i: "Taxas de alfabetização baixas em cidades com muitos idosos refletem carências históricas no sistema educacional que precisam de programas de alfabetização de adultos." 
+  },
+  den: { 
+    t: "Densidade Demográfica", 
+    d: "Indica quantas pessoas vivem, em média, por quilômetro quadrado de território. Ajuda a identificar se o município é predominantemente urbano (muita gente concentrada) ou rural (pessoas espalhadas).", 
+    i: "Altas densidades exigem soluções complexas de mobilidade urbana e gestão intensiva de resíduos sólidos para evitar colapsos nos serviços." 
+  },
+  bf: { 
+    t: "Bolsa Família", 
+    d: "Número de famílias que dependem do programa federal de transferência de renda. Este dado é um termômetro direto da insegurança alimentar e da vulnerabilidade socioeconômica extrema no município.", 
+    i: "Quando mais de 30% da população depende de benefícios, a economia local fica vulnerável a mudanças nos repasses federais, exigindo políticas de incentivo ao emprego local." 
+  },
+  agu: { 
+    t: "Água Potável", 
+    d: "Percentual de residências conectadas à rede formal de abastecimento de água tratada. O acesso à água segura é essencial para a dignidade humana e reduz drasticamente a mortalidade infantil e doenças infecciosas.", 
+    i: "A dependência excessiva de poços artesianos ou caminhões-pipa indica uma infraestrutura de rede incompleta que gera custos extras para as famílias." 
+  },
+  esg: { 
+    t: "Esgotamento Sanitário", 
+    d: "Indica o percentual de casas com coleta e tratamento de esgoto. Este é o serviço de infraestrutura mais crítico na região. Cada R$ 1,00 investido em saneamento economiza R$ 4,00 em despesas de saúde pública no longo prazo.", 
+    i: "Índices baixos de esgoto (inferiores a 20%) são a principal causa de contaminação de lençóis freáticos e proliferação de doenças em áreas urbanas adensadas." 
+  },
+  gra: { 
+    t: "Gravidez na Adolescência", 
+    d: "Mede a proporção de nascidos vivos cujas mães têm entre 10 e 19 anos. É um indicador de impacto social profundo, correlacionado à interrupção dos ciclos escolares das jovens e perpetuação da pobreza.", 
+    i: "Altas taxas indicam a necessidade urgente de expansão da rede de atenção primária à saúde e de programas de educação sexual e planejamento familiar." 
+  },
+  cSan: { 
+    t: "Gráfico de Saneamento", 
+    d: "Este gráfico permite visualizar a distância entre a realidade do município e as médias do estado do RN e do país. É a ferramenta principal para cobrar investimentos estruturais junto aos órgãos competentes.", 
+    i: "Analise a barra de esgoto: se ela for muito menor que a de água, a cidade vive um desequilíbrio sanitário grave que exige atenção política." 
+  },
+  cAge: { 
+    t: "Distribuição Etária", 
+    d: "Mostra o perfil de idade dos moradores: muitos jovens (pirâmide base larga) ou tendência de envelhecimento. É vital para decidir onde construir creches vs. centros de convivência para idosos.", 
+    i: "Se a cidade tem muitos jovens (0-18), o foco deve ser o 'primeiro emprego' e educação técnica para reter esses talentos no município." 
+  },
+  cLetal: { 
+    t: "Índice de Segurança", 
+    d: "Representa a evolução de crimes violentos intencionais no território. Segurança pública percebida é fator determinante para a atração de novos negócios e fixação de profissionais qualificados.", 
+    i: "Tendências de aumento exigem não apenas policiamento, mas intervenção social em bairros periféricos para oferecer alternativas à juventude." 
+  },
+  cRadar: { 
+    t: "Maturidade Sociodemográfica", 
+    d: "Uma visão 360 graus que cruza economia, educação, saúde e infraestrutura. Ajuda a identificar, de forma rápida, qual área está mais 'encolhida' (precisa de atenção) e qual está mais 'expandida' (ponto forte).", 
+    i: "Quanto mais simétrico e amplo for o radar, mais equilibrado é o desenvolvimento da cidade. Pontas muito curtas indicam gargalos críticos." 
+  },
+  cIDHM: { 
+    t: "Comparativo Regional de IDHM", 
+    d: "Posiciona o município em relação aos seus vizinhos. Ajuda a entender se a cidade está acompanhando o ritmo de desenvolvimento da Região Metropolitana e do Litoral Sul.", 
+    i: "Estar abaixo da média regional pode indicar uma perda de competitividade territorial e necessidade de cooperação intermunicipal." 
+  }
 };
 
 function showInsight(id) {
@@ -1166,7 +1226,7 @@ function generatePDF() {
     </div>
 
     <!-- ANÁLISE EXECUTIVA -->
-    <div class="pdf-sec">🧐 Análise Executiva Sênior</div>
+    <div class="pdf-sec">🧐 Diagnóstico Estratégico Integrado</div>
     <div class="exec-card">${el('analysis-text')}</div>
 
     <!-- DIMENSÃO SOCIOECONÔMICA -->
