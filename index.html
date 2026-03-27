@@ -918,97 +918,231 @@ function initTabs() {
 
 function generatePDF() {
   const city = document.getElementById('city-select').value;
-  const header = document.querySelector('header').cloneNode(true);
-  
+  const d = DB[city];
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('pt-BR');
+  const timeStr = now.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+
+  // ── Container principal ──────────────────────────────────────────
   const content = document.createElement('div');
-  content.className = 'pdf-report-container';
-  content.style.background = '#ffffff';
-  content.style.color = '#000000';
-  content.style.width = '275mm';
-  content.style.padding = '8mm';
-  content.style.fontFamily = 'Inter, sans-serif';
+  content.style.cssText = 'background:#fff;color:#000;width:275mm;font-family:Outfit,Inter,sans-serif;font-size:10pt;line-height:1.5;box-sizing:border-box;';
 
-  const printStyle = document.createElement('style');
-  printStyle.innerHTML = `
-    .pdf-report-container { box-sizing: border-box; display: block; overflow: hidden; }
-    .pdf-report-container section { display: block; clear: both; page-break-inside: avoid; margin-bottom: 25px; width: 100%; position: relative; }
-    .pdf-report-container section:last-of-type { margin-bottom: 0 !important; page-break-after: avoid !important; }
-    .pdf-report-container .card-premium, .pdf-report-container .table-container { 
-      page-break-inside: avoid; border: 1px solid #ddd !important; margin-bottom: 12px; 
-      padding: 10px !important; display: block;
+  // ── CSS interno ──────────────────────────────────────────────────
+  const style = document.createElement('style');
+  style.innerHTML = `
+    * { box-sizing:border-box; color:#000!important; -webkit-text-fill-color:#000!important; }
+    .pdf-wrap { padding:8mm 10mm 12mm; }
+    /* CAPA */
+    .pdf-cover {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:10mm 0 8mm; text-align:center; border-bottom:3px solid #000; margin-bottom:6mm;
     }
-    .pdf-report-container .section-title { color: #000; border-bottom: 2px solid #000; padding-bottom: 5px; margin: 25px 0 10px 0; font-weight: bold; font-size: 14pt; display: block; width: 100%; }
-    .pdf-report-container .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; width: 100%; }
-    .pdf-report-container .kpi-val { font-size: 16pt !important; }
-    .pdf-report-container .kpi-label { font-size: 8pt !important; }
-    .pdf-report-container .charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; margin-bottom: 15px; }
-    .pdf-report-container .chart-card { 
-      page-break-inside: avoid; border: 1px solid #ddd !important; padding: 10px !important; 
-      height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .pdf-report-container .chart-card h3 { font-size: 9pt; margin-bottom: 8px; text-align: center; color: #000; }
-    .pdf-report-container img.chart-img { max-width: 100%; max-height: 240px; object-fit: contain; display: block; }
-    .pdf-report-container table { width: 100%; font-size: 9pt; border-collapse: collapse; margin-bottom: 10px; }
-    .pdf-report-container th, .pdf-report-container td { padding: 6px !important; border: 1px solid #ddd; text-align: left; }
-    .pdf-report-container * { color: #000 !important; -webkit-text-fill-color: #000 !important; }
-    .pdf-meta { display: flex; justify-content: space-between; font-size: 8pt; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; }
-    .pdf-report-container .alert-box { border: 2px solid #000 !important; background: #f9f9f9 !important; padding: 10px !important; margin: 15px 0; page-break-inside: avoid; display: block; }
+    .pdf-cover .eyebrow { font-size:7pt; letter-spacing:4px; text-transform:uppercase; color:#555!important; margin-bottom:4mm; }
+    .pdf-cover h1 { font-size:26pt; font-weight:900; letter-spacing:-1px; margin:0 0 2mm; line-height:1; }
+    .pdf-cover h2 { font-size:11pt; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin:0 0 4mm; color:#333!important; }
+    .pdf-cover .pdf-meta-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:2mm; }
+    .pdf-cover .meta-badge { border:1px solid #999; padding:2px 10px; border-radius:20px; font-size:7pt; font-weight:600; }
+    .pdf-cover .date-row { font-size:8pt; color:#666!important; margin-top:3mm; }
+    /* SECTION TITLE */
+    .pdf-sec { font-size:10pt; font-weight:800; text-transform:uppercase; letter-spacing:1.5px;
+      border-bottom:2px solid #000; padding-bottom:3px; margin:7mm 0 4mm; display:flex; gap:8px; align-items:center; }
+    /* KPI GRID */
+    .kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:5mm; }
+    .kpi-card { border:1px solid #ddd; border-radius:6px; padding:6px 8px; }
+    .kpi-card .lbl { font-size:6pt; text-transform:uppercase; letter-spacing:1.5px; color:#444!important; font-weight:700; margin-bottom:2px; }
+    .kpi-card .val { font-size:16pt; font-weight:900; letter-spacing:-1px; line-height:1; }
+    .kpi-card .src { font-size:6pt; color:#888!important; margin-top:2px; text-transform:uppercase; }
+    .blue { color:#1d4ed8!important; } .green { color:#059669!important; }
+    .yellow { color:#b45309!important; } .red { color:#dc2626!important; }
+    /* TABLES */
+    table { width:100%; border-collapse:collapse; font-size:8.5pt; margin-bottom:5mm; }
+    th { background:#f3f4f6; border:1px solid #000; padding:5px 8px; font-weight:700; text-align:left; font-size:7.5pt; text-transform:uppercase; }
+    td { border:1px solid #aaa; padding:5px 8px; vertical-align:top; }
+    /* ALERT */
+    .alert-box { border:1.5px solid #000; background:#f9fafb; border-radius:6px; padding:6px 10px; margin:4mm 0; font-size:9pt; }
+    .alert-box strong { font-weight:800; display:block; margin-bottom:3px; }
+    /* EXEC */
+    .exec-card { border:2px solid #000; border-left:5px solid #000; border-radius:4px; padding:8px 14px; font-style:italic; font-size:9.5pt; line-height:1.7; margin:4mm 0; background:#f9fafb; }
+    /* CHARTS */
+    .charts-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6mm; margin-bottom:5mm; }
+    .chart-box { border:1px solid #ddd; border-radius:6px; padding:6px; }
+    .chart-box .cht { font-size:7pt; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#444!important; margin-bottom:4px; }
+    .chart-box img { width:100%; height:160px; object-fit:contain; display:block; }
+    .radar-box { border:1px solid #ddd; border-radius:6px; padding:6px; text-align:center; margin-bottom:5mm; }
+    .radar-box img { max-height:200px; margin:0 auto; display:block; }
+    .idhm-box { border:1px solid #ddd; border-radius:6px; padding:6px; margin-bottom:5mm; }
+    .idhm-box img { width:100%; height:180px; object-fit:contain; display:block; }
+    /* FONTES */
+    .fontes-table th { font-size:7pt; }
+    .fontes-table td { font-size:8pt; }
+    /* PAGE BREAK */
+    .pb { page-break-before:always; margin-top:0; }
+    /* FOOTER */
+    .pdf-footer { border-top:1px solid #ddd; padding-top:4px; margin-top:8mm; display:flex; justify-content:space-between; font-size:7pt; color:#666!important; }
+    /* HIDE dark-mode elements */
+    .info-btn, .btn-pdf, .nav-logo, .badge, .kpi-bar, .kpi-icon, .s-icon, .header-eyebrow, .badges-row { display:none!important; }
+    a { color:#000!important; text-decoration:none; }
   `;
-  content.appendChild(printStyle);
+  content.appendChild(style);
 
-  const metaHeader = `
-    <div class="pdf-meta">
-      <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</span>
-      <span>RELATÓRIO EXECUTIVO - ${city.toUpperCase()}</span>
-      <span>MAPEAMENTO SOCIODEMOGRÁFICO</span>
-    </div>`;
+  // ── Helper: canvas → img src ─────────────────────────────────────
+  function canvasToImg(id) {
+    const c = document.getElementById(id);
+    return c ? c.toDataURL('image/png') : '';
+  }
 
-  let reportHTML = metaHeader + header.outerHTML;
-  reportHTML += document.getElementById('impacto-section').outerHTML;
-  reportHTML += document.getElementById('socio-section').outerHTML;
-  reportHTML += document.getElementById('protecao-section').outerHTML;
-  reportHTML += document.getElementById('saneamento-section').outerHTML;
-  reportHTML += document.getElementById('radar-section').outerHTML;
-  reportHTML += document.getElementById('executiva-section').outerHTML;
-  reportHTML += document.getElementById('comparativo-section').outerHTML;
-  
-  const visionClone = document.getElementById('visualizacao-section').cloneNode(true);
-  reportHTML += visionClone.outerHTML;
-  reportHTML += document.getElementById('fontes-section').outerHTML;
-  
-  content.innerHTML += reportHTML;
-  
-  // Converte todos os canvases no content para imagens para o PDF
-  content.querySelectorAll('canvas').forEach(c => {
-    // Busca o canvas original correspondente pelo ID ou classe
-    const original = document.getElementById(c.id);
-    if(original && original.toDataURL) {
-      const img = document.createElement('img');
-      img.className = 'chart-img';
-      img.src = original.toDataURL('image/png');
-      c.parentNode.replaceChild(img, c);
-    }
-  });
+  // ── Helper: safe inner text ─────────────────────────────────────
+  function el(id) {
+    const e = document.getElementById(id);
+    return e ? e.innerText.trim() : '-';
+  }
+  function elHTML(id) {
+    const e = document.getElementById(id);
+    return e ? e.innerHTML : '-';
+  }
 
-  content.querySelectorAll('.info-btn, .btn-pdf, .alert-icon, .badges-row').forEach(el => el.remove());
-  
+  // ── Build HTML ───────────────────────────────────────────────────
+  const html = `
+  <div class="pdf-wrap">
+
+    <!-- CAPA COMPACTA -->
+    <div class="pdf-cover">
+      <div class="eyebrow">🇧🇷 Rio Grande do Norte · Plataforma de Inteligência Territorial</div>
+      <h1>Mapeamento Sociodemográfico</h1>
+      <h2>${city} – Rio Grande do Norte</h2>
+      <div class="pdf-meta-row">
+        <span class="meta-badge">IBGE Censo 2022</span>
+        <span class="meta-badge">DATASUS</span>
+        <span class="meta-badge">CAERN / Inst. Água e Saneamento</span>
+        <span class="meta-badge">SSP-RN</span>
+        <span class="meta-badge">MDS / Cadastro Único</span>
+      </div>
+      <div class="date-row">Emitido em ${dateStr} às ${timeStr} · Relatório Executivo Sociodemográfico</div>
+    </div>
+
+    <!-- INDICADORES GERAIS -->
+    <div class="pdf-sec">📌 Indicadores Gerais de Impacto</div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="lbl">População Total</div><div class="val blue">${el('k-pop')}</div><div class="src">IBGE 2022</div></div>
+      <div class="kpi-card"><div class="lbl">Domicílios</div><div class="val blue">${el('k-dom')}</div><div class="src">IBGE 2022</div></div>
+      <div class="kpi-card"><div class="lbl">IDHM</div><div class="val green">${el('k-idh')}</div><div class="src">IBGE / PNUD</div></div>
+      <div class="kpi-card"><div class="lbl">PIB Per Capita</div><div class="val yellow">${el('k-pib')}</div><div class="src">IBGE</div></div>
+      <div class="kpi-card"><div class="lbl">Alfabetização</div><div class="val blue">${el('k-alf')}</div><div class="src">IBGE 2022</div></div>
+      <div class="kpi-card"><div class="lbl">Densidade Dem.</div><div class="val green">${el('k-den')}</div><div class="src">IBGE 2022</div></div>
+      <div class="kpi-card"><div class="lbl">Bolsa Família</div><div class="val red">${el('k-bf')}</div><div class="src">MDS</div></div>
+      <div class="kpi-card"><div class="lbl">Água Potável</div><div class="val green">${el('k-agu')}</div><div class="src">CAERN</div></div>
+      <div class="kpi-card"><div class="lbl">Esgotamento</div><div class="val red">${el('k-esg')}</div><div class="src">CAERN</div></div>
+      <div class="kpi-card"><div class="lbl">Gravidez Adol.</div><div class="val red">${el('k-gra')}</div><div class="src">DATASUS</div></div>
+    </div>
+
+    <!-- ANÁLISE EXECUTIVA -->
+    <div class="pdf-sec">🧐 Análise Executiva Sênior</div>
+    <div class="exec-card">${el('analysis-text')}</div>
+
+    <!-- DIMENSÃO SOCIOECONÔMICA -->
+    <div class="pdf-sec">💼 Dimensão Socioeconômica</div>
+    <table>
+      <thead><tr><th>CadÚnico</th><th>Beneficiários Bolsa Família</th><th>Taxa Desemprego / Informalidade</th><th>Índice de Vulnerabilidade</th></tr></thead>
+      <tbody><tr>
+        <td>${el('ts-cadunico')}</td>
+        <td>${el('ts-bf-detalhe')}</td>
+        <td>${el('ts-desemprego')}</td>
+        <td>${el('ts-vulnerabilidade')}</td>
+      </tr></tbody>
+    </table>
+
+    <!-- PROTEÇÃO E RISCO SOCIAL -->
+    <div class="pdf-sec">🛡️ Proteção e Risco Social</div>
+    <table>
+      <thead><tr><th>Conflito Armado / Facções</th><th>Rotas Inseguras p/ Escola</th><th>Trabalho Infantil / Segurança</th><th>Uso de Drogas Local</th></tr></thead>
+      <tbody><tr>
+        <td>${elHTML('tr-fac')}</td>
+        <td>${el('tr-rotas')}</td>
+        <td>${el('tr-trabalho')}</td>
+        <td>${el('tr-drogas')}</td>
+      </tr></tbody>
+    </table>
+    <div class="alert-box">
+      <strong>⚠️ Análise Estrutural Crítica</strong>
+      <span>${el('al-text')}</span>
+    </div>
+
+    <!-- SANEAMENTO -->
+    <div class="pdf-sec pb">💧 Saneamento Básico</div>
+    <table>
+      <thead><tr><th>Indicador</th><th>${city} / RN</th><th>Média Estadual (RN)</th><th>Média Nacional</th><th>Fonte</th></tr></thead>
+      <tbody>
+        <tr><td>Cobertura de Água Potável</td><td class="green" style="font-weight:700">${el('sa-agu')}</td><td>~74,1%</td><td>83,1%</td><td>CAERN / Inst. Água e San.</td></tr>
+        <tr><td>Cobertura de Esgotamento Sanitário</td><td class="red" style="font-weight:700">${el('sa-esg')}</td><td>~25,8%</td><td>59,7%</td><td>CAERN / Inst. Água e San.</td></tr>
+        <tr><td>Habitantes sem esgoto coletado</td><td class="red" style="font-weight:700">${el('sa-hab-esgoto')}</td><td colspan="2" style="font-size:8pt;color:#555!important">Maior carência regional identificada.</td><td>Cálculo Estimado</td></tr>
+        <tr><td>Habitantes sem água tratada</td><td class="red" style="font-weight:700">${el('sa-hab-agua-tratada')}</td><td colspan="2" style="font-size:8pt;color:#555!important">Cobertura parcial, dependência de poços.</td><td>Cálculo Estimado</td></tr>
+        <tr><td>Estação de Tratamento (ETE)</td><td colspan="3">${el('sa-ete')}</td><td>PM / CAERN</td></tr>
+      </tbody>
+    </table>
+
+    <!-- VISUALIZAÇÕES -->
+    <div class="pdf-sec">📈 Painel de Visualização Analítica</div>
+    <div class="charts-row">
+      <div class="chart-box"><div class="cht">Saneamento vs Média RN (%)</div><img src="${canvasToImg('cSan')}"></div>
+      <div class="chart-box"><div class="cht">Distribuição Etária (Estimativa)</div><img src="${canvasToImg('cAge')}"></div>
+      <div class="chart-box"><div class="cht">Letalidade e Conflitos</div><img src="${canvasToImg('cLetal')}"></div>
+    </div>
+
+    <!-- RADAR -->
+    <div class="pdf-sec">🎯 Maturidade Sociodemográfica</div>
+    <div class="radar-box"><img src="${canvasToImg('cRadar')}" style="max-height:200px;"></div>
+
+    <!-- COMPARATIVO IDHM -->
+    <div class="pdf-sec pb">📊 Análise Comparativa Regional (IDHM)</div>
+    <div class="idhm-box"><img src="${canvasToImg('cIDHM')}"></div>
+
+    <!-- FONTES -->
+    <div class="pdf-sec">📚 Fontes Consultadas</div>
+    <table class="fontes-table">
+      <thead><tr><th>Fonte</th><th>Dados Obtidos</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>IBGE – Censo Demográfico 2022</td><td>População, domicílios, densidade, alfabetização, PIB per capita, IDHM</td><td>ibge.gov.br</td></tr>
+        <tr><td>Prefeitura Municipal</td><td>Gravidez na adolescência, programas habitacionais, saneamento, ETE</td><td>Portal Municipal</td></tr>
+        <tr><td>DATASUS / Ministério da Saúde</td><td>Taxa de gravidez na adolescência (10–19 anos)</td><td>datasus.saude.gov.br</td></tr>
+        <tr><td>MDS / Gov.br – Bolsa Família</td><td>Número de famílias beneficiárias</td><td>gov.br/mds</td></tr>
+        <tr><td>Instituto Água e Saneamento</td><td>Cobertura de água e esgoto, prestador CAERN</td><td>aguaesaneamento.org.br</td></tr>
+        <tr><td>CAERN – Companhia de Águas</td><td>Obras de saneamento, ampliação da rede</td><td>caern.rn.gov.br</td></tr>
+      </tbody>
+    </table>
+
+    <!-- FOOTER -->
+    <div class="pdf-footer">
+      <span>Mapeamento Sociodemográfico Regional · ${city} / RN</span>
+      <span>Emitido em ${dateStr} às ${timeStr}</span>
+      <span>Produzido por Danilo Arruda · Dados: IBGE, DATASUS, CAERN, MDS</span>
+    </div>
+
+  </div>`;
+
+  content.innerHTML += html;
+
   const opt = {
-    margin: [10, 10, 10, 10], // Margens de 10mm em todos os lados (A4 Landscape)
-    filename: `Relatorio_Executivo_${city}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
+    margin: [8, 8, 8, 8],
+    filename: `Relatorio_${city.replace(/\s/g,'_')}_${dateStr.replace(/\//g,'-')}.pdf`,
+    image: { type: 'jpeg', quality: 0.97 },
     html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape', compress: true },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    pagebreak: { mode: ['css', 'legacy'] }
   };
 
-  const btn = document.querySelector('.btn-pdf span');
-  const oldText = btn.innerText;
-  btn.innerText = 'Gerando...';
+  const btns = document.querySelectorAll('.btn-pdf span');
+  btns.forEach(b => b.innerText = 'Gerando...');
 
   html2pdf().set(opt).from(content).save().then(() => {
-    btn.innerText = oldText;
+    btns.forEach(b => b.innerText = b.closest('.btn-sync') ? 'Sincronizar' : 'Relatório');
   });
 }
+
+
+
+
+
+
 
 function generateABNTReport() {
   const city = document.getElementById('city-select').value;
