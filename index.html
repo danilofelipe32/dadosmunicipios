@@ -7,6 +7,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Leaflet Maps -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
+
 <style>
   :root {
     --bg: #05060e;
@@ -342,6 +347,69 @@
     .city-nav { padding: 11px 14px; }
   }
   
+  /* ── GEO SECTION ─────────────────────────────────────────── */
+  .geo-controls {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .geo-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 9px 18px; border-radius: 50px; font-size: 0.82rem; font-weight: 700;
+    font-family: 'Outfit', sans-serif; cursor: pointer; transition: all .2s;
+    background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.55); letter-spacing: .3px;
+  }
+  .geo-btn:hover { border-color: var(--primary); color: #fff; }
+  .geo-btn.active { background: linear-gradient(135deg,var(--primary),var(--accent)); border-color: transparent; color: #fff; box-shadow: 0 0 18px rgba(108,99,255,.45); }
+  .geo-btn-all { border-color: rgba(255,184,48,.25); color: #ffb830; }
+  .geo-btn-all:hover { border-color: #ffb830; background: rgba(255,184,48,.1); color: #ffb830; }
+
+  .geo-layout {
+    display: grid; grid-template-columns: 1fr 280px; gap: 16px; height: 500px;
+  }
+  #geo-map {
+    border-radius: 16px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1);
+    height: 100%; min-height: 400px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  }
+  .geo-panel {
+    background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.09);
+    border-radius: 16px; padding: 20px 16px; display: flex; flex-direction: column; gap: 14px;
+    backdrop-filter: blur(12px); overflow-y: auto;
+  }
+  .geo-panel-title {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2.5px;
+    color: rgba(255,255,255,0.35); font-weight: 700;
+  }
+  .geo-city-name {
+    font-size: 1.15rem; font-weight: 800; color: #fff; line-height: 1.2;
+    letter-spacing: -.3px; min-height: 28px;
+  }
+  .geo-stat-group { display: flex; flex-direction: column; gap: 4px; }
+  .geo-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .geo-stat-val { font-size: 1.05rem; font-weight: 800; color: #fff; }
+  .geo-bar-wrap { height: 6px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
+  .geo-bar { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s ease; width: 0%; }
+  .geo-risk-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;
+    letter-spacing: .5px; text-transform: uppercase;
+    background: rgba(255,77,109,.15); color: #ff4d6d; border: 1px solid rgba(255,77,109,.25);
+    width: fit-content;
+  }
+  .geo-risk-badge.medium { background: rgba(255,184,48,.15); color: #ffb830; border-color: rgba(255,184,48,.25); }
+  .geo-risk-badge.low { background: rgba(0,229,160,.15); color: #00e5a0; border-color: rgba(0,229,160,.25); }
+  .geo-legend { margin-top: auto; border-top: 1px solid rgba(255,255,255,.07); padding-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .geo-legend-title { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,.3); margin-bottom: 2px; }
+  .geo-legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(255,255,255,.6); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  /* Override leaflet dark tiles attribution */
+  .leaflet-control-attribution { background: rgba(0,0,0,.5)!important; color: rgba(255,255,255,.4)!important; font-size: 10px!important; }
+  .leaflet-control-attribution a { color: rgba(255,255,255,.4)!important; }
+  @media (max-width: 768px) {
+    .geo-layout { grid-template-columns: 1fr; height: auto; }
+    #geo-map { height: 320px; }
+    .geo-panel { min-height: 220px; }
+  }
+
 </style>
 </head>
 <body>
@@ -618,6 +686,68 @@
       <div class="info-btn" onclick="showInsight('cLetal')">i</div>
       <h3>Letalidade e Conflitos</h3>
       <div class="chart-wrap"><canvas id="cLetal"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GEO INTEL ===== -->
+<section id="geo-section">
+  <div class="section-title"><span class="s-icon">🗺️</span> Inteligência Geoespacial e Mapas de Calor</div>
+
+  <!-- Controles de camada -->
+  <div class="geo-controls">
+    <button class="geo-btn active" id="btn-heat" onclick="toggleGeoLayer('heat')">
+      <span>🔥</span> Vulnerabilidade Sanitária
+    </button>
+    <button class="geo-btn" id="btn-risk" onclick="toggleGeoLayer('risk')">
+      <span>🛡️</span> Risco Armado / Facções
+    </button>
+    <button class="geo-btn" id="btn-school" onclick="toggleGeoLayer('school')">
+      <span>🏫</span> Rotas Escolares Inseguras
+    </button>
+    <button class="geo-btn geo-btn-all" onclick="toggleAllCities()" id="btn-all">
+      <span>🗳️</span> Todos os Municípios
+    </button>
+  </div>
+
+  <!-- Layout mapa + painel -->
+  <div class="geo-layout">
+    <div id="geo-map"></div>
+    <div class="geo-panel">
+      <div class="geo-panel-title">Painel de Risco</div>
+      <div id="geo-city-name" class="geo-city-name">Selecione um município</div>
+
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">💧 Cobertura de Água</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" id="gbar-agua"></div></div>
+        <div class="geo-stat-val" id="gval-agua">-</div>
+      </div>
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">🚽 Esgotamento Sanitário</div>
+        <div class="geo-bar-wrap"><div class="geo-bar" id="gbar-esg" style="background:#ff4d6d;"></div></div>
+        <div class="geo-stat-val" id="gval-esg">-</div>
+      </div>
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">👥 População</div>
+        <div class="geo-stat-val" id="gval-pop">-</div>
+      </div>
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">⚠️ Nível de Risco Sanitário</div>
+        <div class="geo-risk-badge" id="geo-risk-badge">-</div>
+      </div>
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">🛡️ Risco Armado</div>
+        <div class="geo-risk-badge" id="geo-armed-badge">-</div>
+      </div>
+
+      <div class="geo-legend">
+        <div class="geo-legend-title">Legenda — Calor Sanitário</div>
+        <div class="geo-legend-row"><span class="dot" style="background:#00e5a0;"></span> Boa cobertura (≥80%)</div>
+        <div class="geo-legend-row"><span class="dot" style="background:#ffb830;"></span> Cobertura parcial (40–79%)</div>
+        <div class="geo-legend-row"><span class="dot" style="background:#ff4d6d;"></span> Crise sanitária (&lt;40%)</div>
+        <div class="geo-legend-row"><span style="font-size:1.1em">🛡️</span> Presença de facções</div>
+        <div class="geo-legend-row"><span style="font-size:1.1em">🏫</span> Rota escolar de risco</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1556,7 +1686,216 @@ spinStyle.innerHTML = `
 `;
 document.head.appendChild(spinStyle);
 
+
+// =========================================================
+// GEO INTELLIGENCE MAP
+// =========================================================
+const GEO_DATA = {
+  "Parnamirim":          { lat:-5.9142, lng:-35.2631, agu:94.7, esg:7.1,  pop:"252.716", riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:2037 },
+  "São José de Mipibu":  { lat:-6.0783, lng:-35.2428, agu:82.0, esg:5.0,  pop:"46.786",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:380  },
+  "Nísia Floresta":      { lat:-6.0919, lng:-35.2100, agu:79.0, esg:3.0,  pop:"27.648",  riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:155  },
+  "Canguaretama":        { lat:-6.3736, lng:-35.1266, agu:76.5, esg:2.5,  pop:"29.668",  riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:120  },
+  "Goianinha":           { lat:-6.2603, lng:-35.1989, agu:82.0, esg:8.0,  pop:"27.000",  riskArmed:"PRESENTE",  armedClass:"med",  school:false, den:145  },
+  "Monte Alegre":        { lat:-6.0733, lng:-35.3239, agu:74.0, esg:3.0,  pop:"23.031",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:109  },
+  "Tibau do Sul":        { lat:-6.1944, lng:-35.0892, agu:89.0, esg:15.0, pop:"16.929",  riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:164  },
+  "Arez":                { lat:-6.1825, lng:-35.1789, agu:70.0, esg:2.0,  pop:"13.251",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:114  },
+  "Vera Cruz":           { lat:-6.2186, lng:-35.4264, agu:68.0, esg:2.0,  pop:"10.735",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:127  },
+  "Baía Formosa":        { lat:-6.3706, lng:-35.0228, agu:75.0, esg:5.0,  pop:"8.824",   riskArmed:"PRESENTE",  armedClass:"med",  school:false, den:35   },
+  "Senador G. Avelino":  { lat:-6.1436, lng:-35.2969, agu:65.0, esg:1.0,  pop:"4.065",   riskArmed:"CONTROLADO",armedClass:"low",  school:false, den:155  },
+  "Vila Flor":           { lat:-6.2994, lng:-35.3200, agu:60.0, esg:1.0,  pop:"4.300",   riskArmed:"CONTROLADO",armedClass:"low",  school:false, den:80   }
+};
+
+let geoMap = null;
+let geoHeatLayer = null;
+let geoRiskMarkers = [];
+let geoSchoolMarkers = [];
+let geoAllMarkers = [];
+let activeGeoLayer = 'heat';
+let showingAll = false;
+
+function initGeoMap() {
+  if (geoMap) return;
+
+  geoMap = L.map('geo-map', { zoomControl: true, scrollWheelZoom: true })
+    .setView([-6.18, -35.22], 10);
+
+  // Dark tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap © CARTO',
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(geoMap);
+
+  buildGeoLayers();
+  toggleGeoLayer('heat');
+
+  // Focus on selected city
+  const currentCity = document.getElementById('city-select').value;
+  if (GEO_DATA[currentCity]) {
+    const d = GEO_DATA[currentCity];
+    geoMap.setView([d.lat, d.lng], 12);
+    updateGeoPanel(currentCity);
+  }
+}
+
+function buildGeoLayers() {
+  // ── HEAT LAYER (vulnerabilidade sanitária) ────────────────
+  const heatPoints = Object.entries(GEO_DATA).map(([name, d]) => {
+    const intensity = (100 - d.esg) / 100; // maior esg = menor risco = menor calor
+    return [d.lat, d.lng, intensity];
+  });
+  geoHeatLayer = L.heatLayer(heatPoints, {
+    radius: 35, blur: 25, maxZoom: 13,
+    gradient: { 0.0: '#00e5a0', 0.4: '#ffb830', 0.7: '#ff7849', 1.0: '#ff4d6d' }
+  });
+
+  // ── RISK MARKERS (risco armado) ──────────────────────────
+  Object.entries(GEO_DATA).forEach(([name, d]) => {
+    const color = d.armedClass === 'red' ? '#ff4d6d' : d.armedClass === 'med' ? '#ffb830' : '#00e5a0';
+    const icon = L.divIcon({
+      html: `<div style="
+        width:36px;height:36px;border-radius:50%;
+        background:${color}22;border:2.5px solid ${color};
+        display:flex;align-items:center;justify-content:center;
+        font-size:16px;box-shadow:0 0 14px ${color}66;
+      ">🛡️</div>`,
+      className: '', iconSize: [36, 36], iconAnchor: [18, 18]
+    });
+    const m = L.marker([d.lat, d.lng], { icon })
+      .bindTooltip(`<b>${name}</b><br>Risco: ${d.riskArmed}`, { className: 'geo-tooltip' })
+      .on('click', () => {
+        updateGeoPanel(name);
+        const sel = document.getElementById('city-select');
+        sel.value = name;
+        selectCity(name);
+      });
+    geoRiskMarkers.push(m);
+  });
+
+  // ── SCHOOL MARKERS (rotas de risco) ──────────────────────
+  Object.entries(GEO_DATA).filter(([, d]) => d.school).forEach(([name, d]) => {
+    const icon = L.divIcon({
+      html: `<div style="
+        width:32px;height:32px;border-radius:8px;
+        background:#6c63ff33;border:2px solid #6c63ff;
+        display:flex;align-items:center;justify-content:center;
+        font-size:15px;box-shadow:0 0 12px #6c63ff66;
+      ">🏫</div>`,
+      className: '', iconSize: [32, 32], iconAnchor: [16, 16]
+    });
+    const m = L.marker([d.lat + 0.009, d.lng - 0.009], { icon })
+      .bindTooltip(`<b>${name}</b><br>⚠️ Rota escolar de risco identificada`, { className: 'geo-tooltip' })
+      .on('click', () => { updateGeoPanel(name); });
+    geoSchoolMarkers.push(m);
+  });
+
+  // ── ALL CITY MARKERS (visão geral) ───────────────────────
+  Object.entries(GEO_DATA).forEach(([name, d]) => {
+    const san = d.esg;
+    const color = san >= 10 ? '#00e5a0' : san >= 5 ? '#ffb830' : '#ff4d6d';
+    const icon = L.divIcon({
+      html: `<div style="
+        background:${color}; color:#000; font-size:8px; font-weight:900;
+        padding:3px 7px; border-radius:20px; white-space:nowrap;
+        box-shadow:0 2px 10px ${color}88; font-family:Outfit,sans-serif;
+      ">${name.split(' ')[0]} ${san}%</div>`,
+      className: '', iconSize: [null, null], iconAnchor: [0, 0]
+    });
+    const m = L.marker([d.lat, d.lng], { icon })
+      .on('click', () => {
+        updateGeoPanel(name);
+        const sel = document.getElementById('city-select');
+        sel.value = name;
+        selectCity(name);
+        geoMap.flyTo([d.lat, d.lng], 12, { duration: 1 });
+      });
+    geoAllMarkers.push(m);
+  });
+}
+
+function toggleGeoLayer(layer) {
+  activeGeoLayer = layer;
+  // update buttons
+  ['heat','risk','school'].forEach(l => {
+    document.getElementById('btn-' + l).classList.toggle('active', l === layer);
+  });
+  showingAll = false;
+  document.getElementById('btn-all').classList.remove('active');
+
+  // remove all
+  if (geoHeatLayer) geoMap.removeLayer(geoHeatLayer);
+  geoRiskMarkers.forEach(m => geoMap.removeLayer(m));
+  geoSchoolMarkers.forEach(m => geoMap.removeLayer(m));
+  geoAllMarkers.forEach(m => geoMap.removeLayer(m));
+
+  if (layer === 'heat') {
+    geoMap.addLayer(geoHeatLayer);
+  } else if (layer === 'risk') {
+    geoRiskMarkers.forEach(m => geoMap.addLayer(m));
+  } else if (layer === 'school') {
+    geoSchoolMarkers.forEach(m => geoMap.addLayer(m));
+  }
+}
+
+function toggleAllCities() {
+  showingAll = !showingAll;
+  document.getElementById('btn-all').classList.toggle('active', showingAll);
+  ['heat','risk','school'].forEach(l => document.getElementById('btn-' + l).classList.remove('active'));
+
+  if (geoHeatLayer) geoMap.removeLayer(geoHeatLayer);
+  geoRiskMarkers.forEach(m => geoMap.removeLayer(m));
+  geoSchoolMarkers.forEach(m => geoMap.removeLayer(m));
+  geoAllMarkers.forEach(m => geoMap.removeLayer(m));
+
+  if (showingAll) {
+    geoMap.addLayer(geoHeatLayer);
+    geoAllMarkers.forEach(m => geoMap.addLayer(m));
+    geoMap.flyTo([-6.18, -35.22], 10, { duration: 1.2 });
+  }
+}
+
+function updateGeoPanel(cityName) {
+  const d = GEO_DATA[cityName];
+  if (!d) return;
+  document.getElementById('geo-city-name').textContent = cityName;
+  document.getElementById('gval-agua').textContent = d.agu + '%';
+  document.getElementById('gval-esg').textContent = d.esg + '%';
+  document.getElementById('gval-pop').textContent = d.pop + ' hab.';
+
+  document.getElementById('gbar-agua').style.width = d.agu + '%';
+  document.getElementById('gbar-esg').style.width = d.esg + '%';
+
+  const riskSan = d.esg < 5 ? 'CRISE CRÍTICA' : d.esg < 15 ? 'ALERTA' : 'RAZOÁVEL';
+  const riskClass = d.esg < 5 ? '' : d.esg < 15 ? 'medium' : 'low';
+  const badge = document.getElementById('geo-risk-badge');
+  badge.textContent = riskSan;
+  badge.className = 'geo-risk-badge ' + riskClass;
+
+  const armedBadge = document.getElementById('geo-armed-badge');
+  armedBadge.textContent = d.riskArmed;
+  armedBadge.className = 'geo-risk-badge ' + (d.armedClass === 'red' ? '' : d.armedClass === 'med' ? 'medium' : 'low');
+}
+
+// Inicializar mapa quando a seção ficar visível (IntersectionObserver)
+const geoObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    initGeoMap();
+    geoObserver.disconnect();
+  }
+}, { threshold: 0.1 });
+geoObserver.observe(document.getElementById('geo-map'));
+
+// Atualizar painel quando trocar de município
+const _origSelectCity = selectCity;
+selectCity = function(city) {
+  _origSelectCity(city);
+  if (geoMap && GEO_DATA[city]) {
+    updateGeoPanel(city);
+    geoMap.flyTo([GEO_DATA[city].lat, GEO_DATA[city].lng], 12, { duration: 1 });
+  }
+};
+
 window.onload = initTabs;
+
 </script>
 </body>
 </html>
