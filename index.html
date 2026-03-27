@@ -112,6 +112,7 @@
   }
 
   .container { max-width: 1600px; margin: 0 auto; padding: 0 40px; }
+
   .section-title { 
     font-size: 1.5rem; 
     font-weight: 700; 
@@ -605,23 +606,21 @@
         <tr>
           <td>Habitantes sem esgoto coletado</td>
           <td id="sa-hab-esgoto" class="t-red font-bold">-</td>
-          <td>--</td>
-          <td>--</td>
+          <td style="font-size: 0.85rem; color: #666;">Esgoto: a maior carência regional identificada.</td>
+          <td style="color: #999;">--</td>
           <td>Cálculo Estimado</td>
         </tr>
         <tr>
           <td>Habitantes sem água tratada</td>
           <td id="sa-hab-agua-tratada" class="t-red font-bold">-</td>
-          <td>--</td>
-          <td>--</td>
+          <td style="font-size: 0.85rem; color: #666;">Água: Cobertura parcial, dependência de poços.</td>
+          <td style="color: #999;">--</td>
           <td>Cálculo Estimado</td>
         </tr>
         <tr>
           <td>Estação de Tratamento (ETE)</td>
-          <td id="sa-ete">-</td>
-          <td>--</td>
-          <td>--</td>
-          <td>Prefeitura / CAERN</td>
+          <td id="sa-ete" colspan="3" style="text-align: left; padding-left: 15px;">-</td>
+          <td>Dados PM / CAERN</td>
         </tr>
       </tbody>
     </table>
@@ -724,7 +723,8 @@ const DB = {
     sa_hab_esgoto: "~237.124", sa_hab_agua: "~13.524", sa_hab_agua_tratada: "~4.000", sa_ete: "Infra precária / Em ampliação",
     s_agu: 94.7, s_esg: 7.1, letal: 85,
     radar: { idh: 77, alf: 95, agu: 95, esg: 7, seg: 45 },
-    exec_analysis: "Parnamirim apresenta um cenário de 'Crescimento Hiper-Acelerado com Déficit Estrutural'. Embora ostente um PIB per capita robusto e a maior densidade demográfica da região, o município enfrenta um hiato crítico de saneamento (92,9% sem esgoto adequado). Esta disparidade entre desenvolvimento econômico e infraestrutura básica cria um vetor de risco sanitário severo. A análise geoespacial indica que a verticalização urbana não foi acompanhada pela expansão de serviços, exigindo uma reestruturação imediata do Plano Diretor para mitigar as externalidades negativas do adensamento."
+    exec_analysis: "Parnamirim apresenta um cenário de 'Crescimento Hiper-Acelerado com Déficit Estrutural'. Embora ostente um PIB per capita robusto e a maior densidade demográfica da região, o município enfrenta um hiato crítico de saneamento (92,9% sem esgoto adequado). Esta disparidade entre desenvolvimento econômico e infraestrutura básica cria um vetor de risco sanitário severo. A análise geoespacial indica que a verticalização urbana não foi acompanhada pela expansão de serviços, exigindo uma reestruturação imediata do Plano Diretor para mitigar as externalidades negativas do adensamento.",
+    ibgeCode: "2403251"
   },
   "S.J. Mipibu": {
     pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%",
@@ -740,7 +740,8 @@ const DB = {
     sa_hab_esgoto: "~44.900", sa_hab_agua: "~7.100", sa_hab_agua_tratada: "~7.000", sa_ete: "Sistemas de fossa rudimentar.",
     s_agu: 85, s_esg: 5.0, letal: 92,
     radar: { idh: 61, alf: 84, agu: 85, esg: 5, seg: 35 },
-    exec_analysis: "São José de Mipibu atua como o 'Portal do Agreste'. O crescimento demográfico desordenado sem expansão de esgoto (5%) cria um passivo socioambiental crítico. A segurança pública é o maior gargalo, impactada pela letalidade vinda da RM de Natal."
+    exec_analysis: "São José de Mipibu atua como o 'Portal do Agreste'. O crescimento demográfico desordenado sem expansão de esgoto (5%) cria um passivo socioambiental crítico. A segurança pública é o maior gargalo, impactada pela letalidade vinda da RM de Natal.",
+    ibgeCode: "2412203"
   },
   "Nísia Floresta": {
     pop:"31.942", dom:"~ 11.200", idh:"0,622", pib:"R$ 17.949", alf:"82,4%", den:"104,3", bf:"~ 7.200", agu:"79,0%", esg:"~ 3,0%", gra:"~ 18,2%",
@@ -756,7 +757,8 @@ const DB = {
     sa_hab_esgoto: "~31.000", sa_hab_agua: "~6.700", sa_hab_agua_tratada: "~6.700", sa_ete: "Inexistente.",
     s_agu: 79, s_esg: 3.0, letal: 95,
     radar: { idh: 62, alf: 82, agu: 79, esg: 3, seg: 25 },
-    exec_analysis: "Nísia Floresta enfrenta o 'Estigma Carcerário'. Ter o maior complexo prisional do estado gera externalidades negativas na segurança local (letalidade 95%). O potencial turístico de suas lagoas é travado pela ausência de saneamento básico (3%)."
+    exec_analysis: "Nísia Floresta enfrenta o 'Estigma Carcerário'. Ter o maior complexo prisional do estado gera externalidades negativas na segurança local (letalidade 95%). O potencial turístico de suas lagoas é travado pela ausência de saneamento básico (3%).",
+    ibgeCode: "2408201"
   },
   "Canguaretama": {
     pop:"29.668", dom:"~ 10.100", idh:"0,579", pib:"R$ 20.761", alf:"78,1%", den:"120,4", bf:"~ 8.100", agu:"76,5%", esg:"~ 2,5%", gra:"~ 21,0%",
@@ -772,7 +774,8 @@ const DB = {
     sa_hab_esgoto: "~28.900", sa_hab_agua: "~6.900", sa_hab_agua_tratada: "~6.900", sa_ete: "Inoperante.",
     s_agu: 76, s_esg: 2.5, letal: 78,
     radar: { idh: 58, alf: 78, agu: 76, esg: 2, seg: 40 },
-    exec_analysis: "Canguaretama demonstra um 'Ciclo de Pobreza Transgeracional'. Com baixos índices de IDHM e esgoto (2.5%), o município é um território de alta vulnerabilidade, onde o programa Bolsa Família é o principal pilar de sustentação econômica."
+    exec_analysis: "Canguaretama demonstra um 'Ciclo de Pobreza Transgeracional'. Com baixos índices de IDHM e esgoto (2.5%), o município é um território de alta vulnerabilidade, onde o programa Bolsa Família é o principal pilar de sustentação econômica.",
+    ibgeCode: "2402204"
   },
   "Goianinha": {
     pop: "27.000", dom: "~9.200", idh: "0,640", pib: "R$ 22.100", alf: "85,5%", den: "145,2", bf: "~5.800", agu: "82,0%", esg: "8,0%", gra: "17,5%",
@@ -788,7 +791,8 @@ const DB = {
     sa_hab_esgoto: "~24.600", sa_hab_agua: "~4.800", sa_hab_agua_tratada: "~4.500", sa_ete: "Em ampliação.",
     s_agu: 82, s_esg: 8.0, letal: 70,
     radar: { idh: 64, alf: 86, agu: 82, esg: 8, seg: 55 },
-    exec_analysis: "Goianinha é o 'Nó Logístico' da região. Sua economia é mais dinâmica, mas o saneamento (8%) ainda é um gargalo para a atração de novas indústrias. A análise sugere investimentos em distritos industriais planejados."
+    exec_analysis: "Goianinha é o 'Nó Logístico' da região. Sua economia é mais dinâmica, mas o saneamento (8%) ainda é um gargalo para a atração de novas indústrias. A análise sugere investimentos em distritos industriais planejados.",
+    ibgeCode: "2404209"
   },
   "Monte Alegre": {
     pop:"23.031", dom:"~ 7.800", idh:"0,609", pib:"R$ 15.142", alf:"79,8%", den:"109,0", bf:"~ 4.200", agu:"74,0%", esg:"~ 3,0%", gra:"~ 16,8%",
@@ -804,7 +808,8 @@ const DB = {
     sa_hab_esgoto: "~22.300", sa_hab_agua: "~6.000", sa_hab_agua_tratada: "~6.000", sa_ete: "Nenhuma.",
     s_agu: 74, s_esg: 3.0, letal: 55,
     radar: { idh: 61, alf: 80, agu: 74, esg: 3, seg: 65 },
-    exec_analysis: "Monte Alegre demonstra um 'Perfil de Estagnação Rural'. Com baixa densidade produtiva e saneamento incipiente (3%), o município depende fortemente do setor público. Vulnerabilidades em saúde são mapeadas como prioridade."
+    exec_analysis: "Monte Alegre demonstra um 'Perfil de Estagnação Rural'. Com baixa densidade produtiva e saneamento incipiente (3%), o município depende fortemente do setor público. Vulnerabilidades em saúde são mapeadas como prioridade.",
+    ibgeCode: "2407807"
   },
   "Tibau do Sul": {
     pop:"16.929", dom:"~ 6.000", idh:"0,645", pib:"R$ 30.000 (est)", alf:"88,2%", den:"164,8", bf:"~ 2.500", agu:"89,0%", esg:"~ 15,0%", gra:"~ 14,0%",
@@ -820,7 +825,8 @@ const DB = {
     sa_hab_esgoto: "~14.400", sa_hab_agua: "~1.800", sa_hab_agua_tratada: "~1.500", sa_ete: "Privada (Pipa).",
     s_agu: 89, s_esg: 15.0, letal: 80,
     radar: { idh: 65, alf: 88, agu: 89, esg: 15, seg: 40 },
-    exec_analysis: "Tibau do Sul vive o 'Paradoxo de Pipa'. O alto PIB turístico mascara a carência de saneamento nos bairros populares. A disparidade social é o combustível para a letalidade elevada (80% em relação à meta)."
+    exec_analysis: "Tibau do Sul vive o 'Paradoxo de Pipa'. O alto PIB turístico mascara a carência de saneamento nos bairros populares. A disparidade social é o combustível para a letalidade elevada (80% em relação à meta).",
+    ibgeCode: "2414209"
   },
   "Arez": {
     pop:"13.251", dom:"~ 4.500", idh:"0,606", pib:"R$ 15.000 (est)", alf:"77,5%", den:"114,8", bf:"~ 2.800", agu:"70,0%", esg:"~ 2,0%", gra:"~ 18,0%",
@@ -836,7 +842,8 @@ const DB = {
     sa_hab_esgoto: "~13.000", sa_hab_agua: "~4.000", sa_hab_agua_tratada: "~4.000", sa_ete: "Infra precária.",
     s_agu: 70, s_esg: 2.0, letal: 45,
     radar: { idh: 60, alf: 77, agu: 70, esg: 2, seg: 55 },
-    exec_analysis: "Arez demonstra um perfil de vulnerabilidade rural acentuada. O baixo índice de esgotamento sanitário (2%) aliado à infraestrutura de água obsoleta cria um cenário crítico para a saúde pública. A economia local, dependente do funcionalismo e agricultura, não possui lastro para investimentos massivos sem suporte estadual/federal."
+    exec_analysis: "Arez demonstra um perfil de vulnerabilidade rural acentuada. O baixo índice de esgotamento sanitário (2%) aliado à infraestrutura de água obsoleta cria um cenário crítico para a saúde pública. A economia local, dependente do funcionalismo e agricultura, não possui lastro para investimentos massivos sem suporte estadual/federal.",
+    ibgeCode: "2401206"
   },
   "Vera Cruz": {
     pop:"10.735", dom:"~ 3.600", idh:"0,587", pib:"R$ 10.436", alf:"75,2%", den:"127,6", bf:"~ 2.400", agu:"68,0%", esg:"< 2,0%", gra:"~ 19,0%",
@@ -852,7 +859,8 @@ const DB = {
     sa_hab_esgoto: "~10.500", sa_hab_agua: "~3.400", sa_hab_agua_tratada: "~3.400", sa_ete: "Inexistente.",
     s_agu: 68, s_esg: 2.0, letal: 35,
     radar: { idh: 59, alf: 75, agu: 68, esg: 2, seg: 75 },
-    exec_analysis: "Vera Cruz apresenta 'Invisibilidade Infraestrutural'. O menor IDHM do bloco reflete a ausência total de rede de esgoto e carência de água tratada em áreas rurais. A vulnerabilidade é máxima para crises sanitárias."
+    exec_analysis: "Vera Cruz apresenta 'Invisibilidade Infraestrutural'. O menor IDHM do bloco reflete a ausência total de rede de esgoto e carência de água tratada em áreas rurais. A vulnerabilidade é máxima para crises sanitárias.",
+    ibgeCode: "2414803"
   },
   "Baía Formosa": {
     pop:"8.824", dom:"~ 3.000", idh:"0,609", pib:"R$ 38.064", alf:"84,0%", den:"35,6", bf:"~ 1.800", agu:"75,0%", esg:"~ 5,0%", gra:"~ 16,5%",
@@ -868,7 +876,8 @@ const DB = {
     sa_hab_esgoto: "~8.300", sa_hab_agua: "~2.200", sa_hab_agua_tratada: "~2.000", sa_ete: "Incipiente.",
     s_agu: 75, s_esg: 5.0, letal: 40,
     radar: { idh: 61, alf: 84, agu: 75, esg: 5, seg: 65 },
-    exec_analysis: "Baía Formosa resiste como um 'Enclave de Preservação Comercial'. O PIB per capita é inflado pela exploração mineral/turística, mas a infraestrutura básica ainda é insuficiente. O desafio é manter a segurança costeira."
+    exec_analysis: "Baía Formosa resiste como um 'Enclave de Preservação Comercial'. O PIB per capita é inflado pela exploração mineral/turística, mas a infraestrutura básica ainda é insuficiente. O desafio é manter a segurança costeira.",
+    ibgeCode: "2401404"
   },
   "Senador G. Avelino": {
     pop:"4.065", dom:"~ 1.400", idh:"0,570", pib:"R$ 13.500", alf:"73,5%", den:"155,7", bf:"~ 1.100", agu:"65,0%", esg:"< 1,0%", gra:"~ 20,0%",
@@ -884,7 +893,8 @@ const DB = {
     sa_hab_esgoto: "~4.000", sa_hab_agua: "~1.400", sa_hab_agua_tratada: "~1.400", sa_ete: "Nenhuma.",
     s_agu: 65, s_esg: 1.0, letal: 10,
     radar: { idh: 57, alf: 73, agu: 65, esg: 1, seg: 95 },
-    exec_analysis: "Senador Georgino Avelino é o município com maior 'Isolamento Estrutural'. Apesar da tranquilidade (baixa letalidade), os indicadores sociais estão no limite da pobreza extrema. Saneamento é prioridade zero."
+    exec_analysis: "Senador Georgino Avelino é o município com maior 'Isolamento Estrutural'. Apesar da tranquilidade (baixa letalidade), os indicadores sociais estão no limite da pobreza extrema. Saneamento é prioridade zero.",
+    ibgeCode: "2413201"
   },
   "Vila Flor": {
     pop:"3.174", dom:"~ 1.000", idh:"0,576", pib:"R$ 15.709", alf:"74,0%", den:"66,6", bf:"~ 850", agu:"67,0%", esg:"< 1,0%", gra:"~ 18,5%",
@@ -900,7 +910,8 @@ const DB = {
     sa_hab_esgoto: "~3.100", sa_hab_agua: "~1.000", sa_hab_agua_tratada: "~1.000", sa_ete: "Inexistência de rede tratada.",
     s_agu: 67, s_esg: 1.0, letal: 15,
     radar: { idh: 57, alf: 74, agu: 67, esg: 1, seg: 90 },
-    exec_analysis: "Vila Flor é um 'Micro-Cosmos' de resiliência. Apesar de ser o menor município, mantém uma coesão social que impede picos de violência, embora a carência de esgoto (1%) seja um risco de longo prazo para seu patrimônio histórico."
+    exec_analysis: "Vila Flor é um 'Micro-Cosmos' de resiliência. Apesar de ser o menor município, mantém uma coesão social que impede picos de violência, embora a carência de esgoto (1%) seja um risco de longo prazo para seu patrimônio histórico.",
+    ibgeCode: "2415008"
   }
 };
 
@@ -1397,54 +1408,60 @@ function syncSources() {
   const btn = document.getElementById('sync-btn');
   const icon = document.getElementById('sync-icon');
   const items = document.querySelectorAll('.kpi-val, .table-container td, canvas');
+  const cityId = document.getElementById('city-select').value;
+  const cityData = DB[cityId];
   
+  if (!cityData.ibgeCode) {
+    console.error("Código IBGE não definido para este município.");
+    return;
+  }
+
   btn.classList.add('loading');
   icon.style.animation = 'spin 1.5s linear infinite';
-  
-  // Efeito visual nos dados
-  items.forEach(el => {
-    el.style.opacity = '0.3';
-    el.style.filter = 'blur(2px)';
-  });
+  items.forEach(el => { el.style.opacity = '0.3'; el.style.filter = 'blur(2px)'; });
 
-  // Simulação de chamada API para Sidra/IBGE/DATASUS
-  console.log('Consultando SIDRA API - IBGE...');
-  console.log('Consultando DATASUS - TabNet...');
-  console.log('Consultando MDS - CadÚnico...');
+  // URL SIDRA: Tabela 1612 (População Censo 2022)
+  const url = `https://servicodados.ibge.gov.br/api/v3/agregados/1612/periodos/2022/variaveis/93?localidades=N6[${cityData.ibgeCode}]`;
 
-  setTimeout(() => {
-    icon.style.animation = 'none';
-    btn.classList.remove('loading');
-    
-    items.forEach(el => {
-      el.style.opacity = '1';
-      el.style.filter = 'none';
+  console.log(`Consultando SIDRA API para ${cityId} [${cityData.ibgeCode}]...`);
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data[0] && data[0].resultados[0]) {
+        const newVal = data[0].resultados[0].series[0].serie['2022'];
+        const formattedVal = parseInt(newVal).toLocaleString('pt-BR');
+        
+        // Atualiza o DB local temporariamente
+        DB[cityId].pop = formattedVal;
+        
+        // Atualiza a UI
+        document.getElementById('k-pop').innerText = formattedVal;
+        
+        console.log(`Dados atualizados: População = ${formattedVal}`);
+      }
+    })
+    .catch(err => console.error("Erro na sincronização:", err))
+    .finally(() => {
+      setTimeout(() => {
+        icon.style.animation = 'none';
+        btn.classList.remove('loading');
+        items.forEach(el => { el.style.opacity = '1'; el.style.filter = 'none'; });
+
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('pt-BR');
+        
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed; bottom:30px; right:30px; background:#10b981; color:#fff; padding:12px 24px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.5); z-index:10000; font-weight:bold;';
+        toast.innerText = `Sincronização Real IBGE Concluída (${cityId})`;
+        document.body.appendChild(toast);
+        
+        const badges = document.querySelectorAll('.head-badge');
+        if(badges[1]) badges[1].innerText = `Última Sincronização (SIDRA): ${new Date().toLocaleDateString('pt-BR')} ${timeStr}`;
+
+        setTimeout(() => toast.remove(), 4000);
+      }, 1500);
     });
-
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('pt-BR');
-    
-    // Feedback
-    const toast = document.createElement('div');
-    toast.style.position = 'fixed';
-    toast.style.bottom = '30px';
-    toast.style.right = '30px';
-    toast.style.background = '#10b981';
-    toast.style.color = '#fff';
-    toast.style.padding = '12px 24px';
-    toast.style.borderRadius = '12px';
-    toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
-    toast.style.zIndex = '10000';
-    toast.style.fontWeight = 'bold';
-    toast.innerText = `Sincronização Concluída às ${timeStr}`;
-    document.body.appendChild(toast);
-    
-    // Atualizar data de ref no header
-    const badges = document.querySelectorAll('.head-badge');
-    if(badges[1]) badges[1].innerText = `Última Sincronização: ${new Date().toLocaleDateString('pt-BR')} ${timeStr}`;
-
-    setTimeout(() => toast.remove(), 4000);
-  }, 2500);
 }
 
 const spinStyle = document.createElement('style');
