@@ -1437,7 +1437,7 @@ function generatePDF() {
 
   // ── Container principal ──────────────────────────────────────────
   const content = document.createElement('div');
-  content.style.cssText = 'background:#fff;color:#000;width:275mm;font-family:Outfit,Inter,sans-serif;font-size:10pt;line-height:1.5;box-sizing:border-box;';
+  content.style.cssText = 'background:#fff;color:#000;width:1122px;font-family:Outfit,Inter,sans-serif;font-size:10pt;line-height:1.5;box-sizing:border-box; margin:0 auto;';
 
   // ── CSS interno ──────────────────────────────────────────────────
   const style = document.createElement('style');
@@ -1577,6 +1577,22 @@ function generatePDF() {
     <div class="alert-box">
       <strong>⚠️ Análise Estrutural Crítica</strong>
       <span>${el('al-text')}</span>
+    </div>
+
+    <!-- MÓDULO IVJ -->
+    <div class="pdf-sec" style="margin-top:2mm;">🛡️ Módulo de Segurança e Prevenção Social (IVJ)</div>
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr); gap:10px;">
+      <div class="kpi-card"><div class="lbl">Vulnerabilidade Juvenil (IVJ)</div><div class="val red">${el('ivj-val')}</div><div class="src">${el('ivj-trend')}</div></div>
+      <div class="kpi-card"><div class="lbl">Evasão Escolar Estimada</div><div class="val red">${el('ivj-evasao')}</div><div class="src">${el('ivj-evasao-trend')}</div></div>
+      <div class="kpi-card"><div class="lbl">Gravidez na Adolescência</div><div class="val red">${el('ivj-gra2')}</div><div class="src">Média Nac. 14%</div></div>
+    </div>
+    <div class="alert-box" style="margin:2mm 0 5mm; background:#fff5f5; border-color:#fc8181;">
+      <strong>⚠️ Diagnóstico de Vulnerabilidade (IVJ)</strong>
+      <span>${d.ivj_insight || '-'}</span>
+    </div>
+    <div class="chart-box no-break" style="margin-bottom:6mm;">
+      <div class="cht">Comparativo Regional — IVJ e Gravidez na Adolescência</div>
+      <img src="${canvasToImg('cIVJ')}" style="height:150px; width:100%; object-fit:contain;">
     </div>
 
     <!-- SANEAMENTO -->
