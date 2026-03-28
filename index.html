@@ -222,7 +222,12 @@
     border: 1px solid rgba(108,99,255,0.3); padding: 36px; border-radius: 24px;
     max-width: 520px; width: 100%; position: relative;
     box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(108,99,255,0.1);
+    max-height: 90vh; overflow-y: auto;
   }
+  .insight-content::-webkit-scrollbar { width: 6px; }
+  .insight-content::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .insight-content::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.3); border-radius: 10px; }
+  .insight-content::-webkit-scrollbar-thumb:hover { background: rgba(108,99,255,0.5); }
   .insight-content h3 { color: #a59bff; margin-bottom: 14px; font-size: 1.1rem; padding-right: 36px; font-weight: 700; }
   .insight-content p { color: var(--text-muted); margin-bottom: 22px; line-height: 1.7; font-size: 0.9rem; }
   .insight-badge { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.2); color: #a59bff; padding: 10px 16px; border-radius: 10px; font-size: 0.82rem; font-weight: 600; display: block; line-height: 1.5; }
@@ -437,7 +442,12 @@
     border: 1px solid rgba(108,99,255,0.35);
     box-shadow: 0 32px 90px rgba(0,0,0,0.75), 0 0 50px rgba(108,99,255,0.15);
     animation: modalIn 0.3s cubic-bezier(0.23,1,0.32,1);
+    max-height: 90vh; overflow-y: auto;
   }
+  .geo-modal-box::-webkit-scrollbar { width: 6px; }
+  .geo-modal-box::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .geo-modal-box::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.3); border-radius: 10px; }
+  .geo-modal-box::-webkit-scrollbar-thumb:hover { background: rgba(108,99,255,0.5); }
   @keyframes modalIn { from { opacity:0; transform: scale(0.92) translateY(20px); } to { opacity:1; transform: scale(1) translateY(0); } }
   .geo-modal-close {
     position: absolute; top: 14px; right: 16px;
