@@ -410,6 +410,85 @@
     .geo-panel { min-height: 220px; }
   }
 
+  /* SATELLITE BADGE */
+  .sat-badge {
+    position: absolute; top: 10px; right: 10px; z-index: 1000;
+    background: rgba(0,0,0,0.72); border: 1.5px solid rgba(255,255,255,0.2);
+    color: #fff; padding: 6px 14px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    backdrop-filter: blur(8px); transition: all 0.25s;
+  }
+  .sat-badge:hover { background: rgba(108,99,255,0.7); border-color: var(--primary); }
+  .sat-badge.active { background: rgba(255,184,48,0.2); border-color: #ffb830; color: #ffb830; }
+  #geo-map { position: relative; }
+
+  /* GEO MODALS */
+  .geo-modal-overlay {
+    position: fixed; inset: 0; z-index: 5000;
+    background: rgba(0,0,0,0.82); backdrop-filter: blur(14px);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .geo-modal-overlay.open { display: flex; }
+  .geo-modal-box {
+    background: linear-gradient(145deg, #0f1230, #0b0d1a);
+    border-radius: 22px; padding: 36px 34px 30px;
+    max-width: 580px; width: 100%; position: relative;
+    border: 1px solid rgba(108,99,255,0.35);
+    box-shadow: 0 32px 90px rgba(0,0,0,0.75), 0 0 50px rgba(108,99,255,0.15);
+    animation: modalIn 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+  @keyframes modalIn { from { opacity:0; transform: scale(0.92) translateY(20px); } to { opacity:1; transform: scale(1) translateY(0); } }
+  .geo-modal-close {
+    position: absolute; top: 14px; right: 16px;
+    color: rgba(255,255,255,0.35); cursor: pointer;
+    font-size: 28px; width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; transition: all 0.2s;
+  }
+  .geo-modal-close:hover { background: rgba(255,77,109,0.12); color: #ff4d6d; }
+  .geo-modal-header {
+    display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px;
+  }
+  .geo-modal-icon {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .geo-modal-icon.danger { background: rgba(255,77,109,0.15); border: 1.5px solid rgba(255,77,109,0.35); }
+  .geo-modal-icon.warning { background: rgba(255,184,48,0.15); border: 1.5px solid rgba(255,184,48,0.35); }
+  .geo-modal-icon.school { background: rgba(108,99,255,0.15); border: 1.5px solid rgba(108,99,255,0.35); }
+  .geo-modal-title { font-size: 1.2rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .geo-modal-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .geo-modal-section { margin-bottom: 18px; }
+  .geo-modal-section-title {
+    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
+    color: rgba(255,255,255,0.35); font-weight: 700; margin-bottom: 8px;
+  }
+  .geo-modal-body { color: var(--text-muted); font-size: 0.9rem; line-height: 1.75; }
+  .geo-modal-route {
+    background: rgba(108,99,255,0.07); border: 1px solid rgba(108,99,255,0.2);
+    border-radius: 12px; padding: 14px 16px; margin-top: 12px;
+  }
+  .geo-modal-route-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.86rem; color: var(--text-muted);
+  }
+  .geo-modal-route-step:last-child { border-bottom: none; }
+  .geo-modal-route-step .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(108,99,255,0.3); border: 1px solid rgba(108,99,255,0.5);
+    color: #a59bff; font-size: 0.65rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .geo-risk-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: .5px; text-transform: uppercase;
+    margin: 2px 3px;
+  }
+  .geo-risk-tag.danger { background: rgba(255,77,109,0.15); color: #ff4d6d; border: 1px solid rgba(255,77,109,0.3); }
+  .geo-risk-tag.warning { background: rgba(255,184,48,0.15); color: #ffb830; border: 1px solid rgba(255,184,48,0.3); }
+
 </style>
 </head>
 <body>
@@ -708,6 +787,9 @@
     <button class="geo-btn geo-btn-all" onclick="toggleAllCities()" id="btn-all">
       <span>🗳️</span> Todos os Municípios
     </button>
+    <button class="geo-btn" id="btn-satellite" onclick="toggleSatellite()" style="margin-left:auto;border-color:rgba(255,184,48,.3);color:#ffb830;">
+      <span>🛰️</span> Satélite
+    </button>
   </div>
 
   <!-- Layout mapa + painel -->
@@ -751,6 +833,58 @@
     </div>
   </div>
 </section>
+
+<!-- ===== MODAL: PONTO DE RISCO ARMADO ===== -->
+<div id="geo-risk-modal" class="geo-modal-overlay" onclick="closeGeoModal('geo-risk-modal', event)">
+  <div class="geo-modal-box">
+    <div class="geo-modal-close" onclick="document.getElementById('geo-risk-modal').classList.remove('open')">&times;</div>
+    <div class="geo-modal-header">
+      <div class="geo-modal-icon danger" id="risk-modal-icon">🛡️</div>
+      <div>
+        <div class="geo-modal-title" id="risk-modal-city">Município</div>
+        <div class="geo-modal-subtitle" id="risk-modal-level">Nível de Risco</div>
+      </div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">📋 Por que este município é de alto risco?</div>
+      <div class="geo-modal-body" id="risk-modal-why"></div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">⚠️ Fatores agravantes identificados</div>
+      <div id="risk-modal-tags"></div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">📊 Contexto socioeconômico</div>
+      <div class="geo-modal-body" id="risk-modal-context"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: ROTA ESCOLAR INSEGURA ===== -->
+<div id="geo-school-modal" class="geo-modal-overlay" onclick="closeGeoModal('geo-school-modal', event)">
+  <div class="geo-modal-box">
+    <div class="geo-modal-close" onclick="document.getElementById('geo-school-modal').classList.remove('open')">&times;</div>
+    <div class="geo-modal-header">
+      <div class="geo-modal-icon school">🏫</div>
+      <div>
+        <div class="geo-modal-title" id="school-modal-city">Município</div>
+        <div class="geo-modal-subtitle">⚠️ Rota Escolar de Risco Identificada</div>
+      </div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">🗺️ Trajeto da rota escolar</div>
+      <div class="geo-modal-route" id="school-modal-route"></div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">❌ Por que esta rota é insegura?</div>
+      <div class="geo-modal-body" id="school-modal-why"></div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">👶 Impacto sobre as crianças</div>
+      <div class="geo-modal-body" id="school-modal-impact"></div>
+    </div>
+  </div>
+</div>
 
 <section id="fontes-section">
   <div class="section-title">📚 Fontes Consultadas</div>
@@ -1750,18 +1884,155 @@ document.head.appendChild(spinStyle);
 // GEO INTELLIGENCE MAP
 // =========================================================
 const GEO_DATA = {
-  "Parnamirim":          { lat:-5.9142, lng:-35.2631, agu:94.7, esg:7.1,  pop:"252.716", riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:2037 },
-  "São José de Mipibu":  { lat:-6.0783, lng:-35.2428, agu:82.0, esg:5.0,  pop:"46.786",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:380  },
-  "Nísia Floresta":      { lat:-6.0919, lng:-35.2100, agu:79.0, esg:3.0,  pop:"27.648",  riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:155  },
-  "Canguaretama":        { lat:-6.3736, lng:-35.1266, agu:76.5, esg:2.5,  pop:"29.668",  riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:120  },
-  "Goianinha":           { lat:-6.2603, lng:-35.1989, agu:82.0, esg:8.0,  pop:"27.000",  riskArmed:"PRESENTE",  armedClass:"med",  school:false, den:145  },
-  "Monte Alegre":        { lat:-6.0733, lng:-35.3239, agu:74.0, esg:3.0,  pop:"23.031",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:109  },
-  "Tibau do Sul":        { lat:-6.1944, lng:-35.0892, agu:89.0, esg:15.0, pop:"16.929",  riskArmed:"CRÍTICO",   armedClass:"red",  school:true,  den:164  },
-  "Arez":                { lat:-6.1825, lng:-35.1789, agu:70.0, esg:2.0,  pop:"13.251",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:114  },
-  "Vera Cruz":           { lat:-6.2186, lng:-35.4264, agu:68.0, esg:2.0,  pop:"10.735",  riskArmed:"PRESENTE",  armedClass:"med",  school:true,  den:127  },
-  "Baía Formosa":        { lat:-6.3706, lng:-35.0228, agu:75.0, esg:5.0,  pop:"8.824",   riskArmed:"PRESENTE",  armedClass:"med",  school:false, den:35   },
-  "Senador G. Avelino":  { lat:-6.1436, lng:-35.2969, agu:65.0, esg:1.0,  pop:"4.065",   riskArmed:"CONTROLADO",armedClass:"low",  school:false, den:155  },
-  "Vila Flor":           { lat:-6.2994, lng:-35.3200, agu:60.0, esg:1.0,  pop:"4.300",   riskArmed:"CONTROLADO",armedClass:"low",  school:false, den:80   }
+  "Parnamirim": {
+    lat:-5.9142, lng:-35.2631, agu:94.7, esg:7.1, pop:"252.716", riskArmed:"CRÍTICO", armedClass:"red", school:true, den:2037,
+    riskWhy: "Parnamirim concentra a maior densidade demográfica da região (2.037 hab/km²) e abriga bases de facções rivais — PCC e Sindicato do RN — que disputam territórios ao longo da BR-101 e em bairros como Cohabinal, Nova Parnamirim e Nova Esperança. O crescimento urbano acelerado sem infraestrutura adequada criou bolsões de vulnerabilidade que facilitam o recrutamento de jovens pelo tráfico.",
+    riskTags: ["PCC presente", "Sindicato do RN", "Confrontos na BR-101", "Tráfico em condomínios", "Alta densidade"],
+    riskContext: "Com apenas 7,1% de cobertura de esgoto para uma população de 252 mil habitantes, o déficit sanitário atinge ~237 mil pessoas. A pobreza estrutural (21.600 famílias no Bolsa Família) alimenta ciclos de dependência que tornam jovens vulneráveis à cooptação do crime organizado.",
+    schoolWhy: "Os bairros Cohabinal, Nova Parnamirim e Nova Esperança concentram confrontos armados entre facções rivais em horários próximos à entrada e saída das escolas (6h–7h30 e 17h–18h30). Crianças precisam cruzar áreas de domínio territorial disputado, sem proteção policial permanente nas vias.",
+    schoolRoute: [
+      { step: "Ponto de partida", desc: "Residências na periferia do bairro Cohabinal — área de alta concentração do Sindicato do RN" },
+      { step: "Travessia crítica 1", desc: "Cruzamento da Av. Ayrton Senna com ruas sem iluminação — ponto de troca de sentinelas do tráfico" },
+      { step: "Ponto de travessia da BR-101", desc: "Alunos precisam atravessar rodovia federal sem passarela — risco de atropelamento e abordagem" },
+      { step: "Trecho Nova Esperança", desc: "Via de 600m sem calçada, com becos utilizados pelo tráfico como ponto de fuga em operações policiais" },
+      { step: "Chegada à escola", desc: "EMEF do bairro — sem muros de segurança e com acesso aberto por 3 entradas não vigiadas" }
+    ],
+    schoolImpact: "Evasão escolar estimada em 18% nessas áreas. Crianças relatam presença de homens armados nas proximidades das escolas. Professores registram absenteísmo elevado nos dias após confrontos violentos. A insegurança do percurso afeta diretamente o aprendizado e a frequência dos alunos."
+  },
+  "São José de Mipibu": {
+    lat:-6.0783, lng:-35.2428, agu:82.0, esg:5.0, pop:"46.786", riskArmed:"PRESENTE", armedClass:"med", school:true, den:380,
+    riskWhy: "São José de Mipibu sofre com a disputa territorial entre Comando Vermelho e Sindicato do RN, que buscam controlar rotas de escoamento da droga que passa pela BR-101. Homicídios frequentes ocorrem especialmente nos bairros de periferia, onde a baixa iluminação e o patrulhamento escasso favorecem emboscadas.",
+    riskTags: ["CV vs Sindicato RN", "Bairros periféricos", "Baixa iluminação", "Homicídios frequentes", "Rota BR-101"],
+    riskContext: "Com IDHM de 0,611 e cobertura de esgoto de apenas 5%, a população convive com precariedade sanitária e econômica. Cerca de 9.500 famílias dependem do Bolsa Família — um indicador direto da vulnerabilidade que expõe jovens ao crime.",
+    schoolWhy: "Vias rurais sem iluminação e com patrulhamento dificultado conectam comunidades rurais às escolas urbanas. Crianças de zonas rurais percorrem trajetos de até 8km em estradas sem asfalto, expostas a abordagens e ao trânsito de veículos usados pelo tráfico.",
+    schoolRoute: [
+      { step: "Zona rural — Sítios", desc: "Alunos saem de comunidades rurais às 5h30, em locais sem iluminação pública" },
+      { step: "Estrada vicinal sem pavimento", desc: "4km de estrada de terra usada por veículos do tráfico para transporte de drogas" },
+      { step: "Entrada no perímetro urbano", desc: "Cruzamento com bairro de alta vulnerabilidade — presença de bocas de fumo relatada" },
+      { step: "Chegada à escola estadual", desc: "Escola sem cerca e sem monitoramento do entorno por câmeras ou vigilância" }
+    ],
+    schoolImpact: "Estudantes rurais têm frequência até 25% menor que estudantes urbanos. Famílias relatam medo de enviar filhos em dias de operação policial. A distância e insegurança contribuem para evasão precoce e ingresso no mercado informal infantil."
+  },
+  "Nísia Floresta": {
+    lat:-6.0919, lng:-35.2100, agu:79.0, esg:3.0, pop:"27.648", riskArmed:"CRÍTICO", armedClass:"red", school:true, den:155,
+    riskWhy: "Nísia Floresta abriga o Complexo Penitenciário de Alcaçuz, o maior do Rio Grande do Norte. A presença do presídio cria um polo criminoso externo: famílias de detentos, comparsas em liberdade e redes de suporte às facções se concentram na cidade, tornando-a um ponto nevrálgico do crime organizado estadual.",
+    riskTags: ["Complexo Alcaçuz", "PCC/Sindicato", "Redes de suporte às facções", "Eixo distribuidor de drogas", "Letalidade 95%"],
+    riskContext: "A proximidade com o maior presídio estadual eleva a letalidade ao índice mais alto da região. Com apenas 3% de cobertura de esgoto, a vulnerabilidade sanitária agrava o contexto social e reforça o ciclo de pobreza que alimenta o crime.",
+    schoolWhy: "Crianças que moram próximas ao complexo penitenciário transitam por áreas com alta concentração de visitantes de detentos, que são potencialmente membros de organizações criminosas. O risco de aliciamento e exposição à violência é documentado por assistentes sociais da região.",
+    schoolRoute: [
+      { step: "Bairro próximo ao Alcaçuz", desc: "Área de moradia de famílias de detentos — alta rotatividade e tensão social constante" },
+      { step: "Rua principal sem iluminação", desc: "Via que margeia o muro do complexo penitenciário — local de visitas e aglomerações" },
+      { step: "Cruzamento com ponto de tráfico", desc: "Boca de fumo documentada pela SSP-RN a 300m da única escola da área" },
+      { step: "Escola Municipal", desc: "Infraestrutura precária, sem muros e com histórico de conflitos no entorno imediato" }
+    ],
+    schoolImpact: "Professores relatam dificuldade em manter autoridade pedagógica em ambiente de medo. Alunos expõem-se diariamente a cenas de tráfico e violência. A taxa de evasão é estimada em 22% — a mais alta entre os municípios analisados."
+  },
+  "Canguaretama": {
+    lat:-6.3736, lng:-35.1266, agu:76.5, esg:2.5, pop:"29.668", riskArmed:"CRÍTICO", armedClass:"red", school:true, den:120,
+    riskWhy: "A Operação Tifão e investigações policiais revelaram que tribunais do crime funçionam em Canguaretama, onde lideranças de facções julgam e executam rivais locais. O município serve como ponto de apoio para redes de crime organizado que atuam no Agreste Potiguar, com estrutura hierárquica consolidada.",
+    riskTags: ["Tribunais do crime", "Op. Tifão", "Facções no Agreste", "Redes organizadas", "Alta dependência social"],
+    riskContext: "Com IDHM de 0,579 — o mais baixo da região — e 8.100 famílias dependentes do Bolsa Família, a vulnerabilidade social é extrema. A alta dependência dos programas de transferência de renda expõe jovens ao aliciamento precoce, pois o tráfico oferece renda imediata.",
+    schoolWhy: "Rotas de transporte alternativo passam por canaviais e regiões remotas sem fiscalização. O controle territorial das facções se estende às estradas vicinais usadas pelos ônibus escolares, que pagam pedágio informal ao crime organizado em algumas comunidades.",
+    schoolRoute: [
+      { step: "Comunidades do Agreste", desc: "Crianças de assentamentos percorrem mais de 10km para chegar à escola mais próxima" },
+      { step: "Estrada dos canaviais", desc: "Via controlada por facções locais — transporte escolar sujeito a abordagens e retaliações" },
+      { step: "Vila do Mangue", desc: "Área de tráfico intenso com histórico de confrontos entre grupos rivais durante o dia" },
+      { step: "Escola Estadual Centro", desc: "Escola com superlotação e sem segurança no entorno — disputa por domínio de território na praça frontal" }
+    ],
+    schoolImpact: "A insegurança das rotas gera absenteísmo crônico. Motoristas de ônibus escolares relatam abordagens. Crianças de famílias que se recusam a pagar 'pedágio' ao tráfico são impedidas de usar certas estradas. O fenômeno impacta diretamente o direito à educação."
+  },
+  "Goianinha": {
+    lat:-6.2603, lng:-35.1989, agu:82.0, esg:8.0, pop:"27.000", riskArmed:"PRESENTE", armedClass:"med", school:false, den:145,
+    riskWhy: "Goianinha é um polo comercial regional que atrai facções interessadas no controle do fluxo de dinheiro físico e das rotas de tráfico intermunicipal. A intersecção de rotas regionais de entorpecentes torna a cidade um ponto estratégico, embora o nível de violência seja menor que nos municípios de risco crítico.",
+    riskTags: ["Intersecção de rotas do tráfico", "Fações intermunicipais", "Controle do fluxo comercial"],
+    riskContext: "Apesar de economicamente mais dinâmico, o saneamento (8%) ainda é um gargalo. A presença de pessoas de fora da comunidade no comércio facilita a infiltração de redes criminosas sem identificação pela comunidade local.",
+    schoolWhy: "Não identificada rota escolar crítica neste município.",
+    schoolRoute: [],
+    schoolImpact: "Nível de risco escolar abaixo do limiar crítico para intervenção emergencial."
+  },
+  "Monte Alegre": {
+    lat:-6.0733, lng:-35.3239, agu:74.0, esg:3.0, pop:"23.031", riskArmed:"PRESENTE", armedClass:"med", school:true, den:109,
+    riskWhy: "Monte Alegre sofre com associações criminosas locais que atuam em furtos organizados e pequenas redes de tráfico. A estagnação econômica e a migração de capitais criminosos de cidades vizinhas aumentam a pressão sobre uma estrutura policial insuficiente para o território extenso do município.",
+    riskTags: ["Furto organizado", "Vias vicinais", "Monitoramento insuficiente", "Periferia rural"],
+    riskContext: "Com rendas entre as mais baixas do bloco e economia baseada em repasses públicos, o município não gera oportunidades para os jovens. A distância dos centros urbanos maiores agrava o isolamento e torna a fiscalização difícil.",
+    schoolWhy: "Vias vicinais extensas conectam comunidades rurais remotas à sede municipal. Esses caminhos cortam propriedades rurais sem monitoramento, com histórico de furtos a alunos e professores. A ausência de iluminação representa risco adicional nos períodos de manhã cedo.",
+    schoolRoute: [
+      { step: "Comunidades rurais distantes", desc: "Alunos saem antes do amanhecer de localidades como Lagoa do Barro e Angicos" },
+      { step: "Vias vicinais sem pavimento", desc: "Caminho de terra cortando fazendas — sem iluminação e sem comunicação móvel" },
+      { step: "Ponto de furtos recorrentes", desc: "Cruzamento isolado com histórico de abordagens a estudantes registradas pela PM" },
+      { step: "Escola Municipal Sede", desc: "Estrutura básica com disciplina comprometida pela irregularidade de frequência" }
+    ],
+    schoolImpact: "O isolamento geográfico e a insegurança do percurso contribuem para que crianças rurais tenham acesso à educação 30% pior em qualidade que na sede. Abandono escolar antes do 9º ano é frequente."
+  },
+  "Tibau do Sul": {
+    lat:-6.1944, lng:-35.0892, agu:89.0, esg:15.0, pop:"16.929", riskArmed:"CRÍTICO", armedClass:"red", school:true, den:164,
+    riskWhy: "Tibau do Sul — sede da famosa Praia de Pipa — é o polo mais lucrativo do estado fora de Natal para venda de drogas sintéticas. A disputa feroz pelo controle do turismo gera confrontos violentos entre facções. A dualidade entre o turismo de luxo e a periferia refém do tráfico cria uma letalidade acima da média estadual.",
+    riskTags: ["Pipa — tráfico de sintéticas", "Disputa territorial no turismo", "PCC presente", "Alta letalidade", "Exploração infantil"],
+    riskContext: "O PIB inflado pelo turismo mascara a pobreza da periferia. Com apenas 15% de esgoto, a saúde das comunidades locais é historicamente negligenciada. O dinheiro do turismo atrai redes criminosas sofisticadas que se infiltram na economia local.",
+    schoolWhy: "O acesso à área de Pipa possui trechos de alta periculosidade, especialmente nos horários de pico de lazer quando há circulação intensa de turistas e, consequentemente, de traficantes. Crianças utilizam as mesmas vias em horários críticos, expostas a abordagens e troca de drogas.",
+    schoolRoute: [
+      { step: "Periferia de Pipa", desc: "Bairros de moradores locais — áreas de domínio de facções que exploram o turismo" },
+      { step: "Rua principal de Pipa", desc: "Via turística com troca de drogas velada entre turistas e distribuidores — crianças cruzam esse fluxo" },
+      { step: "Acesso pela Praia do Amor", desc: "Trilhas utilizadas por crianças sem fiscalização — pontos de encontro de dealers" },
+      { step: "Escola Municipal", desc: "Escola superlotada atendendo filhos de trabalhadores do turismo — professores relatam tráfico no portão" }
+    ],
+    schoolImpact: "A normalização do tráfico no ambiente turístico reduz a percepção de risco pelas crianças, aumentando a vulnerabilidade ao contato precoce com drogas. Professores registram consumo de substâncias por alunos a partir dos 11 anos."
+  },
+  "Arez": {
+    lat:-6.1825, lng:-35.1789, agu:70.0, esg:2.0, pop:"13.251", riskArmed:"PRESENTE", armedClass:"med", school:true, den:114,
+    riskWhy: "Arez sofreu eventos de vandalismo organizado — incluindo incêndios à rede pública de telefonia — articulados de dentro dos presídios por ordens do SDC (Sindicato do Crime). A fragilidade institucional e a dependência de cidades vizinhas para segurança tornam o município vulnerável a ações criminosas coordenadas.",
+    riskTags: ["SDC — incêndios orquestrados", "Bocas de fumo ativas", "Caminhos de terra isolados", "Dependência de Goianinha"],
+    riskContext: "A economia fragilizada e o baixo PIB per capita geram alta dependência do Bolsa Família. Com apenas 2% de esgoto, a população convive com condições precárias que limitam o desenvolvimento infantil e aumentam as doenças, agravando a vulnerabilidade social.",
+    schoolWhy: "Caminhos de terra isolados conectam comunidades rurais à escola. Esses trajetos cortam áreas sem monitoramento, usadas como rota secundária de drogas interligada com a rede de Goianinha. Iluminação pública inexistente nesses caminhos é um fator de risco documentado.",
+    schoolRoute: [
+      { step: "Assentamentos rurais", desc: "Conjunto de sítios sem transporte escolar formal — pais improvisam carona em vans não regulamentadas" },
+      { step: "Caminho de terra", desc: "Via usada como alternativa pelo tráfico que liga Arez a Goianinha — sem policiamento" },
+      { step: "Proximidade de boca de fumo", desc: "Ponto de tráfico a 200m da entrada da escola — crianças passam diariamente" },
+      { step: "Escola Pública Municipal", desc: "Estrutura deteriorada com portão permanentemente aberto — sem controle de entrada" }
+    ],
+    schoolImpact: "A exposição cotidiana ao tráfico no trajeto gera naturalização da violência. Assistentes sociais documentam casos de crianças que 'trabalham' como olheiros do tráfico para complementar a renda familiar miserável."
+  },
+  "Vera Cruz": {
+    lat:-6.2186, lng:-35.4264, agu:68.0, esg:2.0, pop:"10.735", riskArmed:"PRESENTE", armedClass:"med", school:true, den:127,
+    riskWhy: "Vera Cruz funciona como cidade de passagem para rotas limítrofes de tráfico que sofrem pressão das guerras entre facções em municípios vizinhos maiores. A ausência de policiamento fixo e a baixa capacidade institucional tornam o município vulnerável a invasões territoriais de grupos criminosos externos.",
+    riskTags: ["Ponto de passagem do tráfico", "Rotas limítrofes", "Baixo PIB", "Ausência de policiamento"],
+    riskContext: "O menor PIB per capita do bloco (R$ 10.436) e ausência total de rede de esgoto criam o município com maior vulnerabilidade sanitária da região. A economia de subsistência oferece renda inferior ao que o tráfico paga, gerando incentivos perversos para o ingresso no crime.",
+    schoolWhy: "Extensas áreas sem policiamento fixo significam que crianças percorrem trechos rurais completamente desprotegidos. A violência que transborda de cidades vizinhas atinge as rotas escolares de Vera Cruz de forma imprevisível.",
+    schoolRoute: [
+      { step: "Sítios e fazendas", desc: "Origem dos alunos rurais — sem ponto de ônibus escolar regular em vários sítios" },
+      { step: "Estrada estadual", desc: "Via de tráfico intermunicipal — usada por veículos do crime que conectam municípios vizinhos" },
+      { step: "Zona de conflito limítrofe", desc: "Área de fronteira municipal com histórico de violência transbordada de cidades vizinhas" },
+      { step: "Escola Municipal Única", desc: "Único estabelecimento de ensino fundamental — superlotado e sem apoio psicossocial" }
+    ],
+    schoolImpact: "A escola única do município absorve toda demanda de ensino fundamental. A superlotação e o estresse da insegurança resultam em baixo desempenho acadêmico. O município registra a maior taxa de crianças fora da escola do bloco: estimados 12% fora do sistema."
+  },
+  "Baía Formosa": {
+    lat:-6.3706, lng:-35.0228, agu:75.0, esg:5.0, pop:"8.824", riskArmed:"PRESENTE", armedClass:"med", school:false, den:35,
+    riskWhy: "As Operações Kraken e Leviatã revelaram que facções chegaram às vilas pesqueiras e turísticas de Baía Formosa, buscando controlar o loteamento e a distribuição local de entorpecentes, aproveitando o fluxo de turistas. A polícia monitora a expansão das fronteiras criminosas até a costa.",
+    riskTags: ["Op. Kraken e Leviatã", "Vilas pesqueiras controladas", "Expansão criminal costeira"],
+    riskContext: "O PIB inflado pela exploração mineral e turística não se traduz em qualidade de vida para os pescadores artesanais. Com 5% de esgoto, a infraestrutura básica é deficiente. A exploração costeira atrai redes criminosas que buscam territórios com menos policiamento.",
+    schoolWhy: "Não identificada rota escolar crítica neste município.",
+    schoolRoute: [],
+    schoolImpact: "Nível de risco escolar abaixo do limiar crítico para intervenção emergencial."
+  },
+  "Senador G. Avelino": {
+    lat:-6.1436, lng:-35.2969, agu:65.0, esg:1.0, pop:"4.065", riskArmed:"CONTROLADO", armedClass:"low", school:false, den:155,
+    riskWhy: "Senador Georgino Avelino apresenta o menor nível de risco armado da região. O ambiente rural pacato e o isolamento geográfico limitam a penetração das facções. Eventuais ocorrências se limitam a esconderijos ocasionais usados por criminosos em fuga de outras regiões.",
+    riskTags: ["Risco baixo", "Ambiente rural", "Esconderijo ocasional", "Isolamento geográfico"],
+    riskContext: "Apesar da tranquilidade, os indicadores sociais são dos piores do bloco: IDHM 0,570 e cobertura de esgoto de apenas 1%. A pobreza extrema é o maior risco — não a violência armada, mas a vulnerabilidade social crônica.",
+    schoolWhy: "Não identificada rota escolar crítica neste município.",
+    schoolRoute: [],
+    schoolImpact: "Isolamento geográfico gera dificuldade de acesso à escola, mas sem componente de violência armada significativo."
+  },
+  "Vila Flor": {
+    lat:-6.2994, lng:-35.3200, agu:60.0, esg:1.0, pop:"4.300", riskArmed:"CONTROLADO", armedClass:"low", school:false, den:80,
+    riskWhy: "Vila Flor mantém baixo risco armado graças à coesão social de uma comunidade pequena onde todos se conhecem. O aparato policial básico é suficiente para o volume de ocorrências. O maior risco é estrutural — a pobreza extrema e a ausência total de esgoto.",
+    riskTags: ["Risco controlado", "Coesão social", "Pequeno retalho local", "Vigilância comunitária"],
+    riskContext: "Com PIB absoluto mínimo, qualquer redução nos repasses federais pode colapsar a capacidade de manutenção dos serviços básicos. A dependência do funcionalismo público é total. Criminalidade de baixíssima escala, mas pobreza estrutural severa.",
+    schoolWhy: "Não identificada rota escolar crítica neste município.",
+    schoolRoute: [],
+    schoolImpact: "A segurança comunitária é preservada pelo tamanho da cidade. Riscos escolares são de natureza socioeconômica, não de violência armada."
+  }
 };
 
 let geoMap = null;
@@ -1771,6 +2042,9 @@ let geoSchoolMarkers = [];
 let geoAllMarkers = [];
 let activeGeoLayer = 'heat';
 let showingAll = false;
+let isSatellite = false;
+let darkTileLayer = null;
+let satTileLayer = null;
 
 function initGeoMap() {
   if (geoMap) return;
@@ -1778,11 +2052,27 @@ function initGeoMap() {
   geoMap = L.map('geo-map', { zoomControl: true, scrollWheelZoom: true })
     .setView([-6.18, -35.22], 10);
 
-  // Dark tile layer
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  // Dark tile layer (padrão)
+  darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OpenStreetMap © CARTO',
     subdomains: 'abcd', maxZoom: 19
-  }).addTo(geoMap);
+  });
+
+  // Satellite tile layer (Esri World Imagery)
+  satTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© Esri, Maxar, Earthstar Geographics',
+    maxZoom: 19
+  });
+
+  darkTileLayer.addTo(geoMap);
+
+  // Botão de satélite sobre o mapa
+  const satBtn = document.createElement('button');
+  satBtn.className = 'sat-badge';
+  satBtn.id = 'sat-toggle-btn';
+  satBtn.innerHTML = '🛰️ Satélite';
+  satBtn.onclick = toggleSatellite;
+  document.getElementById('geo-map').appendChild(satBtn);
 
   buildGeoLayers();
   toggleGeoLayer('heat');
@@ -1826,6 +2116,7 @@ function buildGeoLayers() {
         const sel = document.getElementById('city-select');
         sel.value = name;
         selectCity(name);
+        openRiskModal(name);
       });
     geoRiskMarkers.push(m);
   });
@@ -1843,7 +2134,10 @@ function buildGeoLayers() {
     });
     const m = L.marker([d.lat + 0.009, d.lng - 0.009], { icon })
       .bindTooltip(`<b>${name}</b><br>⚠️ Rota escolar de risco identificada`, { className: 'geo-tooltip' })
-      .on('click', () => { updateGeoPanel(name); });
+      .on('click', () => {
+        updateGeoPanel(name);
+        openSchoolModal(name);
+      });
     geoSchoolMarkers.push(m);
   });
 
@@ -1952,6 +2246,79 @@ selectCity = function(city) {
     geoMap.flyTo([GEO_DATA[city].lat, GEO_DATA[city].lng], 12, { duration: 1 });
   }
 };
+
+// ── SATELLITE TOGGLE ─────────────────────────────────────────────
+function toggleSatellite() {
+  isSatellite = !isSatellite;
+  const btn = document.getElementById('btn-satellite');
+  const innerBtn = document.getElementById('sat-toggle-btn');
+  if (isSatellite) {
+    geoMap.removeLayer(darkTileLayer);
+    satTileLayer.addTo(geoMap);
+    if (btn) { btn.classList.add('active'); btn.innerHTML = '<span>🌍</span> Modo Padrão'; }
+    if (innerBtn) { innerBtn.classList.add('active'); innerBtn.innerHTML = '🌍 Modo Padrão'; }
+  } else {
+    geoMap.removeLayer(satTileLayer);
+    darkTileLayer.addTo(geoMap);
+    if (btn) { btn.classList.remove('active'); btn.innerHTML = '<span>🛰️</span> Satélite'; }
+    if (innerBtn) { innerBtn.classList.remove('active'); innerBtn.innerHTML = '🛰️ Satélite'; }
+  }
+}
+
+// ── MODAL: PONTO DE RISCO ─────────────────────────────────────────
+function openRiskModal(cityName) {
+  const d = GEO_DATA[cityName];
+  if (!d) return;
+  document.getElementById('risk-modal-city').textContent = cityName;
+  const levelText = d.riskArmed === 'CRÍTICO' ? '🔴 Risco CRÍTICO — Facções com domínio territorial'
+    : d.riskArmed === 'PRESENTE' ? '🟡 Risco PRESENTE — Atividade criminosa ativa'
+    : '🟢 Risco CONTROLADO — Baixa incidência armada';
+  document.getElementById('risk-modal-level').textContent = levelText;
+
+  const icon = document.getElementById('risk-modal-icon');
+  icon.className = 'geo-modal-icon ' + (d.armedClass === 'red' ? 'danger' : d.armedClass === 'med' ? 'warning' : 'school');
+  icon.textContent = d.armedClass === 'red' ? '🛡️' : d.armedClass === 'med' ? '⚠️' : '✅';
+
+  document.getElementById('risk-modal-why').textContent = d.riskWhy || 'Dados não disponíveis.';
+
+  const tagsEl = document.getElementById('risk-modal-tags');
+  tagsEl.innerHTML = (d.riskTags || []).map(t => {
+    const cls = d.armedClass === 'red' ? 'danger' : 'warning';
+    return `<span class="geo-risk-tag ${cls}">${t}</span>`;
+  }).join('');
+
+  document.getElementById('risk-modal-context').textContent = d.riskContext || '';
+  document.getElementById('geo-risk-modal').classList.add('open');
+}
+
+// ── MODAL: ROTA ESCOLAR ───────────────────────────────────────────
+function openSchoolModal(cityName) {
+  const d = GEO_DATA[cityName];
+  if (!d || !d.school) return;
+  document.getElementById('school-modal-city').textContent = cityName;
+
+  const routeEl = document.getElementById('school-modal-route');
+  if (d.schoolRoute && d.schoolRoute.length) {
+    routeEl.innerHTML = d.schoolRoute.map((r, i) => `
+      <div class="geo-modal-route-step">
+        <span class="step-num">${i + 1}</span>
+        <div><strong style="color:#a59bff;font-size:0.82rem;">${r.step}</strong><br>${r.desc}</div>
+      </div>
+    `).join('');
+  } else {
+    routeEl.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">Trajeto não mapeado em detalhe.</p>';
+  }
+
+  document.getElementById('school-modal-why').textContent = d.schoolWhy || 'Dados não disponíveis.';
+  document.getElementById('school-modal-impact').textContent = d.schoolImpact || '';
+  document.getElementById('geo-school-modal').classList.add('open');
+}
+
+function closeGeoModal(modalId, event) {
+  if (event.target === document.getElementById(modalId)) {
+    document.getElementById(modalId).classList.remove('open');
+  }
+}
 
 window.onload = initTabs;
 
