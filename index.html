@@ -402,6 +402,7 @@
   .rank-number {
     font-size: 2.2rem; font-weight: 900; color: #fff;
     background: linear-gradient(135deg, var(--primary), var(--accent));
+    background-clip: text;
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     line-height: 1;
   }
@@ -800,6 +801,7 @@
     <div class="benchmark-grid">
       <!-- Card Ranking -->
       <div class="benchmark-card">
+        <div class="info-btn" onclick="showInsight('rank')">i</div>
         <div class="rank-badge-wrap">
           <div class="rank-number" id="rank-pos">#0</div>
           <div class="rank-text">
@@ -814,6 +816,7 @@
       </div>
       <!-- Card Comparativo Direto -->
       <div class="benchmark-card">
+        <div class="info-btn" onclick="showInsight('comp')">i</div>
         <div class="comp-bars">
           <div class="comp-item">
             <div class="comp-lbl-row"><span id="comp-name-main">Município</span> <span id="comp-val-main">0/100</span></div>
@@ -1616,6 +1619,16 @@ const InsightsDB = {
     t: "Índice SocioDash™",
     d: "O Índice SocioDash™ é uma métrica proprietária que consolida a maturidade sociodemográfica do município em uma única nota de 0 a 100. Ele é calculado a partir da média equilibrada de três eixos críticos: Educação (taxa de alfabetização), Saneamento (média de cobertura de água e esgoto) e Segurança (baseado no inverso do Índice de Vulnerabilidade Juvenil - IVJ).",
     i: "Este índice permite uma comparação rápida entre municípios. Uma nota alta indica equilíbrio entre desenvolvimento humano e infraestrutura básica."
+  },
+  rank: {
+    t: "Ranking de Maturidade Regional",
+    d: "Este ranking posiciona o município entre os 12 analisados na região, utilizando o Score SocioDash™ como critério de ordenação. O percentil de performance indica a porcentagem de municípios que possuem uma nota inferior à da cidade selecionada.",
+    i: "A posição no ranking reflete o nível de competitividade territorial e ajuda a identificar onde o município se destaca na região."
+  },
+  comp: {
+    t: "Comparativo de Performance Territorial",
+    d: "Esta ferramenta permite comparar o desempenho do município com referências estratégicas: Natal (Capital do Estado) e a Média Geral do Rio Grande do Norte. As barras normalizam os dados para o Índice SocioDash™ (0-100).",
+    i: "Manter-se próximo ou acima da média estadual e da capital é um indicador de eficiência na gestão de recursos e infraestrutura social."
   }
 };
 
