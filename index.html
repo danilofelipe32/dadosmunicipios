@@ -339,6 +339,44 @@
     padding: 4px 8px; border-radius: 4px;
   }
 
+  /* SOCIODASH SCORE CARD */
+  .score-hero {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(108,99,255,0.08));
+    border: 1px solid rgba(108,99,255,0.25);
+    border-radius: 24px;
+    padding: 30px;
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(108,99,255,0.1);
+  }
+  .score-circle-container {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px;
+  }
+  .score-main { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff; }
+  .score-total { font-size: 1.2rem; color: var(--text-muted); font-weight: 700; margin-top: -5px; }
+  .score-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary); font-weight: 800; margin-top: 10px; }
+  
+  .score-breakdown { display: flex; flex-direction: column; gap: 18px; }
+  .score-item { display: flex; align-items: center; gap: 15px; }
+  .score-item-label { width: 100px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .score-bar-bg { flex: 1; height: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.23,1,0.32,1); width: 0; }
+  .score-item-val { width: 45px; text-align: right; font-size: 0.9rem; font-weight: 800; color: #fff; }
+  
+  .bg-success { background: var(--success); box-shadow: 0 0 15px rgba(0,229,160,0.4); }
+  .bg-warning { background: var(--warning); box-shadow: 0 0 15px rgba(255,184,48,0.4); }
+  .bg-danger { background: var(--danger); box-shadow: 0 0 15px rgba(255,77,109,0.4); }
+  
+  @media (max-width: 768px) {
+    .score-hero { grid-template-columns: 1fr; text-align: center; gap: 20px; }
+    .score-circle-container { border-right: none; padding-right: 0; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  }
+
   /* PRINT */
   @media print {
     body { background: white !important; color: #000 !important; font-size: 10.5pt; line-height: 1.5; margin: 0; padding: 0; }
@@ -365,6 +403,10 @@
     .rec-impact { font-weight: bold; margin-top: 10px; border-top: 1px solid #ddd; padding-top: 5px; }
     .alert-box strong, #analysis-text, #al-text, .rec-title, .rec-body, .rec-impact { color: #000 !important; }
     .exec-card::before, .rec-card::before { display: none !important; }
+    .score-hero { background: #f0f0f0 !important; border: 2px solid #000 !important; color: #000 !important; grid-template-columns: 150px 1fr !important; margin-bottom: 30px !important; page-break-inside: avoid; }
+    .score-main, .score-total, .score-label, .score-item-label, .score-item-val { color: #000 !important; }
+    .score-bar-bg { border: 1px solid #000 !important; background: #fff !important; }
+    .score-circle-container { border-right: 1px solid #000 !important; }
     #saneamento-section, #visualizacao-section, #comparativo-section, #decision-section { page-break-before: always; }
     .chart-card { border: none !important; background: none !important; page-break-inside: avoid; }
     .chart-wrap { height: 220px !important; }
@@ -671,6 +713,33 @@
 
 <div class="container">
   
+  <section id="score-section">
+    <div class="score-hero">
+      <div class="score-circle-container">
+        <div class="score-main" id="score-total-val">0</div>
+        <div class="score-total">/100</div>
+        <div class="score-label">Índice SocioDash™</div>
+      </div>
+      <div class="score-breakdown">
+        <div class="score-item">
+          <div class="score-item-label">Educação</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar-edu"></div></div>
+          <div class="score-item-val" id="score-val-edu">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-item-label">Saneamento</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar-san"></div></div>
+          <div class="score-item-val" id="score-val-san">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-item-label">Segurança</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar-seg"></div></div>
+          <div class="score-item-val" id="score-val-seg">0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="impacto-section">
     <div class="section-title"><span class="s-icon">📌</span> Indicadores Gerais de Impacto</div>
     <div class="kpi-grid">
@@ -1572,6 +1641,49 @@ function updateRecommendations(cityId) {
   });
 }
 
+function updateSocioDashScore(cityId) {
+  const d = DB[cityId];
+  
+  // 1. EDUCAÇÃO (Alfabetização)
+  const eduVal = parseInt(d.alf.replace('%','')) || 0;
+  
+  // 2. SANEAMENTO (Média Água + Esgoto)
+  const aguVal = parseFloat(d.agu.replace(',','.')) || 0;
+  const esgVal = parseFloat(d.esg.replace(',','.')) || 0;
+  const sanVal = Math.round((aguVal + esgVal) / 2);
+  
+  // 3. SEGURANÇA (Inverso do IVJ)
+  const ivjVal = d.ivj || 0;
+  const segVal = Math.round(Math.max(0, 100 - (ivjVal * 10)));
+  
+  // 4. TOTAL
+  const totalVal = Math.round((eduVal + sanVal + segVal) / 3);
+  
+  // Helpers
+  const getColorClass = (v) => v >= 70 ? 'bg-success' : v >= 40 ? 'bg-warning' : 'bg-danger';
+  
+  // Visual Update
+  document.getElementById('score-total-val').innerText = totalVal;
+  
+  // EDU
+  document.getElementById('score-val-edu').innerText = eduVal;
+  const barEdu = document.getElementById('score-bar-edu');
+  barEdu.style.width = eduVal + '%';
+  barEdu.className = 'score-bar-fill ' + getColorClass(eduVal);
+  
+  // SAN
+  document.getElementById('score-val-san').innerText = sanVal;
+  const barSan = document.getElementById('score-bar-san');
+  barSan.style.width = sanVal + '%';
+  barSan.className = 'score-bar-fill ' + getColorClass(sanVal);
+  
+  // SEG
+  document.getElementById('score-val-seg').innerText = segVal;
+  const barSeg = document.getElementById('score-bar-seg');
+  barSeg.style.width = segVal + '%';
+  barSeg.className = 'score-bar-fill ' + getColorClass(segVal);
+}
+
 function generatePDF() {
   const city = document.getElementById('city-select').value;
   const d = DB[city];
@@ -2054,6 +2166,7 @@ function selectCity(cityId) {
     `<strong>⚠️ Diagnóstico de Vulnerabilidade Juvenil — ${cityId}:</strong> ${d.ivj_insight || 'Análise disponível após seleção do município.'}`;
 
   updateRecommendations(cityId);
+  updateSocioDashScore(cityId);
 
   renderCharts(d.s_agu, d.s_esg, d.letal, cityId, d.radar);
 }
