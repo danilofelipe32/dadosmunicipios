@@ -352,6 +352,7 @@
     align-items: center;
     backdrop-filter: blur(20px);
     box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(108,99,255,0.1);
+    position: relative;
   }
   .score-circle-container {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -713,8 +714,9 @@
 
 <div class="container">
   
-  <section id="score-section">
+  <section id="score-section" style="position:relative;">
     <div class="score-hero">
+      <div class="info-btn" style="top:15px; right:15px;" onclick="showInsight('sociodash')">i</div>
       <div class="score-circle-container">
         <div class="score-main" id="score-total-val">0</div>
         <div class="score-total">/100</div>
@@ -1519,6 +1521,11 @@ const InsightsDB = {
     t: "Comparativo Regional — IVJ e Gravidez Adolescente",
     d: "Visualização conjunta do Índice de Vulnerabilidade Juvenil e da taxa de gravidez na adolescência para todos os 12 municípios. Permite identificar rapidamente quais cidades concentram os maiores riscos e demandam intervenção prioritária.",
     i: "Municípios com IVJ acima de 7,0 e gravidez adolescente acima de 20% simultaneamente estão na zona crítica de vulnerabilidade máxima e requerem atenção imediata do poder público."
+  },
+  sociodash: {
+    t: "Índice SocioDash™",
+    d: "O Índice SocioDash™ é uma métrica proprietária que consolida a maturidade sociodemográfica do município em uma única nota de 0 a 100. Ele é calculado a partir da média equilibrada de três eixos críticos: Educação (taxa de alfabetização), Saneamento (média de cobertura de água e esgoto) e Segurança (baseado no inverso do Índice de Vulnerabilidade Juvenil - IVJ).",
+    i: "Este índice permite uma comparação rápida entre municípios. Uma nota alta indica equilíbrio entre desenvolvimento humano e infraestrutura básica."
   }
 };
 
