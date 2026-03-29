@@ -378,6 +378,58 @@
     .score-circle-container { border-right: none; padding-right: 0; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
   }
 
+  /* BENCHMARK COMPARATIVE */
+  .benchmark-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .benchmark-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,212,255,0.05));
+    border: 1px solid rgba(108,99,255,0.18);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 15px;
+    position: relative; overflow: hidden;
+  }
+  .benchmark-card::before {
+    content: ''; position: absolute; top:0; right:0; width:100px; height:100px;
+    background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .rank-badge-wrap { display: flex; align-items: center; gap: 15px; }
+  .rank-number {
+    font-size: 2.2rem; font-weight: 900; color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+  .rank-text { font-size: 0.82rem; font-weight: 700; color: var(--text-muted); line-height: 1.3; }
+  .rank-text strong { color: #fff; display: block; font-size: 0.95rem; }
+  
+  .percentile-box {
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.25);
+    border-radius: 12px; padding: 12px 16px;
+    margin-top: 5px;
+  }
+  .percentile-val { font-weight: 900; color: var(--success); font-size: 1rem; }
+  .percentile-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+  .comp-bars { display: flex; flex-direction: column; gap: 12px; }
+  .comp-item { display: flex; flex-direction: column; gap: 5px; }
+  .comp-lbl-row { display: flex; justify-content: space-between; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: var(--text-muted); }
+  .comp-bar-bg { height: 8px; background: rgba(255,255,255,0.04); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+  .comp-bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease-out; }
+  .comp-bar-fill.main { background: var(--primary); box-shadow: 0 0 10px rgba(108,99,255,0.3); }
+  .comp-bar-fill.natal { background: #fff; opacity: 0.6; }
+  .comp-bar-fill.rn { background: var(--accent); opacity: 0.5; }
+
+  @media (max-width: 900px) {
+    .benchmark-grid { grid-template-columns: 1fr; }
+  }
+
   /* PRINT */
   @media print {
     body { background: white !important; color: #000 !important; font-size: 10.5pt; line-height: 1.5; margin: 0; padding: 0; }
@@ -737,6 +789,44 @@
           <div class="score-item-label">Segurança</div>
           <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar-seg"></div></div>
           <div class="score-item-val" id="score-val-seg">0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENCHMARK SECTION -->
+  <section id="benchmark-section">
+    <div class="section-title"><span class="s-icon">🏁</span> Benchmark Comparativo Regional <span class="badge b-success" style="margin-left:10px;font-size:0.6rem;">Ranking Intel</span></div>
+    <div class="benchmark-grid">
+      <!-- Card Ranking -->
+      <div class="benchmark-card">
+        <div class="rank-badge-wrap">
+          <div class="rank-number" id="rank-pos">#0</div>
+          <div class="rank-text">
+            No ranking de <strong id="rank-total">12 municípios</strong>
+            análise competitiva territorial
+          </div>
+        </div>
+        <div class="percentile-box">
+          <div class="percentile-val" id="rank-percentile">0%</div>
+          <div class="percentile-lbl" id="rank-percentile-text">Melhor que os outros municípios analisados.</div>
+        </div>
+      </div>
+      <!-- Card Comparativo Direto -->
+      <div class="benchmark-card">
+        <div class="comp-bars">
+          <div class="comp-item">
+            <div class="comp-lbl-row"><span id="comp-name-main">Município</span> <span id="comp-val-main">0/100</span></div>
+            <div class="comp-bar-bg"><div class="comp-bar-fill main" id="bar-comp-main"></div></div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-lbl-row">Natal (Capital/Referência) <span id="comp-val-natal">78/100</span></div>
+            <div class="comp-bar-bg"><div class="comp-bar-fill natal" id="bar-comp-natal" style="width:78%;"></div></div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-lbl-row">Média Rio Grande do Norte <span id="comp-val-rn">61/100</span></div>
+            <div class="comp-bar-bg"><div class="comp-bar-fill rn" id="bar-comp-rn" style="width:61%;"></div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1529,6 +1619,54 @@ const InsightsDB = {
   }
 };
 
+// --- BENCHMARK DATA & UTILS ---
+const REF_NATAL = { alf: "94%", agu: "98%", esg: "46%", ivj: 5.8 }; // Referência Capital
+const REF_MEDIA_RN = { alf: "85%", agu: "74%", esg: "25%", ivj: 6.5 }; // Média Estadual
+
+function calculateScoreValue(d) {
+  const edu = parseInt(d.alf.replace('%','')) || 0;
+  const agu = parseFloat(d.agu.toString().replace(',','.')) || 0;
+  const esg = parseFloat(d.esg.toString().replace(',','.')) || 0;
+  const san = Math.round((agu + esg) / 2);
+  const ivj = d.ivj || 0;
+  const seg = Math.round(Math.max(0, 100 - (ivj * 10)));
+  return Math.round((edu + san + seg) / 3);
+}
+
+function updateBenchmark(cityId) {
+  const currentScore = calculateScoreValue(DB[cityId]);
+  const allScores = Object.keys(DB).map(id => ({ id, score: calculateScoreValue(DB[id]) }));
+  
+  // Sort descending
+  allScores.sort((a,b) => b.score - a.score);
+  
+  const rank = allScores.findIndex(x => x.id === cityId) + 1;
+  const total = allScores.length;
+  
+  // Percentile Calculation
+  const betterThan = allScores.filter(x => x.score < currentScore).length;
+  const percentile = Math.round((betterThan / (total - 1)) * 100);
+
+  // Update DOM
+  document.getElementById('rank-pos').innerText = `#${rank}`;
+  document.getElementById('rank-total').innerText = `${total} municípios`;
+  document.getElementById('rank-percentile').innerText = `${percentile}%`;
+  document.getElementById('rank-percentile-text').innerText = `Melhor que ${percentile}% dos outros municípios analisados na região.`;
+
+  // Comparisons
+  document.getElementById('comp-name-main').innerText = cityId;
+  document.getElementById('comp-val-main').innerText = `${currentScore}/100`;
+  document.getElementById('bar-comp-main').style.width = `${currentScore}%`;
+
+  const natalScore = calculateScoreValue(REF_NATAL);
+  document.getElementById('comp-val-natal').innerText = `${natalScore}/100`;
+  document.getElementById('bar-comp-natal').style.width = `${natalScore}%`;
+
+  const rnScore = calculateScoreValue(REF_MEDIA_RN);
+  document.getElementById('comp-val-rn').innerText = `${rnScore}/100`;
+  document.getElementById('bar-comp-rn').style.width = `${rnScore}%`;
+}
+
 function showInsight(id) {
   const modal = document.getElementById('insight-modal');
   const data = InsightsDB[id];
@@ -1650,41 +1788,27 @@ function updateRecommendations(cityId) {
 
 function updateSocioDashScore(cityId) {
   const d = DB[cityId];
-  
-  // 1. EDUCAÇÃO (Alfabetização)
   const eduVal = parseInt(d.alf.replace('%','')) || 0;
-  
-  // 2. SANEAMENTO (Média Água + Esgoto)
   const aguVal = parseFloat(d.agu.replace(',','.')) || 0;
   const esgVal = parseFloat(d.esg.replace(',','.')) || 0;
   const sanVal = Math.round((aguVal + esgVal) / 2);
-  
-  // 3. SEGURANÇA (Inverso do IVJ)
   const ivjVal = d.ivj || 0;
   const segVal = Math.round(Math.max(0, 100 - (ivjVal * 10)));
+  const totalVal = calculateScoreValue(d);
   
-  // 4. TOTAL
-  const totalVal = Math.round((eduVal + sanVal + segVal) / 3);
-  
-  // Helpers
   const getColorClass = (v) => v >= 70 ? 'bg-success' : v >= 40 ? 'bg-warning' : 'bg-danger';
   
-  // Visual Update
   document.getElementById('score-total-val').innerText = totalVal;
-  
-  // EDU
   document.getElementById('score-val-edu').innerText = eduVal;
   const barEdu = document.getElementById('score-bar-edu');
   barEdu.style.width = eduVal + '%';
   barEdu.className = 'score-bar-fill ' + getColorClass(eduVal);
   
-  // SAN
   document.getElementById('score-val-san').innerText = sanVal;
   const barSan = document.getElementById('score-bar-san');
   barSan.style.width = sanVal + '%';
   barSan.className = 'score-bar-fill ' + getColorClass(sanVal);
   
-  // SEG
   document.getElementById('score-val-seg').innerText = segVal;
   const barSeg = document.getElementById('score-bar-seg');
   barSeg.style.width = segVal + '%';
@@ -1809,6 +1933,32 @@ function generatePDF() {
       <div class="kpi-card"><div class="lbl">Água Potável</div><div class="val green">${el('k-agu')}</div><div class="src">CAERN</div></div>
       <div class="kpi-card"><div class="lbl">Esgotamento</div><div class="val red">${el('k-esg')}</div><div class="src">CAERN</div></div>
       <div class="kpi-card"><div class="lbl">Gravidez Adol.</div><div class="val red">${el('k-gra')}</div><div class="src">DATASUS</div></div>
+    </div>
+
+    <!-- BENCHMARK -->
+    <div class="pdf-sec">🏁 Benchmark Comparativo Regional</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+      <div style="border:1px solid #e5e7eb; border-radius:7px; padding:12px; background:#fcfcfc; display:flex; align-items:center; gap:15px;">
+        <div style="font-size:20pt; font-weight:900; color:#1d4ed8;">${el('rank-pos')}</div>
+        <div style="font-size:8pt; line-height:1.2;">No ranking de <strong>12 municípios</strong><br>Análise de Performance Regional</div>
+      </div>
+      <div style="border:1px solid #e5e7eb; border-radius:7px; padding:12px; background:#f0fdf4;">
+        <div style="font-size:10pt; font-weight:900; color:#166534;">${el('rank-percentile')} de Performance</div>
+        <div style="font-size:7.5pt; color:#166534;">${el('rank-percentile-text')}</div>
+      </div>
+    </div>
+    <div style="border:1px solid #e5e7eb; border-radius:7px; padding:12px; background:#fafafa; margin-bottom:15px;">
+       <div style="font-size:7pt; font-weight:800; text-transform:uppercase; margin-bottom:10px; color:#666;">Comparativo de Score SocioDash™</div>
+       <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; font-size:7pt;"><span>${city}</span> <strong>${el('comp-val-main')}</strong></div>
+          <div style="height:6px; background:#eee; border-radius:10px; overflow:hidden;"><div style="width:${el('comp-val-main').split('/')[0]}%; height:100%; background:#1d4ed8;"></div></div>
+          
+          <div style="display:flex; justify-content:space-between; font-size:7pt; margin-top:2px;"><span>Natal (Capital)</span> <strong>${el('comp-val-natal')}</strong></div>
+          <div style="height:6px; background:#eee; border-radius:10px; overflow:hidden;"><div style="width:78%; height:100%; background:#666;"></div></div>
+          
+          <div style="display:flex; justify-content:space-between; font-size:7pt; margin-top:2px;"><span>Média RN</span> <strong>${el('comp-val-rn')}</strong></div>
+          <div style="height:6px; background:#eee; border-radius:10px; overflow:hidden;"><div style="width:61%; height:100%; background:#10b981;"></div></div>
+       </div>
     </div>
 
     <!-- ANÁLISE EXECUTIVA -->
@@ -2174,6 +2324,7 @@ function selectCity(cityId) {
 
   updateRecommendations(cityId);
   updateSocioDashScore(cityId);
+  updateBenchmark(cityId);
 
   renderCharts(d.s_agu, d.s_esg, d.letal, cityId, d.radar);
 }
