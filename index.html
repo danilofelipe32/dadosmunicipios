@@ -264,6 +264,7 @@
   .t-yellow { color: var(--warning); }
   .t-red { color: var(--danger); }
   .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
+  .font-bold { font-weight: 700; }
   .b-danger { background: rgba(255,77,109,0.12); color: var(--danger); border: 1px solid rgba(255,77,109,0.2); }
   .b-warning { background: rgba(255,184,48,0.12); color: var(--warning); border: 1px solid rgba(255,184,48,0.2); }
   .b-success { background: rgba(0,229,160,0.1); color: var(--success); border: 1px solid rgba(0,229,160,0.2); }
@@ -976,16 +977,18 @@
         <thead>
           <tr>
             <th>Alunos com NEE (Matriculados)</th>
-            <th>Perfil de Autodeclaração (Raça/Cor)</th>
+            <th>Matrículas EJA (2023)</th>
+            <th>Perfil de Autodeclaração</th>
             <th>Fonte dos Dados</th>
-            <th>Regional de Ensino</th>
+            <th>Regional</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td id="edu-nee" class="t-red font-bold">-</td>
+            <td id="edu-eja" class="t-blue font-bold">-</td>
             <td id="edu-auto">-</td>
-            <td>SIGEduc / Censo Escolar 2024</td>
+            <td>SIGEduc / QEdu 2023</td>
             <td>2ª DIREC</td>
           </tr>
         </tbody>
@@ -1167,6 +1170,10 @@
         <div class="geo-stat-label">🎓 Alunos com NEE (SIGEduc)</div>
         <div class="geo-stat-val" id="gval-nee">-</div>
       </div>
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">📘 Matrículas EJA (QEdu)</div>
+        <div class="geo-stat-val" id="gval-eja">-</div>
+      </div>
 
       <div class="geo-legend">
         <div class="geo-legend-title">Legenda — Calor Sanitário</div>
@@ -1347,6 +1354,7 @@ const DB = {
     radar: { idh: 77, alf: 95, agu: 95, esg: 7, seg: 45 },
     exec_analysis: "Parnamirim apresenta um cenário de 'Crescimento Hiper-Acelerado com Déficit Estrutural'. Embora ostente um PIB per capita robusto e a maior densidade demográfica da região, o município enfrenta um hiato crítico de saneamento (92,9% sem esgoto adequado). Esta disparidade entre desenvolvimento econômico e infraestrutura básica cria um vetor de risco sanitário severo. A análise geoespacial indica que a verticalização urbana não foi acompanhada pela expansão de serviços, exigindo uma reestruturação imediata do Plano Diretor para mitigar as externalidades negativas do adensamento.",
     edu_nee: "375 alunos",
+    edu_eja: "1.621 alunos",
     edu_auto: "Branca (46,8%) e Parda (45,2%) predominantes.",
     ibgeCode: "2403251"
   },
@@ -1368,6 +1376,7 @@ const DB = {
     radar: { idh: 61, alf: 84, agu: 85, esg: 5, seg: 35 },
     exec_analysis: "São José de Mipibu atua como o 'Portal do Agreste'. O crescimento demográfico desordenado sem expansão de esgoto (5%) cria um passivo socioambiental crítico. A segurança pública é o maior gargalo, impactada pela letalidade vinda da RM de Natal.",
     edu_nee: "99 alunos",
+    edu_eja: "424 alunos",
     edu_auto: "Parda (65,2%) e Branca (24,3%) predominantes.",
     ibgeCode: "2412203"
   },
@@ -1389,6 +1398,7 @@ const DB = {
     radar: { idh: 62, alf: 82, agu: 79, esg: 3, seg: 25 },
     exec_analysis: "Nísia Floresta enfrenta o 'Estigma Carcerário'. Ter o maior complexo prisional do estado gera externalidades negativas na segurança local (letalidade 95%). O potencial turístico de suas lagoas é travado pela ausência de saneamento básico (3%).",
     edu_nee: "69 alunos",
+    edu_eja: "148 alunos",
     edu_auto: "Parda (68,0%) e Branca (22,0%) predominantes.",
     ibgeCode: "2408201"
   },
@@ -1410,6 +1420,7 @@ const DB = {
     radar: { idh: 58, alf: 78, agu: 76, esg: 2, seg: 40 },
     exec_analysis: "Canguaretama demonstra um 'Ciclo de Pobreza Transgeracional'. Com baixos índices de IDHM e esgoto (2.5%), o município é um território de alta vulnerabilidade, onde o programa Bolsa Família é o principal pilar de sustentação econômica.",
     edu_nee: "94 alunos",
+    edu_eja: "643 alunos",
     edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
     ibgeCode: "2402204"
   },
@@ -1431,6 +1442,7 @@ const DB = {
     radar: { idh: 64, alf: 86, agu: 82, esg: 8, seg: 55 },
     exec_analysis: "Goianinha é o 'Nó Logístico' da região. Sua economia é mais dinâmica, mas o saneamento (8%) ainda é um gargalo para a atração de novas indústrias. A análise sugere investimentos em distritos industriais planejados.",
     edu_nee: "45 alunos",
+    edu_eja: "412 alunos",
     edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
     ibgeCode: "2404209"
   },
@@ -1452,6 +1464,7 @@ const DB = {
     radar: { idh: 61, alf: 80, agu: 74, esg: 3, seg: 65 },
     exec_analysis: "Monte Alegre demonstra um 'Perfil de Estagnação Rural'. Com baixa densidade produtiva e saneamento incipiente (3%), o município depende fortemente do setor público. Vulnerabilidades em saúde são mapeadas como prioridade.",
     edu_nee: "22 alunos",
+    edu_eja: "387 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2407807"
   },
@@ -1473,6 +1486,7 @@ const DB = {
     radar: { idh: 65, alf: 88, agu: 89, esg: 15, seg: 40 },
     exec_analysis: "Tibau do Sul vive o 'Paradoxo de Pipa'. O alto PIB turístico mascara a carência de saneamento nos bairros populares. A disparidade social é o combustível para a letalidade elevada (80% em relação à meta).",
     edu_nee: "14 alunos",
+    edu_eja: "86 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2414209"
   },
@@ -1494,6 +1508,7 @@ const DB = {
     radar: { idh: 60, alf: 77, agu: 70, esg: 2, seg: 55 },
     exec_analysis: "Arez demonstra um perfil de vulnerabilidade rural acentuada. O baixo índice de esgotamento sanitário (2%) aliado à infraestrutura de água obsoleta cria um cenário crítico para a saúde pública. A economia local, dependente do funcionalismo e agricultura, não possui lastro para investimentos massivos sem suporte estadual/federal.",
     edu_nee: "24 alunos",
+    edu_eja: "112 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2401206"
   },
@@ -1515,6 +1530,7 @@ const DB = {
     radar: { idh: 59, alf: 75, agu: 68, esg: 2, seg: 75 },
     exec_analysis: "Vera Cruz apresenta 'Invisibilidade Infraestrutural'. O menor IDHM del bloco reflete a ausência total de rede de esgoto e carência de água tratada em áreas rurais. A vulnerabilidade é máxima para crises sanitárias.",
     edu_nee: "32 alunos",
+    edu_eja: "105 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2414803"
   },
@@ -1536,6 +1552,7 @@ const DB = {
     radar: { idh: 61, alf: 84, agu: 75, esg: 5, seg: 65 },
     exec_analysis: "Baía Formosa resiste como um 'Enclave de Preservação Comercial'. O PIB per capita é inflado pela exploração mineral/turística, mas a infraestrutura básica ainda é insuficiente. O desafio é manter a segurança costeira.",
     edu_nee: "17 alunos",
+    edu_eja: "62 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2401404"
   },
@@ -1557,6 +1574,7 @@ const DB = {
     radar: { idh: 57, alf: 73, agu: 65, esg: 1, seg: 95 },
     exec_analysis: "Senador Georgino Avelino é o município com maior 'Isolamento Estrutural'. Apesar da tranquilidade (baixa letalidade), os indicadores sociais estão no limite da pobreza extrema. Saneamento é prioridade zero.",
     edu_nee: "4 alunos",
+    edu_eja: "48 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2413201"
   },
@@ -1578,6 +1596,7 @@ const DB = {
     radar: { idh: 57, alf: 74, agu: 67, esg: 1, seg: 90 },
     exec_analysis: "Vila Flor é um 'Micro-Cosmos' de resiliência. Apesar de ser o menor município, mantém uma coesão social que impede picos de violência, embora a carência de esgoto (1%) seja um risco de longo prazo para seu patrimônio histórico.",
     edu_nee: "7 alunos",
+    edu_eja: "29 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2415008"
   }
@@ -2395,11 +2414,15 @@ function selectCity(cityId) {
 
   // Educação SIGEduc
   document.getElementById('edu-nee').innerText = d.edu_nee || "-";
+  document.getElementById('edu-eja').innerText = d.edu_eja || "-";
   document.getElementById('edu-auto').innerText = d.edu_auto || "-";
   
   // Geopanel Educ
   if(document.getElementById('gval-nee')) {
     document.getElementById('gval-nee').innerText = d.edu_nee || "-";
+  }
+  if(document.getElementById('gval-eja')) {
+    document.getElementById('gval-eja').innerText = d.edu_eja || "-";
   }
 
   renderCharts(d.s_agu, d.s_esg, d.letal, cityId, d.radar);
