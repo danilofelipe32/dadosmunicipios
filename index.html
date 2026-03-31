@@ -1318,7 +1318,7 @@ const DB = {
     exec_analysis: "Parnamirim apresenta um cenário de 'Crescimento Hiper-Acelerado com Déficit Estrutural'. Embora ostente um PIB per capita robusto e a maior densidade demográfica da região, o município enfrenta um hiato crítico de saneamento (92,9% sem esgoto adequado). Esta disparidade entre desenvolvimento econômico e infraestrutura básica cria um vetor de risco sanitário severo. A análise geoespacial indica que a verticalização urbana não foi acompanhada pela expansão de serviços, exigindo uma reestruturação imediata do Plano Diretor para mitigar as externalidades negativas do adensamento.",
     ibgeCode: "2403251"
   },
-  "S.J. Mipibu": {
+  "São José de Mipibu": {
     pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%",
     ivj: 7.20, ivj_trend: "stable", ivj_trend_text: "→ Estagnado (sem redução)", evasao: "22%", evasao_val: 22,
     ivj_insight: "São José de Mipibu apresenta IVJ elevado (7,20) com estagnação no indicador. A combinação de rotas escolares rurais inseguras e alta dependência do Bolsa Família cria um ciclo onde jovens interrompem os estudos precocemente. A gravidez na adolescência (~19,5%) agrava o ciclo de pobreza intergeracional.",
@@ -2841,6 +2841,8 @@ function buildGeoLayers() {
         sel.value = name;
         selectCity(name);
         openRiskModal(name);
+        // Garantir foco no marcador
+        geoMap.flyTo([d.lat, d.lng], 13, { duration: 1 });
       });
     geoRiskMarkers.push(m);
   });
@@ -2883,6 +2885,10 @@ function buildGeoLayers() {
         const sel = document.getElementById('city-select');
         sel.value = name;
         selectCity(name);
+        // Se houver dados de risco, abre o modal mesmo na visão geral
+        if (GEO_DATA[name] && GEO_DATA[name].riskWhy) {
+          openRiskModal(name);
+        }
         geoMap.flyTo([d.lat, d.lng], 12, { duration: 1 });
       });
     geoAllMarkers.push(m);
