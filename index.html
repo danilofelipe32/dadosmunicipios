@@ -761,6 +761,7 @@
     <span class="head-badge">🏥 DATASUS</span>
     <span class="head-badge">💧 CAERN</span>
     <span class="head-badge">🛡️ SSP-RN</span>
+    <span class="head-badge">🎓 SIGEDUC</span>
     <span class="head-badge">2022 – 2026</span>
   </div>
 </header>
@@ -968,6 +969,30 @@
     </table>
   </div>
 
+  <section id="educacao-section">
+    <div class="section-title"><span class="s-icon">🎓</span> Educação e Inclusão (2ª DIREC / SIGEduc)</div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Alunos com NEE (Matriculados)</th>
+            <th>Perfil de Autodeclaração (Raça/Cor)</th>
+            <th>Fonte dos Dados</th>
+            <th>Regional de Ensino</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="edu-nee" class="t-red font-bold">-</td>
+            <td id="edu-auto">-</td>
+            <td>SIGEduc / Censo Escolar 2024</td>
+            <td>2ª DIREC</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <div class="alert-box">
     <div class="alert-icon">⚠️</div>
     <div><strong>Análise Estrutural Crítica</strong> <span id="al-text">...</span></div>
@@ -1138,6 +1163,10 @@
         <div class="geo-stat-label">🛡️ Risco Armado</div>
         <div class="geo-risk-badge" id="geo-armed-badge">-</div>
       </div>
+      <div class="geo-stat-group">
+        <div class="geo-stat-label">🎓 Alunos com NEE (SIGEduc)</div>
+        <div class="geo-stat-val" id="gval-nee">-</div>
+      </div>
 
       <div class="geo-legend">
         <div class="geo-legend-title">Legenda — Calor Sanitário</div>
@@ -1279,6 +1308,7 @@
         <tr><td>MDS / Gov.br – Bolsa Família</td><td>Número de famílias beneficiárias (nov/2025)</td><td><a href="https://gov.br/mds" target="_blank">gov.br/mds</a></td></tr>
         <tr><td>Instituto Água e Saneamento</td><td>Cobertura de água e esgoto, prestador CAERN</td><td><a href="https://aguaesaneamento.org.br" target="_blank">aguaesaneamento.org.br</a></td></tr>
         <tr><td>CAERN – Companhia de Águas</td><td>Obras de saneamento, ETE Passagem de Areia, ampliação da rede</td><td><a href="https://caern.rn.gov.br" target="_blank">caern.rn.gov.br</a></td></tr>
+        <tr><td>SIGEduc / Censo Escolar 2024</td><td>Alunos com NEE (Necessidades Educacionais Especiais), Autodeclaração, 2ª DIREC</td><td><a href="https://sigeduc.rn.gov.br/" target="_blank">sigeduc.rn.gov.br</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -1316,6 +1346,8 @@ const DB = {
     s_agu: 94.7, s_esg: 7.1, letal: 85,
     radar: { idh: 77, alf: 95, agu: 95, esg: 7, seg: 45 },
     exec_analysis: "Parnamirim apresenta um cenário de 'Crescimento Hiper-Acelerado com Déficit Estrutural'. Embora ostente um PIB per capita robusto e a maior densidade demográfica da região, o município enfrenta um hiato crítico de saneamento (92,9% sem esgoto adequado). Esta disparidade entre desenvolvimento econômico e infraestrutura básica cria um vetor de risco sanitário severo. A análise geoespacial indica que a verticalização urbana não foi acompanhada pela expansão de serviços, exigindo uma reestruturação imediata do Plano Diretor para mitigar as externalidades negativas do adensamento.",
+    edu_nee: "375 alunos",
+    edu_auto: "Branca (46,8%) e Parda (45,2%) predominantes.",
     ibgeCode: "2403251"
   },
   "São José de Mipibu": {
@@ -1335,6 +1367,8 @@ const DB = {
     s_agu: 85, s_esg: 5.0, letal: 92,
     radar: { idh: 61, alf: 84, agu: 85, esg: 5, seg: 35 },
     exec_analysis: "São José de Mipibu atua como o 'Portal do Agreste'. O crescimento demográfico desordenado sem expansão de esgoto (5%) cria um passivo socioambiental crítico. A segurança pública é o maior gargalo, impactada pela letalidade vinda da RM de Natal.",
+    edu_nee: "99 alunos",
+    edu_auto: "Parda (65,2%) e Branca (24,3%) predominantes.",
     ibgeCode: "2412203"
   },
   "Nísia Floresta": {
@@ -1354,6 +1388,8 @@ const DB = {
     s_agu: 79, s_esg: 3.0, letal: 95,
     radar: { idh: 62, alf: 82, agu: 79, esg: 3, seg: 25 },
     exec_analysis: "Nísia Floresta enfrenta o 'Estigma Carcerário'. Ter o maior complexo prisional do estado gera externalidades negativas na segurança local (letalidade 95%). O potencial turístico de suas lagoas é travado pela ausência de saneamento básico (3%).",
+    edu_nee: "69 alunos",
+    edu_auto: "Parda (68,0%) e Branca (22,0%) predominantes.",
     ibgeCode: "2408201"
   },
   "Canguaretama": {
@@ -1373,6 +1409,8 @@ const DB = {
     s_agu: 76, s_esg: 2.5, letal: 78,
     radar: { idh: 58, alf: 78, agu: 76, esg: 2, seg: 40 },
     exec_analysis: "Canguaretama demonstra um 'Ciclo de Pobreza Transgeracional'. Com baixos índices de IDHM e esgoto (2.5%), o município é um território de alta vulnerabilidade, onde o programa Bolsa Família é o principal pilar de sustentação econômica.",
+    edu_nee: "94 alunos",
+    edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
     ibgeCode: "2402204"
   },
   "Goianinha": {
@@ -1392,6 +1430,8 @@ const DB = {
     s_agu: 82, s_esg: 8.0, letal: 70,
     radar: { idh: 64, alf: 86, agu: 82, esg: 8, seg: 55 },
     exec_analysis: "Goianinha é o 'Nó Logístico' da região. Sua economia é mais dinâmica, mas o saneamento (8%) ainda é um gargalo para a atração de novas indústrias. A análise sugere investimentos em distritos industriais planejados.",
+    edu_nee: "45 alunos",
+    edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
     ibgeCode: "2404209"
   },
   "Monte Alegre": {
@@ -1411,6 +1451,8 @@ const DB = {
     s_agu: 74, s_esg: 3.0, letal: 55,
     radar: { idh: 61, alf: 80, agu: 74, esg: 3, seg: 65 },
     exec_analysis: "Monte Alegre demonstra um 'Perfil de Estagnação Rural'. Com baixa densidade produtiva e saneamento incipiente (3%), o município depende fortemente do setor público. Vulnerabilidades em saúde são mapeadas como prioridade.",
+    edu_nee: "22 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2407807"
   },
   "Tibau do Sul": {
@@ -1430,6 +1472,8 @@ const DB = {
     s_agu: 89, s_esg: 15.0, letal: 80,
     radar: { idh: 65, alf: 88, agu: 89, esg: 15, seg: 40 },
     exec_analysis: "Tibau do Sul vive o 'Paradoxo de Pipa'. O alto PIB turístico mascara a carência de saneamento nos bairros populares. A disparidade social é o combustível para a letalidade elevada (80% em relação à meta).",
+    edu_nee: "14 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2414209"
   },
   "Arez": {
@@ -1449,6 +1493,8 @@ const DB = {
     s_agu: 70, s_esg: 2.0, letal: 45,
     radar: { idh: 60, alf: 77, agu: 70, esg: 2, seg: 55 },
     exec_analysis: "Arez demonstra um perfil de vulnerabilidade rural acentuada. O baixo índice de esgotamento sanitário (2%) aliado à infraestrutura de água obsoleta cria um cenário crítico para a saúde pública. A economia local, dependente do funcionalismo e agricultura, não possui lastro para investimentos massivos sem suporte estadual/federal.",
+    edu_nee: "24 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2401206"
   },
   "Vera Cruz": {
@@ -1467,7 +1513,9 @@ const DB = {
     sa_hab_esgoto: "~10.500", sa_hab_agua: "~3.400", sa_hab_agua_tratada: "~3.400", sa_ete: "Inexistente.",
     s_agu: 68, s_esg: 2.0, letal: 35,
     radar: { idh: 59, alf: 75, agu: 68, esg: 2, seg: 75 },
-    exec_analysis: "Vera Cruz apresenta 'Invisibilidade Infraestrutural'. O menor IDHM do bloco reflete a ausência total de rede de esgoto e carência de água tratada em áreas rurais. A vulnerabilidade é máxima para crises sanitárias.",
+    exec_analysis: "Vera Cruz apresenta 'Invisibilidade Infraestrutural'. O menor IDHM del bloco reflete a ausência total de rede de esgoto e carência de água tratada em áreas rurais. A vulnerabilidade é máxima para crises sanitárias.",
+    edu_nee: "32 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2414803"
   },
   "Baía Formosa": {
@@ -1487,6 +1535,8 @@ const DB = {
     s_agu: 75, s_esg: 5.0, letal: 40,
     radar: { idh: 61, alf: 84, agu: 75, esg: 5, seg: 65 },
     exec_analysis: "Baía Formosa resiste como um 'Enclave de Preservação Comercial'. O PIB per capita é inflado pela exploração mineral/turística, mas a infraestrutura básica ainda é insuficiente. O desafio é manter a segurança costeira.",
+    edu_nee: "17 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2401404"
   },
   "Senador G. Avelino": {
@@ -1506,12 +1556,14 @@ const DB = {
     s_agu: 65, s_esg: 1.0, letal: 10,
     radar: { idh: 57, alf: 73, agu: 65, esg: 1, seg: 95 },
     exec_analysis: "Senador Georgino Avelino é o município com maior 'Isolamento Estrutural'. Apesar da tranquilidade (baixa letalidade), os indicadores sociais estão no limite da pobreza extrema. Saneamento é prioridade zero.",
+    edu_nee: "4 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2413201"
   },
   "Vila Flor": {
     pop:"3.174", dom:"~ 1.000", idh:"0,576", pib:"R$ 15.709", alf:"74,0%", den:"66,6", bf:"~ 850", agu:"67,0%", esg:"< 1,0%", gra:"~ 18,5%",
     ivj: 6.30, ivj_trend: "down", ivj_trend_text: "↓ Coesão social contém o IVJ", evasao: "13%", evasao_val: 13,
-    ivj_insight: "Vila Flor, o menor município, demonstra que a coesão social de comunidades pequenas ajuda a conter o IVJ (6,30). A gravidez adolescente (18,5%) é o principal alerta. A dependência do funcionalismo público não cria perspectivas de médio prazo para os jovens, exigindo programas específicos de primeiro emprego.",
+    ivj_insight: "Vila Flor, o menor município, demonstra que a coesão social de comunidades pequenas ajuda a conter o IVJ (6,30). A gravidez adolescente (18,5%) é o principal alerta.",
     ts_cadunico: "~ 1.000 domicílios. Menor em contingente.",
     ts_bf_detalhe: "~ 850 famílias beneficiárias.",
     ts_desemprego: "Economia micro e baseada na prefeitura local.",
@@ -1525,6 +1577,8 @@ const DB = {
     s_agu: 67, s_esg: 1.0, letal: 15,
     radar: { idh: 57, alf: 74, agu: 67, esg: 1, seg: 90 },
     exec_analysis: "Vila Flor é um 'Micro-Cosmos' de resiliência. Apesar de ser o menor município, mantém uma coesão social que impede picos de violência, embora a carência de esgoto (1%) seja um risco de longo prazo para seu patrimônio histórico.",
+    edu_nee: "7 alunos",
+    edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2415008"
   }
 };
@@ -2338,6 +2392,15 @@ function selectCity(cityId) {
   updateRecommendations(cityId);
   updateSocioDashScore(cityId);
   updateBenchmark(cityId);
+
+  // Educação SIGEduc
+  document.getElementById('edu-nee').innerText = d.edu_nee || "-";
+  document.getElementById('edu-auto').innerText = d.edu_auto || "-";
+  
+  // Geopanel Educ
+  if(document.getElementById('gval-nee')) {
+    document.getElementById('gval-nee').innerText = d.edu_nee || "-";
+  }
 
   renderCharts(d.s_agu, d.s_esg, d.letal, cityId, d.radar);
 }
