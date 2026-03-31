@@ -2020,18 +2020,32 @@ function openServiceModal(type) {
   document.getElementById('svc-modal-title').innerText = titles[type];
   document.getElementById('svc-modal-city').innerText = cityId + ' / RN';
   
-  // Tratar múltiplos endereços separados por ';' ou '|'
-  let addrHTML = contact.addr;
-  if (addrHTML.includes(';') || addrHTML.includes('|')) {
-    const separator = addrHTML.includes(';') ? ';' : '|';
-    const list = addrHTML.split(separator).filter(t => t.trim().length > 0);
-    const count = list.length;
-    document.getElementById('svc-modal-count').innerText = `${count} Unidades Encontradas`;
+  const mapBase = "https://www.google.com/maps/search/?api=1&query=";
+  let addrHTML = "";
+  
+  if (contact.addr.includes(';') || contact.addr.includes('|')) {
+    const separator = contact.addr.includes(';') ? ';' : '|';
+    const list = contact.addr.split(separator).filter(t => t.trim().length > 0);
+    document.getElementById('svc-modal-count').innerText = `${list.length} Unidades Encontradas (Clique para abrir GPS)`;
+    
     addrHTML = '<ul style="margin: 0; padding-left: 18px; list-style-type: square;">' + 
-               list.map(item => `<li style="margin-bottom: 8px;">${item.trim()}</li>`).join('') + 
+               list.map(item => {
+                 const clean = item.trim();
+                 const query = encodeURIComponent(clean + " " + cityId + " RN");
+                 return `<li style="margin-bottom: 9px; line-height: 1.4;">
+                           <a href="${mapBase}${query}" target="_blank" style="color: #a59bff; text-decoration: none; border-bottom: 1px dashed rgba(165,155,255,0.4); display: inline-block;">
+                             ${clean} <span style="font-size:0.75rem; margin-left:4px;">📍</span>
+                           </a>
+                         </li>`;
+               }).join('') + 
                '</ul>';
   } else {
-    document.getElementById('svc-modal-count').innerText = `Endereço Principal`;
+    document.getElementById('svc-modal-count').innerText = `Endereço Principal (Clique p/ abrir GPS)`;
+    const clean = contact.addr.trim();
+    const query = encodeURIComponent(clean + " " + cityId + " RN");
+    addrHTML = `<a href="${mapBase}${query}" target="_blank" style="color: #a59bff; text-decoration: none; border-bottom: 1px dashed rgba(165,155,255,0.4);">
+                  ${clean} 📍
+                </a>`;
   }
   
   document.getElementById('svc-modal-addr').innerHTML = addrHTML;
