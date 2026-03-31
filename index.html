@@ -2021,20 +2021,45 @@ function openServiceModal(type) {
   document.getElementById('svc-modal-city').innerText = cityId + ' / RN';
   
   const mapBase = "https://www.google.com/maps/search/?api=1&query=";
+  const dirBase = "https://www.google.com/maps/dir/?api=1&";
   let addrHTML = "";
   
   if (contact.addr.includes(';') || contact.addr.includes('|')) {
     const separator = contact.addr.includes(';') ? ';' : '|';
     const list = contact.addr.split(separator).filter(t => t.trim().length > 0);
-    document.getElementById('svc-modal-count').innerText = `${list.length} Unidades Encontradas (Clique para abrir GPS)`;
+    document.getElementById('svc-modal-count').innerText = `${list.length} ${type === 'transporte' ? 'Rotas Ativas' : 'Unidades Encontradas'} (Clique para ver rota no GPS)`;
     
     addrHTML = '<ul style="margin: 0; padding-left: 18px; list-style-type: square;">' + 
                list.map(item => {
                  const clean = item.trim();
-                 const query = encodeURIComponent(clean + " " + cityId + " RN");
+                 let finalUrl = "";
+                 
+                 if (type === 'transporte') {
+                   // Tentar extrair os pontos da rota (Bairro A / Bairro B)
+                   let routeParts = clean;
+                   if (clean.includes(':')) {
+                     routeParts = clean.split(':')[1].trim();
+                   }
+                   const points = routeParts.split('/').map(p => p.trim() + " " + cityId + " RN");
+                   
+                   if (points.length >= 2) {
+                     const origin = encodeURIComponent(points[0]);
+                     const destination = encodeURIComponent(points[points.length - 1]);
+                     let waypoints = "";
+                     if (points.length > 2) {
+                       waypoints = "&waypoints=" + points.slice(1, -1).map(p => encodeURIComponent(p)).join('|');
+                     }
+                     finalUrl = `${dirBase}origin=${origin}&destination=${destination}${waypoints}`;
+                   } else {
+                     finalUrl = `${mapBase}${encodeURIComponent(clean + " " + cityId + " RN")}`;
+                   }
+                 } else {
+                   finalUrl = `${mapBase}${encodeURIComponent(clean + " " + cityId + " RN")}`;
+                 }
+
                  return `<li style="margin-bottom: 9px; line-height: 1.4;">
-                           <a href="${mapBase}${query}" target="_blank" style="color: #a59bff; text-decoration: none; border-bottom: 1px dashed rgba(165,155,255,0.4); display: inline-block;">
-                             ${clean} <span style="font-size:0.75rem; margin-left:4px;">📍</span>
+                           <a href="${finalUrl}" target="_blank" style="color: #a59bff; text-decoration: none; border-bottom: 1px dashed rgba(165,155,255,0.4); display: inline-block;">
+                             ${clean} <span style="font-size:0.75rem; margin-left:4px;">${type === 'transporte' ? '🛤️' : '📍'}</span>
                            </a>
                          </li>`;
                }).join('') + 
