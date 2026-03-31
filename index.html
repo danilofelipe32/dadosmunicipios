@@ -1058,11 +1058,17 @@
         <div class="assist-val" id="as-caps">-</div>
         <div class="assist-sub">Saúde Mental</div>
       </div>
-      <div class="assist-card" style="cursor: pointer;" onclick="openServiceModal('ct')">
+      <div class="assist-card" style="border-color: #f59e0b; cursor: pointer;" onclick="openServiceModal('ct')">
         <span class="assist-icon">🛡️</span>
-        <div class="assist-label">CONSELHO TUTELAR</div>
+        <div class="assist-label" style="color: #f59e0b;">Conselho Tutelar</div>
         <div class="assist-val" id="as-ct">-</div>
         <div class="assist-sub">Zelo de Direitos</div>
+      </div>
+      <div class="assist-card" style="border-color: #3b82f6; cursor: pointer;" onclick="openServiceModal('transporte')">
+        <span class="assist-icon">🚌</span>
+        <div class="assist-label" style="color: #3b82f6;">Transporte Escolar</div>
+        <div class="assist-val" id="as-transporte">Ativo</div>
+        <div class="assist-sub">Rotas Operacionais</div>
       </div>
     </div>
   </section>
@@ -1391,12 +1397,11 @@
         <tr><td>MDS / CadSUAS</td><td>Equipamentos de Assistência Social (CRAS, CREAS) e Conselhos</td><td><a href="https://aplicacoes.mds.gov.br/cadsuas" target="_blank">aplicacoes.mds.gov.br/cadsuas</a></td></tr>
         <tr><td>MS / CNES (DataSUS)</td><td>Unidades Básicas de Saúde (UBS) em funcionamento</td><td><a href="https://cnes.datasus.gov.br" target="_blank">cnes.datasus.gov.br</a></td></tr>
         <tr><td>CNM / Portal Municipal</td><td>Dados de Conselhos Tutelares e Unidades CAPS</td><td>Portais da Transparência</td></tr>
+        <tr><td>SEEC-RN / PETERN</td><td>Rotas de Transporte Escolar, Programas Estaduais e PNATE</td><td><a href="https://educacao.rn.gov.br" target="_blank">educacao.rn.gov.br</a></td></tr>
       </tbody>
     </table>
   </div>
 </section>
-
-</div>
 
 <footer>
   <a href="https://wa.me/5584999780963" target="_blank">
@@ -1482,7 +1487,8 @@ const DB = {
       cras: { addr: "CRAS Monte Castelo: Rua Tenente Pedro Rufino, 934; CRAS Vale do Sol: Rua Bertulina Antunes, 84; CRAS Passagem de Areia: Rua Edgar Dantas, 1856; CRAS Nova Parnamirim: Rua das Garças, 15; CRAS Litoral: Pirangi do Norte; CRAS Moita Verde: Bairro Vida Nova; CRAS Parque das Árvores: Av. Olavo Lacerda; CRAS Santos Reis: Unidade Central; CRAS Rosa dos Ventos: Rua da Saudade.", tel: "(84) 3644-8400", info: "Paridade: 09 unidades físicas listadas no modal." },
       creas: { addr: "CREAS Santos Reis: Rua Edgar Dantas, s/n (Próximo à Secretaria).", tel: "(84) 3644-8401", info: "Paridade: 01 unidade de referência especializada." },
       caps: { addr: "CAPS II: Rua Aspirante Santos, 396, Santos Reis; CAPS AD (Litoral Sul): Rua Aspirante Santos, 396; CAPS i (Infantil): Unidade Rosa dos Ventos.", tel: "(84) 3644-83XX", info: "Paridade: 03 unidades (I, II, AD) detalhadas no modal." },
-      ct: { addr: "Conselho Tutelar I (Centro): Rua Dr. Carlos Matheus, 1444; Conselho Tutelar II (Santos Reis): Rua Aspirante Santos, 396.", tel: "(84) 98839-XXXX", info: "Paridade: 02 unidades (Zelo de Direitos)." }
+      ct: { addr: "Conselho Tutelar I (Centro): Rua Dr. Carlos Matheus, 1444; Conselho Tutelar II (Santos Reis): Rua Aspirante Santos, 396.", tel: "(84) 98839-XXXX", info: "Paridade: 02 unidades (Zelo de Direitos)." },
+      transporte: { addr: "Rota Emaús: Parque Industrial / Emaús; Rota Litoral Sustentável: Pirangi / Pium / Cotovelo; Rota Cajupiranga: Sede / Liberdade; Rota Norte: Nova Parnamirim / Cidade Verde; Rota Oeste: Passagem de Areia / Parque de Exposição; Rota Industrial: Rosa dos Ventos / Vale do Sol.", tel: "(84) 3644-8400 (Educação)", info: "Principais eixos de transporte escolar municipal e estadual." }
     }
   },
   "São José de Mipibu": {
@@ -1512,7 +1518,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Rua Coronel Antônio Basílio, 69; CRAS Volante: Atendimento em Comunidades Rurais.", tel: "(84) 3273-3390", info: "Paridade: 02 unidades de proteção básica." },
       creas: { addr: "CREAS Sede: Rua Coronel Antônio Basílio, 69, Centro (Anexo SEMAS).", tel: "Referência Regional", info: "Paridade: 01 unidade de proteção especial estratégica." },
       caps: { addr: "CAPS Manoel Alves de Souza: Rodovia RN-315, nº 448.", tel: "(84) 3273-XXXX", info: "Paridade: 01 unidade de saúde mental polo regional." },
-      ct: { addr: "Conselho Tutelar: Rua 1º de Maio, s/n, Centro.", tel: "(84) 988XX-XXXX", info: "Paridade: 01 unidade de zelo aos direitos." }
+      ct: { addr: "Conselho Tutelar: Rua 1º de Maio, s/n, Centro.", tel: "(84) 988XX-XXXX", info: "Paridade: 01 unidade de zelo aos direitos." },
+      transporte: { addr: "Rota Agreste I: Manibu / Rocas; Rota Sul: Taborda / Mendes; Rota Rural Norte: Japecanga / Caieiras; Rota Laranjeiras: Laranjeiras do Abdias / Quebra Fuzil; Rota Tancredo: Tancredo Neves / Bosque das Colinas; Rota Malhada: Comunidade Malhada / Sede.", tel: "(84) 3273-2281", info: "Rotas integradas para escolas estaduais e municipais." }
     }
   },
   "Nísia Floresta": {
@@ -1542,7 +1549,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Rua Prefeito Américo de Oliveira, s/n, Centro.", tel: "(84) 3277-XXXXXXXX", info: "Paridade: 01 unidade de assistência básica." },
       creas: { addr: "CREAS Nísia Floresta: Rua Agripino Marques, 47, Centro.", tel: "Admin. Municipal", info: "Paridade: 01 unidade de proteção especial." },
       caps: { addr: "Referência Regional São José de Mipibu: Rodovia RN-315, 448.", tel: "-", info: "Encaminhamento regional de saúde mental." },
-      ct: { addr: "Conselho Tutelar: Rua São Pedro, s/n, Centro.", tel: "(84) 99XXX-XXXX", info: "Paridade: 01 unidade de zelo de direitos." }
+      ct: { addr: "Conselho Tutelar: Rua São Pedro, s/n, Centro.", tel: "(84) 99XXX-XXXX", info: "Paridade: 01 unidade de zelo de direitos." },
+      transporte: { addr: "Rota Litoral Sul: Barreta / Camurupim; Rota Pirangi: Pirangi do Sul / Búzios; Rota Alcaçuz: Campus / Alcaçuz; Rota Rural: Campo de Santana / Morrinhos; Rota Timbó: Timbó / Mazapas; Rota Central: Hortigranjeira / Sede.", tel: "(84) 3277-22XX", info: "Atendimento prioritário para alunos da rede estadual (Complexo Alcaçuz)." }
     }
   },
   "Canguaretama": {
@@ -1572,7 +1580,8 @@ const DB = {
       cras: { addr: "CRAS Jiquicampo: Rua Jiqui, 377; CRAS Piquiri: Rua Olívia de Souza, 703.", tel: "3241-2670", info: "Paridade: 02 unidades de proteção básica." },
       creas: { addr: "CREAS Canguaretama: Rua André de Albuquerque, 160, Centro.", tel: "-", info: "Paridade: 01 unidade estratégica." },
       caps: { addr: "CAPS I: Av. João Gomes de Torres, 342, Sertãozinho.", tel: "-", info: "Paridade: 01 unidade de saúde mental municipal." },
-      ct: { addr: "Conselho Tutelar: Praça Augusto Severo, 242, Centro.", tel: "(84) 98XXX-XXXX", info: "Paridade: 01 unidade de proteção ativa." }
+      ct: { addr: "Conselho Tutelar: Praça Augusto Severo, 242, Centro.", tel: "(84) 98XXX-XXXX", info: "Paridade: 01 unidade de proteção ativa." },
+      transporte: { addr: "Rota Litoral Norte: Barra de Cunhaú / Outeiro; Rota Piquiri: Piquiri I / Piquiri II; Rota Agreste: Jiquicampo / Sertãozinho; Rota Rural Sul: Lagoa de São João / Santa Luzia; Rota Maia: Vila Maia / Campestre; Rota Canafístula: Canafístula / Areia Branca.", tel: "(84) 3241-XXXX", info: "Rede extensiva com integração para o IFRN Canguaretama." }
     }
   },
   "Goianinha": {
@@ -1602,7 +1611,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Vigário Antônio Montenegro, 360; CRAS Mirante: Unidade Alto do Mirante.", tel: "3243-39XX", info: "Paridade: 02 unidades de assistência básica." },
       creas: { addr: "CREAS Goianinha: Basílio Barbalho, 103, Centro, Vila Helena.", tel: "-", info: "Paridade: 01 unidade de proteção especial." },
       caps: { addr: "CAPS I: R. Prefeito Benjamin Simonete, 286, Bairro Novo Horizonte.", tel: "-", info: "Paridade: 01 unidade especializada." },
-      ct: { addr: "Conselho Tutelar: Centro Administrativo Municipal (Complexo SEMAS).", tel: "(84) 988XX-XXXX", info: "Paridade: 01 unidade de zelo de direitos." }
+      ct: { addr: "Conselho Tutelar: Centro Administrativo Municipal (Complexo SEMAS).", tel: "(84) 988XX-XXXX", info: "Paridade: 01 unidade de zelo de direitos." },
+      transporte: { addr: "Rota Umari: Umari / Sítio Novo; Rota Miranda: Miranda / Lagoa do Poço; Rota Estação: Bairro Estação / Barro Preto; Rota Catu: Comunidade Catu (Indígena); Rota Batatal: Batatal / Buraco; Rota Novo Horizonte: Bosque / Aniquim (Litoral).", tel: "(84) 3243-XXXX", info: "Atendimento logístico estratégico para o polo cerâmico e comercial." }
     }
   },
   "Monte Alegre": {
@@ -1632,7 +1642,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Rua Antônio Miranda, 04; CRAS Polo II: Unidade Volante Rural.", tel: "-", info: "Paridade: 02 unidades de proteção social básica." },
       creas: { addr: "Referência Regional São José de Mipibu (Pactuação Regional).", tel: "-", info: "Média complexidade via rede regionalizada." },
       caps: { addr: "Referência Regional São José de Mipibu (Habilitação Polo).", tel: "-", info: "Suporte especializado via rede regionalizada." },
-      ct: { addr: "Conselho Tutelar: Rua Francisco Nobre, s/n, Centro.", tel: "(84) 98XXX-XXXX", info: "Paridade: 01 unidade de proteção infanto-juvenil." }
+      ct: { addr: "Conselho Tutelar: Rua Francisco Nobre, s/n, Centro.", tel: "(84) 98XXX-XXXX", info: "Paridade: 01 unidade de proteção infanto-juvenil." },
+      transporte: { addr: "Rota Rural I: Sobrado / Contendas / Paiva; Rota Rural II: Malhada / Timbaúba / Gameleira; Rota Bom Fim: Bom Fim / Saquinho; Rota Branca: Vila Branca / Boqueirão; Rota Riacho: Riacho / Sede; Rota Intermunicipal: Cobé / Vera Cruz (Interligação).", tel: "(84) 3276-XXXX", info: "Foco no atendimento às comunidades rurais dispersas do Agreste." }
     }
   },
   "Tibau do Sul": {
@@ -1662,7 +1673,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Rua Professor José Mamede, 101, Centro.", tel: "3246-41XX", info: "Paridade: 01 unidade de proteção básica." },
       creas: { addr: "Referência Regional Goianinha: Rua Basílio Barbalho.", tel: "-", info: "Acesso via rede regionalizada SEMAS." },
       caps: { addr: "Referência Regional Goianinha: Rua Benjamin Simonete.", tel: "-", info: "Encaminhamento regional de saúde mental." },
-      ct: { addr: "Conselho Tutelar: Rua Professor José Mamede, s/n (Anexo à Prefeitura).", tel: "(84) 991XX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." }
+      ct: { addr: "Conselho Tutelar: Rua Professor José Mamede, s/n (Anexo à Prefeitura).", tel: "(84) 991XX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." },
+      transporte: { addr: "Rota Pipa / Sibaúma: Praia de Pipa / Comunidade Quilombola; Rota Cabeceiras: Cabeceiras / Manimbu; Rota Giz / Munim: Área Rural Leste; Rota Litoral Norte: Bela Vista / Patacho; Rota Central: Tibau do Sul / Sede.", tel: "(84) 3246-XXXX", info: "Logística turística vs. escolar integrada ao relevo litorâneo." }
     }
   },
   "Arez": {
@@ -1692,7 +1704,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Rua Interlagos, 56, Centro.", tel: "3242-22XX", info: "Paridade: 01 unidade de proteção básica." },
       creas: { addr: "Referência Regional Goianinha.", tel: "-", info: "Serviço especializado via rede regional." },
       caps: { addr: "Referência Regional Goianinha.", tel: "-", info: "Saúde mental via fluxo regionalizado." },
-      ct: { addr: "Conselho Tutelar: Rua João Hélio, 89, Centro.", tel: "(84) 981XX-XXXX", info: "Paridade: 01 unidade de zelo pelos direitos." }
+      ct: { addr: "Conselho Tutelar: Rua João Hélio, 89, Centro.", tel: "(84) 981XX-XXXX", info: "Paridade: 01 unidade de zelo pelos direitos." },
+      transporte: { addr: "Rota Mundo Novo: Mundo Novo / Patos; Rota Cercado Novo: Cercado Novo / Patos; Rota Rural Arez I: Comunidade Arez I; Rota Rural Arez II: Áreas Agrícolas; Rota Central: Sede / Escolas Estaduais.", tel: "(84) 3242-XXXX", info: "Atendimento às comunidades rurais impactadas por vulnerabilidade." }
     }
   },
   "Vera Cruz": {
@@ -1722,7 +1735,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Rua João Domingos, 302, Centro.", tel: "-", info: "Paridade: 01 unidade de assistência básica." },
       creas: { addr: "Referência Regional São José de Mipibu.", tel: "-", info: "Atendimento especializado regionalizado." },
       caps: { addr: "Referência Regional São José de Mipibu.", tel: "-", info: "Acesso via rede regional de saúde mental." },
-      ct: { addr: "Conselho Tutelar: Sede Administrativa Municipal, Centro.", tel: "(84) 99XXX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." }
+      ct: { addr: "Conselho Tutelar: Sede Administrativa Municipal, Centro.", tel: "(84) 99XXX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." },
+      transporte: { addr: "Rota Cobé: Cobé / Santa Cruz; Rota Vera Cruz I: Distrito Centro; Rota Vera Cruz II: Áreas Periféricas; Rota Araçá: Araçá / Distrito Industrial; Rota Rural Geral: Sede / Escolas Municipais.", tel: "(84) 3274-XXXX", info: "Transporte essencial para superação do isolamento geográfico." }
     }
   },
   "Baía Formosa": {
@@ -1752,7 +1766,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Centro Administrativo Municipal (SEMAS), s/n.", tel: "-", info: "Paridade: 01 unidade de assistência básica." },
       creas: { addr: "Referência Regional Canguaretama.", tel: "-", info: "Acesso regionalizado." },
       caps: { addr: "Referência Regional Canguaretama.", tel: "-", info: "Suporte mental regional." },
-      ct: { addr: "Conselho Tutelar: Rua do Porto, Centro (Próximo à Orla).", tel: "(84) 987XX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." }
+      ct: { addr: "Conselho Tutelar: Rua do Porto, Centro (Próximo à Orla).", tel: "(84) 987XX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." },
+      transporte: { addr: "Rota Bacopari: Bacopari / Sagi; Rota Baía Formosa I: Unidade Sede; Rota Baía Formosa II: Áreas Rurais Leste; Rota Vila Pescadores: Zona Costeira; Rota Central: Sede / IFRN Goianinha.", tel: "(84) 3244-XXXX", info: "Integração entre vilas pesqueiras e os centros de ensino regional." }
     }
   },
   "Senador G. Avelino": {
@@ -1782,7 +1797,8 @@ const DB = {
       cras: { addr: "CRAS Centro: Sede Administrativa Georgino Avelino.", tel: "-", info: "Paridade: 01 unidade de proteção básica." },
       creas: { addr: "Referência Regional Arez/Goianinha.", tel: "-", info: "Encaminhamento para rede regional." },
       caps: { addr: "Referência Regional Mipibu/Arez.", tel: "-", info: "Suporte em saúde mental regional." },
-      ct: { addr: "Conselho Tutelar: Prédio Administrativo Central, s/n, Centro.", tel: "(84) 99XXX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." }
+      ct: { addr: "Conselho Tutelar: Prédio Administrativo Central, s/n, Centro.", tel: "(84) 99XXX-XXXX", info: "Paridade: 01 unidade de proteção de direitos." },
+      transporte: { addr: "Rota Carnaúba: Carnaúba / Malembá; Rota Georgino Avelino I: Sede / Distrito; Rota Rural Sul: Áreas Alagadiças; Rota Lagoa: Entorno das Lagoas / Sede.", tel: "-", info: "Logística complexa em território de pequena extensão e alta densidade." }
     }
   },
   "Vila Flor": {
@@ -1812,7 +1828,8 @@ const DB = {
       cras: { addr: "CRAS Vila Flor: Prédio da Assistência Social, Centro.", tel: "-", info: "Acesso a programas federais e Cadastro Único centralizado." },
       creas: { addr: "Referência Regional Goianinha: Rua Basílio Barbalho.", tel: "-", info: "Serviço regionalizado para proteção especial." },
       caps: { addr: "Referência Regional Goianinha: Rua Benjamin Simonete.", tel: "-", info: "Suporte especializado via rede regional." },
-      ct: { addr: "Conselho Tutelar: Sede Administrativa Vila Flor, Centro.", tel: "(84) 988XX-XXXX", info: "Zelo de direitos na escala municipal." }
+      ct: { addr: "Conselho Tutelar: Sede Administrativa Vila Flor, Centro.", tel: "(84) 988XX-XXXX", info: "Zelo de direitos na escala municipal." },
+      transporte: { addr: "Rota Vila Flor I: Sede / Zona Urbana; Rota Vila Flor II: Áreas Rurais; Rota Piquiri: Sentido Canguaretama (Integração); Rota Rural Volante: Atendimento Domiciliar Distante.", tel: "-", info: "Transporte em pequena escala com foco em coesão social." }
     }
   }
 };
@@ -1986,7 +2003,8 @@ function openServiceModal(type) {
     cras: 'Centros de Referência de Assistência Social (CRAS)',
     creas: 'Centro de Referência Especializado (CREAS)',
     caps: 'Centros de Atenção Psicossocial (CAPS)',
-    ct: 'Conselho Tutelar'
+    ct: 'Conselho Tutelar',
+    transporte: 'Rotas de Transporte Escolar (PETERN)'
   };
   
   const icons = {
@@ -1994,7 +2012,8 @@ function openServiceModal(type) {
     cras: '🏠',
     creas: '⚖️',
     caps: '🧠',
-    ct: '🛡️'
+    ct: '🛡️',
+    transporte: '🚌'
   };
 
   document.getElementById('svc-modal-icon').innerText = icons[type];
