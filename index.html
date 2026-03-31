@@ -744,10 +744,19 @@
     transition: all 0.3s ease;
   }
   .assist-card:hover { background: rgba(108,99,255,0.05); border-color: var(--primary); transform: translateY(-3px); }
+  .assist-card:active { transform: scale(0.98); }
   .assist-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
   .assist-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
   .assist-val { font-size: 1.4rem; font-weight: 800; color: #fff; }
   .assist-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 5px; }
+  
+  /* SERVICE MODAL SPECIFIC */
+  .service-contact-info { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
+  .contact-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
+  .contact-icon { font-size: 1.1rem; }
+  .contact-text { font-size: 0.85rem; color: #e0e0e0; line-height: 1.4; }
+  .contact-label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px; }
+
 
 </style>
 </head>
@@ -1017,33 +1026,33 @@
   <section id="assistencia-section">
     <div class="section-title"><span class="s-icon">🤝</span> Proteção Social, Saúde e Assistência Comunitária</div>
     <div class="assistencia-grid">
-      <div class="assist-card" style="border-color: #10b981;">
+      <div class="assist-card" style="border-color: #10b981; cursor: pointer;" onclick="openServiceModal('ubs')">
         <span class="assist-icon">🏥</span>
         <div class="assist-label" style="color: #10b981;">UBS</div>
         <div class="assist-val" id="as-ubs">-</div>
         <div class="assist-sub">Saúde Básica</div>
       </div>
-      <div class="assist-card">
+      <div class="assist-card" style="cursor: pointer;" onclick="openServiceModal('cras')">
         <span class="assist-icon">🏠</span>
         <div class="assist-label">CRAS</div>
         <div class="assist-val" id="as-cras">-</div>
         <div class="assist-sub">Proteção Básica</div>
       </div>
-      <div class="assist-card">
+      <div class="assist-card" style="border-color: #6366f1; cursor: pointer;" onclick="openServiceModal('creas')">
         <span class="assist-icon">⚖️</span>
-        <div class="assist-label">CREAS</div>
+        <div class="assist-label" style="color: #6366f1;">CREAS</div>
         <div class="assist-val" id="as-creas">-</div>
         <div class="assist-sub">Proteção Especial</div>
       </div>
-      <div class="assist-card">
+      <div class="assist-card" style="cursor: pointer;" onclick="openServiceModal('caps')">
         <span class="assist-icon">🧠</span>
         <div class="assist-label">CAPS I / II</div>
         <div class="assist-val" id="as-caps">-</div>
         <div class="assist-sub">Saúde Mental</div>
       </div>
-      <div class="assist-card">
+      <div class="assist-card" style="cursor: pointer;" onclick="openServiceModal('ct')">
         <span class="assist-icon">🛡️</span>
-        <div class="assist-label">Conselho Tutelar</div>
+        <div class="assist-label">CONSELHO TUTELAR</div>
         <div class="assist-val" id="as-ct">-</div>
         <div class="assist-sub">Zelo de Direitos</div>
       </div>
@@ -1388,6 +1397,50 @@
   </a>
 </footer>
 
+<!-- ===== MODAL: DETALHES DE SERVIÇOS (UBS, CRAS, etc) ===== -->
+<div id="service-modal" class="geo-modal-overlay" onclick="closeGeoModal('service-modal', event)">
+  <div class="geo-modal-box">
+    <div class="geo-modal-close" onclick="document.getElementById('service-modal').classList.remove('open')">&times;</div>
+    <div class="geo-modal-header">
+      <div class="geo-modal-icon" id="svc-modal-icon">🏥</div>
+      <div>
+        <div class="geo-modal-title" id="svc-modal-title">Unidade de Saúde</div>
+        <div class="geo-modal-subtitle" id="svc-modal-city">Município</div>
+      </div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">📍 Localização e Referência</div>
+      <div class="service-contact-info">
+        <div class="contact-row">
+          <span class="contact-icon">📍</span>
+          <div>
+            <div class="contact-label">Endereço Principal</div>
+            <div class="contact-text" id="svc-modal-addr">Rua Principal, Bairro Administrativo.</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <span class="contact-icon">📞</span>
+          <div>
+            <div class="contact-label">Canais de Atendimento</div>
+            <div class="contact-text" id="svc-modal-tel">(84) 3XXX-XXXX • ramal 202</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <span class="contact-icon">⏰</span>
+          <div>
+            <div class="contact-label">Horário de Funcionamento</div>
+            <div class="contact-text" id="svc-modal-time">Segunda a Sexta: 08:00 às 17:00 (Acesso Livre/Agendado)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="geo-modal-section">
+      <div class="geo-modal-section-title">ℹ️ Informações Complementares</div>
+      <div class="geo-modal-body" id="svc-modal-info">A unidade central de atendimento coordena as demandas regionais desta localidade.</div>
+    </div>
+  </div>
+</div>
+
 <script>
 let activeChartSan = null;
 let activeChartAge = null;
@@ -1415,7 +1468,14 @@ const DB = {
     edu_eja: "1.621 alunos",
     edu_auto: "Branca (46,8%) e Parda (45,2%) predominantes.",
     ibgeCode: "2403251",
-    as: { cras: "09", creas: "01", caps: "03 (I, II, AD)", ct: "02 Unidades", ubs: "31 Unidades" }
+    as: { cras: "09", creas: "01", caps: "03 (I, II, AD)", ct: "02 Unidades", ubs: "31 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro (PACS), Rosa dos Ventos, Passagem de Areia, Monte Castelo, Cohab Nal.", tel: "(84) 3644-8100 • Parnamirim Digital", info: "Rede robusta com 31 unidades distribuídas pelo território." },
+      cras: { addr: "Moita Verde, Litoral, Vale do Sol, Passagem de Areia, Vida Nova.", tel: "(84) 3644-8400 (Secretaria)", info: "Atendimento de proteção básica e cadastro único (CadÚnico)." },
+      creas: { addr: "Rua Dr. Luiz Antônio, Centro (Próximo à Prefeitura).", tel: "(84) 3644-8401", info: "Proteção de média complexidade para violação de direitos." },
+      caps: { addr: "Centro (CAPS II), Rosa dos Ventos (CAPS i), Pq. de Exposições (CAPS AD).", tel: "(84) 3644-83XX", info: "Suporte especializado em saúde mental e dependência química." },
+      ct: { addr: "Unidade 1: Centro (Rua Edgar Dantas) | Unidade 2: Nova Parnamirim/Litoral.", tel: "(84) 98839-XXXX (Plantão)", info: "Zelo pelo cumprimento dos direitos da criança e do adolescente." }
+    }
   },
   "São José de Mipibu": {
     pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%",
@@ -1438,7 +1498,14 @@ const DB = {
     edu_eja: "424 alunos",
     edu_auto: "Parda (65,2%) e Branca (24,3%) predominantes.",
     ibgeCode: "2412203",
-    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "16 Unidades" }
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "16 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Pau Brasil, Laranjeiras do Abdias, Manimbu, Mendes.", tel: "(84) 3273-2281", info: "Cobertura em expansão nas zonas urbana e rural." },
+      cras: { addr: "Rua Cel. Aristides Ferreira da Cruz, Centro.", tel: "(84) 3273-3390", info: "Sede administrativa da assistência básica." },
+      creas: { addr: "Rua Santana, Centro.", tel: "Referência Regional", info: "Localizado na região central administrativa." },
+      caps: { addr: "CAPS I - Rua Pe. João Maria, Centro.", tel: "(84) 3273-XXXX", info: "Saúde mental de base comunitária." },
+      ct: { addr: "Praça Monsenhão, Centro.", tel: "(84) 988XX-XXXX", info: "Unidade central de proteção de direitos." }
+    }
   },
   "Nísia Floresta": {
     pop:"31.942", dom:"~ 11.200", idh:"0,622", pib:"R$ 17.949", alf:"82,4%", den:"104,3", bf:"~ 7.200", agu:"79,0%", esg:"~ 3,0%", gra:"~ 18,2%",
@@ -1461,7 +1528,14 @@ const DB = {
     edu_eja: "148 alunos",
     edu_auto: "Parda (68,0%) e Branca (22,0%) predominantes.",
     ibgeCode: "2408201",
-    as: { cras: "01", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "11 Unidades" }
+    as: { cras: "01", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "11 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Pirangi do Sul, Alcaçuz, Campo de Santana.", tel: "(84) 3277-22XX", info: "Foco em atendimento rural e de balneários." },
+      cras: { addr: "Conjunto habitacional, Centro.", tel: "(84) 3277-XXXXXXXX", info: "Centro de referência principal." },
+      creas: { addr: "Rua Principal, Centro.", tel: "Admin. Municipal", info: "Proteção especial vinculada à assistência social." },
+      caps: { addr: "Acesso via Central Regional (Mipibu).", tel: "-", info: "Município depende da rede regional de média complexidade." },
+      ct: { addr: "Rua São Pedro, Centro.", tel: "(84) 99XXX-XXXX", info: "Proteção de direitos regional." }
+    }
   },
   "Canguaretama": {
     pop:"29.668", dom:"~ 10.100", idh:"0,579", pib:"R$ 20.761", alf:"78,1%", den:"120,4", bf:"~ 8.100", agu:"76,5%", esg:"~ 2,5%", gra:"~ 21,0%",
@@ -1484,7 +1558,14 @@ const DB = {
     edu_eja: "643 alunos",
     edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
     ibgeCode: "2402204",
-    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "15 Unidades" }
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "15 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Piquiri, Areia Branca, Barra do Cunhaú.", tel: "(84) 3241-XXXX", info: "Ampla rede rural e atendimento litorâneo." },
+      cras: { addr: "Unidade Centro e Unidade Rural Piquiri.", tel: "3241-2670", info: "Foco no atendimento de alta vulnerabilidade." },
+      creas: { addr: "Sede na Região Central Administrativa.", tel: "-", info: "Proteção de média complexidade." },
+      caps: { addr: "CAPS I - Rua da Cooperativa, Centro.", tel: "-", info: "Referência municipal para saúde mental." },
+      ct: { addr: "Centro, próximo à Delegacia.", tel: "(84) 98XXX-XXXX", info: "Ação intensiva no combate à violência infantil." }
+    }
   },
   "Goianinha": {
     pop: "27.000", dom: "~9.200", idh: "0,640", pib: "R$ 22.100", alf: "85,5%", den: "145,2", bf: "~5.800", agu: "82,0%", esg: "8,0%", gra: "17,5%",
@@ -1507,7 +1588,14 @@ const DB = {
     edu_eja: "412 alunos",
     edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
     ibgeCode: "2404209",
-    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "14 Unidades" }
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "14 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro (I e II), Bosque, Umari, Miranda.", tel: "(84) 3243-XXXX", info: "Atendimento centralizado e comunitário." },
+      cras: { addr: "Unidade Centro e Unidade Mirante.", tel: "3243-39XX", info: "Proteção social básica ativa." },
+      creas: { addr: "Centro Administrativo Municipal.", tel: "-", info: "Atendimento especializado." },
+      caps: { addr: "CAPS I - Próximo ao Hospital Regional.", tel: "-", info: "Saúde mental integrada à rede hospitalar." },
+      ct: { addr: "Centro de Goianinha.", tel: "(84) 988XX-XXXX", info: "Zelo permanente de direitos." }
+    }
   },
   "Monte Alegre": {
     pop:"23.031", dom:"~ 7.800", idh:"0,609", pib:"R$ 15.142", alf:"79,8%", den:"109,0", bf:"~ 4.200", agu:"74,0%", esg:"~ 3,0%", gra:"~ 16,8%",
@@ -1530,7 +1618,14 @@ const DB = {
     edu_eja: "387 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2407807",
-    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "12 Unidades" }
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade", ubs: "12 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Bom Fim, Sobrado, Malhada.", tel: "(84) 3276-XXXX", info: "Prioridade para saúde da família rural." },
+      cras: { addr: "Unidade 1 (Centro) | Unidade 2 (Zona Rural).", tel: "-", info: "Atendimento do Bolsa Família e CadÚnico." },
+      creas: { addr: "Sede Administrativa Municipal.", tel: "-", info: "Atendimento especializado." },
+      caps: { addr: "Acesso via Central Regional (Mipibu/Referência).", tel: "-", info: "Encaminhamento para serviços regionais." },
+      ct: { addr: "Centro de Monte Alegre.", tel: "(84) 98XXX-XXXX", info: "Proteção de direitos locais." }
+    }
   },
   "Tibau do Sul": {
     pop:"16.929", dom:"~ 6.000", idh:"0,645", pib:"R$ 30.000 (est)", alf:"88,2%", den:"164,8", bf:"~ 2.500", agu:"89,0%", esg:"~ 15,0%", gra:"~ 14,0%",
@@ -1553,7 +1648,14 @@ const DB = {
     edu_eja: "86 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2414209",
-    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade", ubs: "08 Unidades" }
+    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade", ubs: "08 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Pipa, Cabeceiras, Sibaúma.", tel: "(84) 3246-XXXX", info: "Controle de surtos litorâneos e saúde da família." },
+      cras: { addr: "Rua do Comércio, Centro.", tel: "3246-41XX", info: "Unidade principal para benefícios sociais." },
+      creas: { addr: "Referência Regional Goianinha.", tel: "-", info: "Acesso por pactuação regional." },
+      caps: { addr: "Referência Regional Goianinha.", tel: "-", info: "Saúde mental via rede regional." },
+      ct: { addr: "Centro e Base de Apoio Pipa.", tel: "(84) 991XX-XXXX", info: "Foco em áreas turísticas de alta rotatividade." }
+    }
   },
   "Arez": {
     pop:"13.251", dom:"~ 4.500", idh:"0,606", pib:"R$ 15.000 (est)", alf:"77,5%", den:"114,8", bf:"~ 2.800", agu:"70,0%", esg:"~ 2,0%", gra:"~ 18,0%",
@@ -1576,7 +1678,14 @@ const DB = {
     edu_eja: "112 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2401206",
-    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade", ubs: "07 Unidades" }
+    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade", ubs: "07 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Mundo Novo, Cercado Novo.", tel: "(84) 3242-XXXX", info: "Atendimento saúde da família rural/urbano." },
+      cras: { addr: "Sede Centro Administrativo Arez.", tel: "3242-22XX", info: "Porta de entrada para programas sociais." },
+      creas: { addr: "Regional Goianinha.", tel: "-", info: "Média complexidade via regional." },
+      caps: { addr: "Regional Goianinha.", tel: "-", info: "Atendimento psiquiátrico via regional." },
+      ct: { addr: "Centro de Arez.", tel: "(84) 981XX-XXXX", info: "Zelo pelos direitos das crianças locais." }
+    }
   },
   "Vera Cruz": {
     pop:"10.735", dom:"~ 3.600", idh:"0,587", pib:"R$ 10.436", alf:"75,2%", den:"127,6", bf:"~ 2.400", agu:"68,0%", esg:"< 2,0%", gra:"~ 19,0%",
@@ -1599,7 +1708,14 @@ const DB = {
     edu_eja: "105 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2414803",
-    as: { cras: "01", creas: "0 (Reg. Mipibu)", caps: "0 (Reg. Mipibu)", ct: "01 Unidade", ubs: "06 Unidades" }
+    as: { cras: "01", creas: "0 (Reg. Mipibu)", caps: "0 (Reg. Mipibu)", ct: "01 Unidade", ubs: "06 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Cobé, Santa Cruz.", tel: "(84) 3274-XXXX", info: "Rede básica municipal." },
+      cras: { addr: "Rua do Comércio, Vera Cruz.", tel: "-", info: "Sede de atendimento social básico." },
+      creas: { addr: "Referência Regional Mipibu.", tel: "-", info: "Proteção especial regionalizada." },
+      caps: { addr: "Referência Regional Mipibu.", tel: "-", info: "Suporte mental regional." },
+      ct: { addr: "Centro de Vera Cruz.", tel: "(84) 99XXX-XXXX", info: "Unidade de proteção de direitos." }
+    }
   },
   "Baía Formosa": {
     pop:"8.824", dom:"~ 3.000", idh:"0,609", pib:"R$ 38.064", alf:"84,0%", den:"35,6", bf:"~ 1.800", agu:"75,0%", esg:"~ 5,0%", gra:"~ 16,5%",
@@ -1622,7 +1738,14 @@ const DB = {
     edu_eja: "62 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2401404",
-    as: { cras: "01", creas: "0 (Reg. Canguaretama)", caps: "0 (Reg. Canguaretama)", ct: "01 Unidade", ubs: "05 Unidades" }
+    as: { cras: "01", creas: "0 (Reg. Canguaretama)", caps: "0 (Reg. Canguaretama)", ct: "01 Unidade", ubs: "05 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Bacopari.", tel: "(84) 3244-XXXX", info: "Atendimento de saúde comunitária." },
+      cras: { addr: "Centro Administrativo Baía Formosa.", tel: "-", info: "Cadastro Único e Proteção Básica." },
+      creas: { addr: "Referência Canguaretama.", tel: "-", info: "Atendimento especial regional." },
+      caps: { addr: "Referência Canguaretama.", tel: "-", info: "Saúde mental regionalizada." },
+      ct: { addr: "Rua do Porto, Centro.", tel: "(84) 987XX-XXXX", info: "Zelo infantil em área litorânea." }
+    }
   },
   "Senador G. Avelino": {
     pop:"4.065", dom:"~ 1.400", idh:"0,570", pib:"R$ 13.500", alf:"73,5%", den:"155,7", bf:"~ 1.100", agu:"65,0%", esg:"< 1,0%", gra:"~ 20,0%",
@@ -1645,7 +1768,14 @@ const DB = {
     edu_eja: "48 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2413201",
-    as: { cras: "01", creas: "0 (Reg. Arez)", caps: "0 (Reg. Arez)", ct: "01 Unidade", ubs: "04 Unidades" }
+    as: { cras: "01", creas: "0 (Reg. Arez)", caps: "0 (Reg. Arez)", ct: "01 Unidade", ubs: "04 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro, Unidade PSF Rural.", tel: "-", info: "Saúde básica unificada." },
+      cras: { addr: "Sede Centro Georgino Avelino.", tel: "-", info: "Assistência básica unificada." },
+      creas: { addr: "Regional Arez/Goianinha.", tel: "-", info: "Encaminhamento especial." },
+      caps: { addr: "Regional Mipibu/Arez.", tel: "-", info: "Saúde mental especializada via regional." },
+      ct: { addr: "Prédio Administrativo, Centro.", tel: "(84) 99XXX-XXXX", info: "Zelo pelos direitos locais." }
+    }
   },
   "Vila Flor": {
     pop:"3.174", dom:"~ 1.000", idh:"0,576", pib:"R$ 15.709", alf:"74,0%", den:"66,6", bf:"~ 850", agu:"67,0%", esg:"< 1,0%", gra:"~ 18,5%",
@@ -1668,7 +1798,14 @@ const DB = {
     edu_eja: "29 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
     ibgeCode: "2415008",
-    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade", ubs: "03 Unidades" }
+    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade", ubs: "03 Unidades" },
+    as_contacts: {
+      ubs: { addr: "Centro de Vila Flor.", tel: "-", info: "Atendimento de saúde da família centralizado." },
+      cras: { addr: "Prédio da Assistência Social.", tel: "-", info: "Acesso a programas federais/cadúnico." },
+      creas: { addr: "Encaminhamento Regional Goianinha.", tel: "-", info: "Serviço regionalizado." },
+      caps: { addr: "Encaminhamento Regional Goianinha.", tel: "-", info: "Suporte em saúde mental regional." },
+      ct: { addr: "Sede Centro Vila Flor.", tel: "(84) 988XX-XXXX", info: "Atuação centralizada local." }
+    }
   }
 };
 
@@ -1826,6 +1963,49 @@ function updateBenchmark(cityId) {
   const rnScore = calculateScoreValue(REF_MEDIA_RN);
   document.getElementById('comp-val-rn').innerText = `${rnScore}/100`;
   document.getElementById('bar-comp-rn').style.width = `${rnScore}%`;
+}
+
+function openServiceModal(type) {
+  const cityId = document.getElementById('city-select').value;
+  const d = DB[cityId];
+  if (!d || !d.as_contacts || !d.as_contacts[type]) return;
+
+  const contact = d.as_contacts[type];
+  const modal = document.getElementById('service-modal');
+  
+  const titles = {
+    ubs: 'Unidade Básica de Saúde (UBS)',
+    cras: 'Centro de Referência de Assistência Social (CRAS)',
+    creas: 'Centro de Referência Especializado (CREAS)',
+    caps: 'Centro de Atendimento Psicossocial (CAPS)',
+    ct: 'Conselho Tutelar'
+  };
+  
+  const icons = {
+    ubs: '🏥',
+    cras: '🏠',
+    creas: '⚖️',
+    caps: '🧠',
+    ct: '🛡️'
+  };
+
+  document.getElementById('svc-modal-icon').innerText = icons[type];
+  document.getElementById('svc-modal-title').innerText = titles[type];
+  document.getElementById('svc-modal-city').innerText = cityId + ' / RN';
+  document.getElementById('svc-modal-addr').innerText = contact.addr;
+  document.getElementById('svc-modal-tel').innerText = contact.tel;
+  document.getElementById('svc-modal-info').innerText = contact.info;
+
+  modal.classList.add('open');
+}
+
+function openInsight(id) {
+  const i = InsightsDB[id];
+  if(!i) return;
+  document.getElementById('ins-title').innerText = i.t;
+  document.getElementById('ins-desc').innerText = i.d;
+  document.getElementById('ins-impact').innerText = i.i;
+  document.getElementById('insight-modal').classList.add('open');
 }
 
 function showInsight(id) {
