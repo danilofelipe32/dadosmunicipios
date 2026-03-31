@@ -732,6 +732,23 @@
     .ivj-grid { grid-template-columns: 1fr; }
   }
 
+  /* ASSISTÊNCIA SOCIAL */
+  .assistencia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px; margin-bottom: 30px;
+  }
+  .assist-card {
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px; text-align: center;
+    transition: all 0.3s ease;
+  }
+  .assist-card:hover { background: rgba(108,99,255,0.05); border-color: var(--primary); transform: translateY(-3px); }
+  .assist-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+  .assist-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+  .assist-val { font-size: 1.4rem; font-weight: 800; color: #fff; }
+  .assist-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 5px; }
+
 </style>
 </head>
 <body>
@@ -994,6 +1011,36 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <section id="assistencia-section">
+    <div class="section-title"><span class="s-icon">🤝</span> Assistência Social e Proteção Comunitária</div>
+    <div class="assistencia-grid">
+      <div class="assist-card">
+        <span class="assist-icon">🏠</span>
+        <div class="assist-label">CRAS</div>
+        <div class="assist-val" id="as-cras">-</div>
+        <div class="assist-sub">Proteção Básica</div>
+      </div>
+      <div class="assist-card">
+        <span class="assist-icon">⚖️</span>
+        <div class="assist-label">CREAS</div>
+        <div class="assist-val" id="as-creas">-</div>
+        <div class="assist-sub">Proteção Especial</div>
+      </div>
+      <div class="assist-card">
+        <span class="assist-icon">🧠</span>
+        <div class="assist-label">CAPS I / II</div>
+        <div class="assist-val" id="as-caps">-</div>
+        <div class="assist-sub">Saúde Mental</div>
+      </div>
+      <div class="assist-card">
+        <span class="assist-icon">🛡️</span>
+        <div class="assist-label">Conselho Tutelar</div>
+        <div class="assist-val" id="as-ct">-</div>
+        <div class="assist-sub">Zelo de Direitos</div>
+      </div>
     </div>
   </section>
 
@@ -1318,6 +1365,8 @@
         <tr><td>CAERN – Companhia de Águas</td><td>Obras de saneamento, ETE Passagem de Areia, ampliação da rede</td><td><a href="https://caern.rn.gov.br" target="_blank">caern.rn.gov.br</a></td></tr>
         <tr><td>SIGEduc / Censo Escolar 2024</td><td>Alunos com NEE (Necessidades Educacionais Especiais), Autodeclaração, 2ª DIREC</td><td><a href="https://sigeduc.rn.gov.br/" target="_blank">sigeduc.rn.gov.br</a></td></tr>
         <tr><td>QEdu / Censo Escolar 2023</td><td>Matrículas na modalidade EJA (Educação de Jovens e Adultos) – 12 municípios</td><td><a href="https://qedu.org.br" target="_blank">qedu.org.br</a></td></tr>
+        <tr><td>MDS / CadSUAS</td><td>Equipamentos de Assistência Social (CRAS, CREAS) e Conselhos</td><td><a href="https://aplicacoes.mds.gov.br/cadsuas" target="_blank">aplicacoes.mds.gov.br/cadsuas</a></td></tr>
+        <tr><td>CNM / Portal Municipal</td><td>Dados de Conselhos Tutelares e Unidades CAPS</td><td>Portais da Transparência</td></tr>
       </tbody>
     </table>
   </div>
@@ -1358,7 +1407,8 @@ const DB = {
     edu_nee: "375 alunos",
     edu_eja: "1.621 alunos",
     edu_auto: "Branca (46,8%) e Parda (45,2%) predominantes.",
-    ibgeCode: "2403251"
+    ibgeCode: "2403251",
+    as: { cras: "09", creas: "01", caps: "03 (I, II, AD)", ct: "02 Unidades" }
   },
   "São José de Mipibu": {
     pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%",
@@ -1380,7 +1430,8 @@ const DB = {
     edu_nee: "99 alunos",
     edu_eja: "424 alunos",
     edu_auto: "Parda (65,2%) e Branca (24,3%) predominantes.",
-    ibgeCode: "2412203"
+    ibgeCode: "2412203",
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade" }
   },
   "Nísia Floresta": {
     pop:"31.942", dom:"~ 11.200", idh:"0,622", pib:"R$ 17.949", alf:"82,4%", den:"104,3", bf:"~ 7.200", agu:"79,0%", esg:"~ 3,0%", gra:"~ 18,2%",
@@ -1402,7 +1453,8 @@ const DB = {
     edu_nee: "69 alunos",
     edu_eja: "148 alunos",
     edu_auto: "Parda (68,0%) e Branca (22,0%) predominantes.",
-    ibgeCode: "2408201"
+    ibgeCode: "2408201",
+    as: { cras: "01", creas: "01", caps: "01 (I)", ct: "01 Unidade" }
   },
   "Canguaretama": {
     pop:"29.668", dom:"~ 10.100", idh:"0,579", pib:"R$ 20.761", alf:"78,1%", den:"120,4", bf:"~ 8.100", agu:"76,5%", esg:"~ 2,5%", gra:"~ 21,0%",
@@ -1424,7 +1476,8 @@ const DB = {
     edu_nee: "94 alunos",
     edu_eja: "643 alunos",
     edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
-    ibgeCode: "2402204"
+    ibgeCode: "2402204",
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade" }
   },
   "Goianinha": {
     pop: "27.000", dom: "~9.200", idh: "0,640", pib: "R$ 22.100", alf: "85,5%", den: "145,2", bf: "~5.800", agu: "82,0%", esg: "8,0%", gra: "17,5%",
@@ -1446,7 +1499,8 @@ const DB = {
     edu_nee: "45 alunos",
     edu_eja: "412 alunos",
     edu_auto: "Parda (72,4%) e Branca (16,7%) predominantes.",
-    ibgeCode: "2404209"
+    ibgeCode: "2404209",
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade" }
   },
   "Monte Alegre": {
     pop:"23.031", dom:"~ 7.800", idh:"0,609", pib:"R$ 15.142", alf:"79,8%", den:"109,0", bf:"~ 4.200", agu:"74,0%", esg:"~ 3,0%", gra:"~ 16,8%",
@@ -1468,7 +1522,8 @@ const DB = {
     edu_nee: "22 alunos",
     edu_eja: "387 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2407807"
+    ibgeCode: "2407807",
+    as: { cras: "02", creas: "01", caps: "01 (I)", ct: "01 Unidade" }
   },
   "Tibau do Sul": {
     pop:"16.929", dom:"~ 6.000", idh:"0,645", pib:"R$ 30.000 (est)", alf:"88,2%", den:"164,8", bf:"~ 2.500", agu:"89,0%", esg:"~ 15,0%", gra:"~ 14,0%",
@@ -1490,7 +1545,8 @@ const DB = {
     edu_nee: "14 alunos",
     edu_eja: "86 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2414209"
+    ibgeCode: "2414209",
+    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade" }
   },
   "Arez": {
     pop:"13.251", dom:"~ 4.500", idh:"0,606", pib:"R$ 15.000 (est)", alf:"77,5%", den:"114,8", bf:"~ 2.800", agu:"70,0%", esg:"~ 2,0%", gra:"~ 18,0%",
@@ -1512,7 +1568,8 @@ const DB = {
     edu_nee: "24 alunos",
     edu_eja: "112 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2401206"
+    ibgeCode: "2401206",
+    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade" }
   },
   "Vera Cruz": {
     pop:"10.735", dom:"~ 3.600", idh:"0,587", pib:"R$ 10.436", alf:"75,2%", den:"127,6", bf:"~ 2.400", agu:"68,0%", esg:"< 2,0%", gra:"~ 19,0%",
@@ -1534,7 +1591,8 @@ const DB = {
     edu_nee: "32 alunos",
     edu_eja: "105 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2414803"
+    ibgeCode: "2414803",
+    as: { cras: "01", creas: "0 (Reg. Mipibu)", caps: "0 (Reg. Mipibu)", ct: "01 Unidade" }
   },
   "Baía Formosa": {
     pop:"8.824", dom:"~ 3.000", idh:"0,609", pib:"R$ 38.064", alf:"84,0%", den:"35,6", bf:"~ 1.800", agu:"75,0%", esg:"~ 5,0%", gra:"~ 16,5%",
@@ -1556,7 +1614,8 @@ const DB = {
     edu_nee: "17 alunos",
     edu_eja: "62 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2401404"
+    ibgeCode: "2401404",
+    as: { cras: "01", creas: "0 (Reg. Canguaretama)", caps: "0 (Reg. Canguaretama)", ct: "01 Unidade" }
   },
   "Senador G. Avelino": {
     pop:"4.065", dom:"~ 1.400", idh:"0,570", pib:"R$ 13.500", alf:"73,5%", den:"155,7", bf:"~ 1.100", agu:"65,0%", esg:"< 1,0%", gra:"~ 20,0%",
@@ -1578,7 +1637,8 @@ const DB = {
     edu_nee: "4 alunos",
     edu_eja: "48 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2413201"
+    ibgeCode: "2413201",
+    as: { cras: "01", creas: "0 (Reg. Arez)", caps: "0 (Reg. Arez)", ct: "01 Unidade" }
   },
   "Vila Flor": {
     pop:"3.174", dom:"~ 1.000", idh:"0,576", pib:"R$ 15.709", alf:"74,0%", den:"66,6", bf:"~ 850", agu:"67,0%", esg:"< 1,0%", gra:"~ 18,5%",
@@ -1600,7 +1660,8 @@ const DB = {
     edu_nee: "7 alunos",
     edu_eja: "29 alunos",
     edu_auto: "Parda predominante região 2ª DIREC.",
-    ibgeCode: "2415008"
+    ibgeCode: "2415008",
+    as: { cras: "01", creas: "0 (Reg. Goianinha)", caps: "0 (Reg. Goianinha)", ct: "01 Unidade" }
   }
 };
 
@@ -1704,6 +1765,11 @@ const InsightsDB = {
     t: "Comparativo de Performance Territorial",
     d: "Esta ferramenta permite comparar o desempenho do município com referências estratégicas: Natal (Capital do Estado) e a Média Geral do Rio Grande do Norte. As barras normalizam os dados para o Índice SocioDash™ (0-100).",
     i: "Manter-se próximo ou acima da média estadual e da capital é um indicador de eficiência na gestão de recursos e infraestrutura social."
+  },
+  assistencia: {
+    t: "Assistência Social e Proteção",
+    d: "Equipamentos de proteção básica (CRAS) e especial (CREAS), além de suporte em saúde mental (CAPS) e proteção de direitos (Conselho Tutelar). Representam a rede de segurança social do município.",
+    i: "A ausência de CREAS ou CAPS próprios em municípios médios (>20 mil hab.) indica dependência de redes regionais, o que pode atrasar o atendimento de casos críticos."
   }
 };
 
@@ -2076,6 +2142,19 @@ function generatePDF() {
         <td>${el('tr-drogas')}</td>
       </tr></tbody>
     </table>
+
+    <!-- ASSISTÊNCIA SOCIAL -->
+    <div class="pdf-sec">🤝 Assistência Social e Proteção Comunitária</div>
+    <table class="no-break">
+      <thead><tr><th>CRAS (Básica)</th><th>CREAS (Especial)</th><th>CAPS I / II (Saúde Mental)</th><th>Conselho Tutelar</th></tr></thead>
+      <tbody><tr>
+        <td style="font-weight:700; text-align:center;">${el('as-cras')}</td>
+        <td style="font-weight:700; text-align:center;">${el('as-creas')}</td>
+        <td style="font-weight:700; text-align:center;">${el('as-caps')}</td>
+        <td style="font-weight:700; text-align:center;">${el('as-ct')}</td>
+      </tr></tbody>
+    </table>
+
     <div class="alert-box">
       <strong>⚠️ Análise Estrutural Crítica</strong>
       <span>${el('al-text')}</span>
@@ -2134,6 +2213,8 @@ function generatePDF() {
         <tr><td>Prefeitura Municipal</td><td>Gravidez na adolescência, programas habitacionais, saneamento, ETE</td><td>Portal Municipal</td></tr>
         <tr><td>DATASUS / Ministério da Saúde</td><td>Taxa de gravidez na adolescência (10–19 anos)</td><td>datasus.saude.gov.br</td></tr>
         <tr><td>MDS / Gov.br – Bolsa Família</td><td>Número de famílias beneficiárias</td><td>gov.br/mds</td></tr>
+        <tr><td>MDS / CadSUAS</td><td>Equipamentos de Assistência Social (CRAS, CREAS)</td><td>aplicacoes.mds.gov.br/cadsuas</td></tr>
+        <tr><td>CNM / Portais de Transparência</td><td>Conselhos Tutelares e Unidades CAPS</td><td>Portais Municipais</td></tr>
         <tr><td>Instituto Água e Saneamento</td><td>Cobertura de água e esgoto, prestador CAERN</td><td>aguaesaneamento.org.br</td></tr>
         <tr><td>CAERN – Companhia de Águas</td><td>Obras de saneamento, ampliação da rede</td><td>caern.rn.gov.br</td></tr>
       </tbody>
@@ -2173,12 +2254,6 @@ function generatePDF() {
     btns.forEach(b => b.innerText = b.closest('.btn-sync') ? 'Sincronizar' : 'Relatório');
   });
 }
-
-
-
-
-
-
 
 function generateABNTReport() {
   const city = document.getElementById('city-select').value;
@@ -2324,6 +2399,8 @@ function generateABNTReport() {
     <div class="abnt-section-title">REFERÊNCIAS</div>
     <p>INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA (IBGE). <b>Censo Demográfico 2022</b>. Rio de Janeiro: IBGE, 2023.</p>
     <p>BRASIL. Ministério do Desenvolvimento e Assistência Social. <b>Cadastro Único</b>. Brasília, 2024.</p>
+    <p>BRASIL. Ministério do Desenvolvimento e Assistência Social. <b>Censo SUAS / CadSUAS</b>. Brasília, 2024.</p>
+    <p>CONFEDERAÇÃO NACIONAL DE MUNICÍPIOS (CNM). <b>Portal Municipal</b>. Brasília, 2024.</p>
     <p>PROGRAMA DAS NAÇÕES UNIDAS PARA O DESENVOLVIMENTO (PNUD). <b>Índice de Desenvolvimento Humano Municipal</b>, 2021.</p>
     <p>RIO GRANDE DO NORTE. Secretaria de Segurança Pública e Defesa Social (SESED). <b>Relatórios de Crimes Violentos Letais Intencionais</b>. Natal, 2024.</p>
   `;
@@ -2406,6 +2483,14 @@ function selectCity(cityId) {
   document.getElementById('ivj-gra2').innerText = d.gra;
   const graVal = parseFloat((d.gra || '0').replace(/[^0-9.]/g, '')) || 0;
   document.getElementById('ivj-gra-bar').style.width = Math.min(graVal * 3.5, 100) + '%';
+
+  // Assistência Social
+  if (d.as) {
+    document.getElementById('as-cras').innerText = d.as.cras;
+    document.getElementById('as-creas').innerText = d.as.creas;
+    document.getElementById('as-caps').innerText = d.as.caps;
+    document.getElementById('as-ct').innerText = d.as.ct;
+  }
 
   document.getElementById('ivj-insight-text').innerHTML =
     `<strong>⚠️ Diagnóstico de Vulnerabilidade Juvenil — ${cityId}:</strong> ${d.ivj_insight || 'Análise disponível após seleção do município.'}`;
