@@ -2983,60 +2983,76 @@ function syncSources() {
   const btn = document.getElementById('sync-btn');
   const icon = document.getElementById('sync-icon');
   const items = document.querySelectorAll('.kpi-val, .table-container td, canvas');
-  const cityId = document.getElementById('city-select').value;
-  const cityData = DB[cityId];
+  const currentCityId = document.getElementById('city-select').value;
+  const btnText = btn.querySelector('span');
+  const originalBtnText = btnText.innerText;
   
-  if (!cityData.ibgeCode) {
-    console.error("Código IBGE não definido para este município.");
-    return;
-  }
-
   btn.classList.add('loading');
+  btnText.innerText = 'Sincronizando...';
   icon.style.animation = 'spin 1.5s linear infinite';
   items.forEach(el => { el.style.opacity = '0.3'; el.style.filter = 'blur(2px)'; });
 
-  // URL SIDRA: Tabela 1612 (População Censo 2022)
-  const url = `https://servicodados.ibge.gov.br/api/v3/agregados/1612/periodos/2022/variaveis/93?localidades=N6[${cityData.ibgeCode}]`;
+  const cities = Object.keys(DB);
+  let updatedCount = 0;
 
-  console.log(`Consultando SIDRA API para ${cityId} [${cityData.ibgeCode}]...`);
+  console.log("Iniciando sincronização global (IBGE SIDRA 2022) para todos os municípios...");
 
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      if (data && data[0] && data[0].resultados[0]) {
-        const newVal = data[0].resultados[0].series[0].serie['2022'];
-        const formattedVal = parseInt(newVal).toLocaleString('pt-BR');
-        
-        // Atualiza o DB local temporariamente
-        DB[cityId].pop = formattedVal;
-        
-        // Atualiza a UI
-        document.getElementById('k-pop').innerText = formattedVal;
-        
-        console.log(`Dados atualizados: População = ${formattedVal}`);
+  // Promessa para sincronizar todos os municípios em paralelo
+  const syncPromises = cities.map(cityId => {
+    const cityData = DB[cityId];
+    if (!cityData.ibgeCode) return Promise.resolve();
+
+    const url = `https://servicodados.ibge.gov.br/api/v3/agregados/1612/periodos/2022/variaveis/93?localidades=N6[${cityData.ibgeCode}]`;
+    
+    return fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data[0] && data[0].resultados[0]) {
+          const newVal = data[0].resultados[0].series[0].serie['2022'];
+          const formattedVal = parseInt(newVal).toLocaleString('pt-BR');
+          
+          // Atualiza o DB global
+          DB[cityId].pop = formattedVal;
+          updatedCount++;
+        }
+      })
+      .catch(err => console.error(`Erro ao sincronizar ${cityId}:`, err));
+  });
+
+  Promise.all(syncPromises).then(() => {
+    // Atualiza a visualização do município selecionado para refletir as mudanças
+    selectCity(currentCityId);
+    
+    console.log(`Sincronização global concluída. ${updatedCount} municípios atualizados.`);
+
+    setTimeout(() => {
+      icon.style.animation = 'none';
+      btn.classList.remove('loading');
+      btnText.innerText = originalBtnText;
+      items.forEach(el => { el.style.opacity = '1'; el.style.filter = 'none'; });
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('pt-BR');
+      
+      const toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed; bottom:30px; right:30px; background:#10b981; color:#fff; padding:12px 24px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,1); z-index:10000; font-weight:bold; border: 1px solid rgba(255,255,255,0.2);';
+      toast.innerText = `Sincronização Global Concluída (${updatedCount} municípios)`;
+      document.body.appendChild(toast);
+      
+      const badges = document.querySelectorAll('.head-badge');
+      if(badges[1]) {
+        badges[1].style.borderColor = 'var(--success)';
+        badges[1].style.color = 'var(--success)';
+        badges[1].innerText = `Sincronizado (IBGE): ${new Date().toLocaleDateString('pt-BR')} ${timeStr}`;
       }
-    })
-    .catch(err => console.error("Erro na sincronização:", err))
-    .finally(() => {
+
       setTimeout(() => {
-        icon.style.animation = 'none';
-        btn.classList.remove('loading');
-        items.forEach(el => { el.style.opacity = '1'; el.style.filter = 'none'; });
-
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('pt-BR');
-        
-        const toast = document.createElement('div');
-        toast.style.cssText = 'position:fixed; bottom:30px; right:30px; background:#10b981; color:#fff; padding:12px 24px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.5); z-index:10000; font-weight:bold;';
-        toast.innerText = `Sincronização Real IBGE Concluída (${cityId})`;
-        document.body.appendChild(toast);
-        
-        const badges = document.querySelectorAll('.head-badge');
-        if(badges[1]) badges[1].innerText = `Última Sincronização (SIDRA): ${new Date().toLocaleDateString('pt-BR')} ${timeStr}`;
-
-        setTimeout(() => toast.remove(), 4000);
-      }, 1500);
-    });
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => toast.remove(), 500);
+      }, 4000);
+    }, 1500);
+  });
 }
 
 const spinStyle = document.createElement('style');
