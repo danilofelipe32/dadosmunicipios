@@ -1076,6 +1076,7 @@
     <div class="tools-grid">
       <!-- Calculadora de Impacto -->
       <div class="tool-card">
+        <div class="info-btn" onclick="showInsight('simulador')">i</div>
         <div class="tool-header">
           <div class="tool-icon">🧮</div>
           <div class="tool-info">
@@ -1103,6 +1104,7 @@
 
       <!-- Exportação -->
       <div class="tool-card">
+        <div class="info-btn" onclick="showInsight('exportacao')">i</div>
         <div class="tool-header">
           <div class="tool-icon">📥</div>
           <div class="tool-info">
@@ -2412,6 +2414,16 @@ const InsightsDB = {
     t: "Assistência Social, Saúde e Proteção",
     d: "Equipamentos de proteção básica (CRAS) e especial (CREAS), além de suporte em saúde mental (CAPS), unidades de saúde (UBS) e proteção de direitos (Conselho Tutelar). Representam a rede de segurança social do município.",
     i: "A ausência de CREAS ou CAPS próprios em municípios médios (>20 mil hab.) indica dependência de redes regionais, o que pode atrasar o atendimento de casos críticos."
+  },
+  simulador: {
+    t: "Calculadora de Impacto (Simulador)",
+    d: "Ferramenta interativa de projeção estatística que permite simular como melhorias reais em indicadores de base (saneamento e educação) elevam matematicamente o IDHM (Índice de Desenvolvimento Humano Municipal). Utiliza correlações lineares históricas para estimar o impacto de políticas públicas.",
+    i: "Experimente elevar o saneamento para 90% e veja o salto na longevidade estimada do município. Pequenos avanços graduais geram grandes impactos cumulativos."
+  },
+  exportacao: {
+    t: "Exportação de Dados Crus",
+    d: "Módulo de transparência ativa que permite o download imediato de toda a série histórica (2018-2030) do município em formato .csv (planilha eletrônica). Essencial para pesquisadores, gestores públicos e cidadãos que desejam realizar auditorias ou análises estatísticas profundas.",
+    i: "O arquivo inclui projeções futuras baseadas em tendências populacionais e metas do Marco Legal do Saneamento. Útil para o planejamento orçamentário anual (LOA/PPA)."
   }
 };
 
