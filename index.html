@@ -736,6 +736,7 @@
     background: rgba(255,255,255,0.015); border-radius: var(--radius);
     padding: 28px; border: 1px solid rgba(255,77,109,0.15);
     margin-bottom: 28px;
+    position: relative;
   }
   .ivj-chart-card h3 {
     font-size: 0.7rem; color: var(--text-muted);
@@ -1579,8 +1580,8 @@
       <div class="kpi-src" style="text-align:center;margin-top:8px;">MDS / IPEA / SSP-RN</div>
     </div>
 
-    <!-- Card Evasão Escolar -->
-    <div class="ivj-card">
+    <div class="ivj-card" style="position:relative;">
+      <div class="info-btn" onclick="showInsight('evasao')" style="background:rgba(255,77,109,0.1);border-color:rgba(255,77,109,0.3);">i</div>
       <div class="ivj-card-label">📚 Evasão Escolar (Estimativa)</div>
       <div class="ivj-card-val t-red" id="ivj-evasao">-</div>
       <div class="ivj-card-sub" id="ivj-evasao-desc">Proporção de jovens fora do sistema educacional formal</div>
@@ -1591,8 +1592,8 @@
       </div>
     </div>
 
-    <!-- Card Gravidez Adolescência -->
-    <div class="ivj-card">
+    <div class="ivj-card" style="position:relative;">
+      <div class="info-btn" onclick="showInsight('ivj-gra')" style="background:rgba(255,77,109,0.1);border-color:rgba(255,77,109,0.3);">i</div>
       <div class="ivj-card-label">👶 Gravidez na Adolescência</div>
       <div class="ivj-card-val t-red" id="ivj-gra2">-</div>
       <div class="ivj-card-sub">Nascidos vivos de mães com 10–19 anos · referência nacional: 14%</div>
@@ -2424,6 +2425,16 @@ const InsightsDB = {
     t: "Exportação de Dados Crus",
     d: "Módulo de transparência ativa que permite o download imediato de toda a série histórica (2018-2030) do município em formato .csv (planilha eletrônica). Essencial para pesquisadores, gestores públicos e cidadãos que desejam realizar auditorias ou análises estatísticas profundas.",
     i: "O arquivo inclui projeções futuras baseadas em tendências populacionais e metas do Marco Legal do Saneamento. Útil para o planejamento orçamentário anual (LOA/PPA)."
+  },
+  evasao: {
+    t: "Evasão Escolar",
+    d: "Percentual estimado de jovens que não concluíram o ensino básico ou que estão fora do sistema educacional regular para sua faixa etária. É um dos maiores sinais de alerta para a vulnerabilidade social crônica.",
+    i: "A evasão está fortemente ligada à falta de transporte escolar rural e à necessidade de renda precoce, exigindo políticas de permanência estudantil."
+  },
+  'ivj-gra': {
+    t: "Impacto da Gravidez na Juventude",
+    d: "Avalia como a maternidade precoce impacta a trajetória social e educacional das jovens. Este indicador compõe o eixo de risco do IVJ (Índice de Vulnerabilidade Juvenil).",
+    i: "Zonas com IVJ alto e alta taxa de gravidez são prioridades máximas para equipes de assistência social móvel."
   }
 };
 
