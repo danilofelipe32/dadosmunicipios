@@ -773,6 +773,64 @@
   .contact-text { font-size: 0.85rem; color: #e0e0e0; line-height: 1.4; }
   .contact-label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px; }
 
+  /* TOOLS SECTION */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px; margin-top: 30px;
+  }
+  .tool-card {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .tool-card::after {
+    content: ''; position: absolute; top: 0; right: 0; width: 60px; height: 60px;
+    background: linear-gradient(135deg, transparent 50%, rgba(108,99,255,0.05) 50%);
+  }
+  .tool-header { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; }
+  .tool-icon { 
+    font-size: 1.4rem; padding: 10px; background: rgba(108,99,255,0.1); 
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  }
+  .tool-info h3 { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .tool-info p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* SIMULATOR CONTROLS */
+  .sim-item { margin-bottom: 18px; }
+  .sim-lbl-row { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600; margin-bottom: 8px; color: #e2e8f0; }
+  .sim-slider {
+    width: 100%; -webkit-appearance: none; height: 6px; border-radius: 5px;
+    background: rgba(255,255,255,0.05); outline: none; margin-bottom: 5px;
+  }
+  .sim-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--primary); cursor: pointer; border: 2px solid #fff;
+  }
+  .sim-result-box {
+    margin-top: auto; padding: 16px; background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2); border-left: 4px solid var(--success);
+    border-radius: 12px;
+  }
+  .sim-res-val { font-size: 1.5rem; font-weight: 900; color: var(--success); }
+  .sim-res-lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+
+  /* EXPORT BUTTON */
+  .btn-export {
+    margin-top: auto; width: 100%; padding: 12px; border-radius: 12px;
+    background: var(--primary); color: #fff; border: none; font-weight: 800;
+    font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .btn-export:hover { filter: brightness(1.1); transform: scale(1.02); box-shadow: 0 5px 15px rgba(108,99,255,0.4); }
+  .btn-export:active { transform: scale(0.98); }
 
 </style>
 </head>
@@ -847,7 +905,10 @@
               <button id="play-time-btn" onclick="togglePlayTime()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:18px;"><i class="fas fa-play"></i></button>
               <input type="range" id="time-slider" min="2018" max="2030" step="2" value="2024" oninput="updateYear(this.value)">
             </div>
-            <div class="time-slider-indicator">Série Temporal Socioeconômica</div>
+            <div class="time-slider-indicator" id="time-indicator">Série Temporal Socioeconômica</div>
+            <div id="estimated-label" style="font-size: 0.65rem; color: var(--accent); margin-top: 4px; font-weight: 700; display: none;">
+              ⚠️ Valor Estimado (SocioDash™ Pro) - <span id="current-date-time"></span>
+            </div>
           </div>
         </div>
         <div class="score-item">
@@ -909,7 +970,54 @@
     </div>
   </section>
 
-  <section id="impacto-section">
+  <section id="tools-section">
+    <div class="section-title"><span class="s-icon">🛠️</span> Módulo de Inteligência Estratégica <span class="badge b-primary" style="margin-left:10px;font-size:0.6rem;">BI Advanced</span></div>
+    <div class="tools-grid">
+      <!-- Calculadora de Impacto -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">🧮</div>
+          <div class="tool-info">
+            <h3>Calculadora de Impacto (Simulador)</h3>
+            <p>Simule melhorias nos indicadores de base e veja o impacto projetado no IDHM municipal.</p>
+          </div>
+        </div>
+        
+        <div class="sim-item">
+          <div class="sim-lbl-row"><span>Investimento em Saneamento</span> <span id="sim-san-val">+0%</span></div>
+          <input type="range" min="0" max="100" value="0" class="sim-slider" id="sim-san" oninput="runSimulation()">
+        </div>
+        
+        <div class="sim-item">
+          <div class="sim-lbl-row"><span>Avanço na Educação (Metas)</span> <span id="sim-edu-val">+0%</span></div>
+          <input type="range" min="0" max="100" value="0" class="sim-slider" id="sim-edu" oninput="runSimulation()">
+        </div>
+
+        <div class="sim-result-box">
+          <div class="sim-res-lbl">Novo IDHM Estimado</div>
+          <div class="sim-res-val" id="sim-idh-result">0.000</div>
+          <div style="font-size:0.65rem; color:var(--text-muted); margin-top:4px;">*Simulação baseada em correlação linear de impacto territorial.</div>
+        </div>
+      </div>
+
+      <!-- Exportação -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">📥</div>
+          <div class="tool-info">
+            <h3>Exportação de Dados Crus</h3>
+            <p>Baixe a base histórica completa do município selecionado em formato CSV para análises externas.</p>
+          </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:20px;">Inclui dados de População, PIB, IDH, Saneamento e Educação de 2018 a 2030 (consolidado e projetado).</p>
+        <button class="btn-export" onclick="exportDataCSV()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Exportar Base Histórica (.csv)
+        </button>
+      </div>
+    </div>
+  </section>
+
     <div class="section-title"><span class="s-icon">📌</span> Indicadores Gerais de Impacto</div>
     <div class="kpi-grid">
     <div class="card-premium">
@@ -2098,6 +2206,62 @@ function calculateScoreValue(d) {
   return Math.round((edu + san + seg) / 3);
 }
 
+function runSimulation() {
+  const cityId = document.getElementById('city-select').value;
+  const year = document.getElementById('time-slider').value;
+  const source = (DB[cityId].history && DB[cityId].history[year]) ? DB[cityId].history[year] : DB[cityId];
+  
+  const addSan = parseInt(document.getElementById('sim-san').value);
+  const addEdu = parseInt(document.getElementById('sim-edu').value);
+  
+  document.getElementById('sim-san-val').innerText = `+${addSan}%`;
+  document.getElementById('sim-edu-val').innerText = `+${addEdu}%`;
+  
+  const baseIdh = source.idh || 0.700;
+  const impactSan = (addSan / 100) * 0.050; // 100% saneamento = +0.050 no IDH (saúde)
+  const impactEdu = (addEdu / 100) * 0.080; // 100% metas educacionais = +0.080 no IDH
+  
+  const result = baseIdh + impactSan + impactEdu;
+  const finalIdh = Math.min(0.999, result).toFixed(3);
+  
+  const resEl = document.getElementById('sim-idh-result');
+  resEl.innerText = finalIdh;
+  
+  if (parseFloat(finalIdh) > baseIdh) {
+    resEl.style.color = '#10b981';
+  } else {
+    resEl.style.color = 'var(--success)';
+  }
+}
+
+function exportDataCSV() {
+  const cityId = document.getElementById('city-select').value;
+  const city = DB[cityId];
+  
+  let csv = "Ano,Populacao,PIB_Per_Capita,IDH,Fonte\n";
+  
+  if (city.history) {
+    Object.keys(city.history).sort().forEach(year => {
+      const d = city.history[year];
+      const isProjected = parseInt(year) > 2024;
+      csv += `${year},${d.pop},"${d.pib}",${d.idh},${isProjected ? 'Projecao SocioDash' : 'Censo/IBGE'}\n`;
+    });
+  } else {
+    csv += `2024,${city.pop},"${city.pib}",${city.idh},Estimado\n`;
+  }
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", `SocioDash_${cityId}_Base_Historica.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  // Como não há showToast, usamos um feedback alternativo ou nada se for óbvio
+}
 function updateBenchmark(cityId, data) {
   const year = document.getElementById('time-slider').value;
   const currentData = data || (DB[cityId].history ? DB[cityId].history[year] : DB[cityId]);
@@ -2985,6 +3149,16 @@ function updateYear(year) {
       document.getElementById('k-agu').innerText = hy.agu;
       document.getElementById('k-esg').innerText = hy.esg;
       
+      // Mostrar/Esconder label de estimativa
+      const estLabel = document.getElementById('estimated-label');
+      if (parseInt(year) > 2022 || parseInt(year) < 2022) {
+        estLabel.style.display = 'block';
+        const now = new Date();
+        document.getElementById('current-date-time').innerText = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+      } else {
+        estLabel.style.display = 'none';
+      }
+
       // Sincronização completa de todos os cards
       if (document.getElementById('k-pib')) document.getElementById('k-pib').innerText = hy.pib;
       if (document.getElementById('k-alf')) document.getElementById('k-alf').innerText = hy.alf;
@@ -3020,6 +3194,7 @@ function updateYear(year) {
       // 5. Re-renderizar Gráficos e Score Global (SocioDash + Benchmark)
       updateSocioDashScore(cityId, hy);
       updateBenchmark(cityId, hy);
+      runSimulation(); // Sincroniza simulador se estiver aberto
       renderCharts(aguNum, esgNum, d.letal, cityId, radar);
       
       // 6. Atualizar Painel de Mapa (GeoPanel)
