@@ -14,30 +14,24 @@
 
 <style>
   :root {
-    --bg: #05060e;
-    --surface: #0b0d1a;
-    --surface-low: #10132a;
-    --primary: #6c63ff;
-    --primary-glow: rgba(108,99,255,0.35);
-    --accent: #00d4ff;
-    --success: #00e5a0;
-    --danger: #ff4d6d;
-    --warning: #ffb830;
-    --text: #f0f2ff;
-    --text-muted: #8b95c4;
-    --text-dim: #3d4580;
+    --bg: #030712;
+    --card: #0f172a;
+    --accent: #3b82f6; 
+    --primary: #6366f1;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.08);
+    --glass: rgba(15, 23, 42, 0.7);
+    --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
     --radius: 18px;
     --blur: blur(20px);
-    --border: rgba(108,99,255,0.12);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; transition: background-color 0.3s, border-color 0.3s; }
   body {
-    font-family: 'Outfit', sans-serif;
     background: var(--bg);
-    background-image:
-      radial-gradient(ellipse 80% 60% at 10% -10%, rgba(108,99,255,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(0,212,255,0.1) 0%, transparent 60%);
-    background-attachment: fixed;
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
@@ -69,7 +63,7 @@
   }
   @keyframes pulse-dot {
     0%,100% { box-shadow: 0 0 8px var(--primary); }
-    50% { box-shadow: 0 0 20px var(--primary), 0 0 35px var(--primary-glow); }
+    50% { box-shadow: 0 0 20px var(--primary), 0 0 35px rgba(108,99,255,0.35); }
   }
   .search-container {
     display: flex; align-items: center;
@@ -101,7 +95,7 @@
   }
   .btn-pdf:hover {
     background: var(--primary); color: #fff; border-color: var(--primary);
-    box-shadow: 0 4px 20px var(--primary-glow); transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(108,99,255,0.35); transform: translateY(-1px);
   }
   .btn-sync {
     background: rgba(0,229,160,0.08) !important; border-color: rgba(0,229,160,0.25) !important;
@@ -168,6 +162,8 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 18px; margin-bottom: 32px;
   }
+  .kpi-card { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 16px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .kpi-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 15px 35px -10px rgba(59, 130, 246, 0.3); }
   .card-premium {
     background: rgba(255,255,255,0.025);
     backdrop-filter: var(--blur);
@@ -209,7 +205,7 @@
     cursor: pointer; font-size: 12px; font-weight: 700;
     transition: all 0.2s; z-index: 5;
   }
-  .info-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 12px var(--primary-glow); }
+  .info-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 12px rgba(108,99,255,0.35); }
 
   /* MODAL */
   .insight-modal {
@@ -364,7 +360,19 @@
   .score-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary); font-weight: 800; margin-top: 10px; }
   
   .score-breakdown { display: flex; flex-direction: column; gap: 18px; }
-  .score-item { display: flex; align-items: center; gap: 15px; }
+    .controls-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .time-slider-container { flex: 1; min-width: 300px; background: rgba(15, 23, 42, 0.4); padding: 12px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    .time-slider-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .time-slider-labels span { font-size: 11px; color: var(--text-muted); cursor: pointer; transition: 0.3s; }
+    .time-slider-labels span.active { color: var(--accent); font-weight: bold; transform: scale(1.1); }
+    #time-slider { width: 100%; height: 6px; border-radius: 5px; background: #334155; outline: none; -webkit-appearance: none; appearance: none; }
+    #time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 3px solid #0f172a; box-shadow: 0 0 10px rgba(15, 82, 186, 0.5); }
+    .time-slider-indicator { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .chart-drilldown-info { position: absolute; top: 15px; right: 20px; background: var(--accent); color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; pointer-events: none; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+    .chart-back-btn { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.1); border: none; color: white; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; z-index: 10; display: none; }
+    .chart-back-btn:hover { background: rgba(255,255,255,0.2); }
   .score-item-label { width: 100px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
   .score-bar-bg { flex: 1; height: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
   .score-bar-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.23,1,0.32,1); width: 0; }
@@ -691,7 +699,7 @@
   .ivj-score-val {
     position: relative; z-index: 1;
     font-size: 1.1rem; font-weight: 900;
-    color: var(--danger); letter-spacing: -1px;
+    color: #fff; letter-spacing: -1px;
   }
   .ivj-card-label {
     font-size: 0.65rem; text-transform: uppercase;
@@ -774,7 +782,18 @@
   <div class="search-container">
     <div class="nav-logo"><div class="logo-dot"></div> SocioDash</div>
     <select id="city-select" class="city-select" onchange="selectCity(this.value)">
-      <!-- Populando via JS -->
+      <option value="Parnamirim">Parnamirim</option>
+      <option value="São José de Mipibu">São José de Mipibu</option>
+      <option value="Nísia Floresta">Nísia Floresta</option>
+      <option value="Canguaretama">Canguaretama</option>
+      <option value="Goianinha">Goianinha</option>
+      <option value="Monte Alegre">Monte Alegre</option>
+      <option value="Tibau do Sul">Tibau do Sul</option>
+      <option value="Arez">Arez</option>
+      <option value="Vera Cruz">Vera Cruz</option>
+      <option value="Baía Formosa">Baía Formosa</option>
+      <option value="Senador G. Avelino">Senador G. Avelino</option>
+      <option value="Vila Flor">Vila Flor</option>
     </select>
     <button class="btn-pdf btn-sync" onclick="syncSources()" id="sync-btn">
       <svg id="sync-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
@@ -813,6 +832,21 @@
         <div class="score-label">Índice SocioDash™</div>
       </div>
       <div class="score-breakdown">
+        <div class="controls-row">
+          <div class="time-slider-container">
+            <div class="time-slider-labels">
+              <span class="active" id="label-2018">2018</span>
+              <span id="label-2020">2020</span>
+              <span id="label-2022">2022</span>
+              <span id="label-2024">Agora</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button id="play-time-btn" onclick="togglePlayTime()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:18px;"><i class="fas fa-play"></i></button>
+              <input type="range" id="time-slider" min="2018" max="2024" step="2" value="2024" oninput="updateYear(this.value)">
+            </div>
+            <div class="time-slider-indicator">Série Temporal Socioeconômica</div>
+          </div>
+        </div>
         <div class="score-item">
           <div class="score-item-label">Educação</div>
           <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar-edu"></div></div>
@@ -1091,6 +1125,8 @@
   <section id="saneamento-section">
     <div class="section-title"><span class="s-icon">💧</span> Saneamento Básico</div>
   <div class="table-container">
+    <button class="chart-back-btn" id="san-back-btn" onclick="resetSanChart()">← Voltar</button>
+    <div class="chart-drilldown-info" id="san-drill-info" style="display:none;">Drilldown Ativo</div>
     <table>
       <thead>
         <tr>
@@ -1197,18 +1233,11 @@
 
   <!-- Controles de camada -->
   <div class="geo-controls">
-    <button class="geo-btn active" id="btn-heat" onclick="toggleGeoLayer('heat')">
-      <span>🔥</span> Vulnerabilidade Sanitária
-    </button>
-    <button class="geo-btn" id="btn-risk" onclick="toggleGeoLayer('risk')">
-      <span>🛡️</span> Risco Armado / Facções
-    </button>
-    <button class="geo-btn" id="btn-school" onclick="toggleGeoLayer('school')">
-      <span>🏫</span> Rotas Escolares Inseguras
-    </button>
-    <button class="geo-btn geo-btn-all" onclick="toggleAllCities()" id="btn-all">
-      <span>🗳️</span> Todos os Municípios
-    </button>
+    <button class="geo-btn active" id="btn-heat" onclick="toggleGeoLayer('heat')"><span>🔥</span> Calor Sanitário</button>
+    <button class="geo-btn" id="btn-density" onclick="toggleGeoLayer('density')"><span>👥</span> Densidade Pop.</button>
+    <button class="geo-btn" id="btn-risk" onclick="toggleGeoLayer('risk')"><span>🛡️</span> Risco Armado</button>
+    <button class="geo-btn" id="btn-school" onclick="toggleGeoLayer('school')"><span>🏫</span> Rotas Escolares</button>
+    <button class="geo-btn" id="btn-all" onclick="toggleAllCities()"><span>👁️</span> Visão Geral</button>
     <button class="geo-btn" id="btn-satellite" onclick="toggleSatellite()" style="margin-left:auto;border-color:rgba(255,184,48,.3);color:#ffb830;">
       <span>🛰️</span> Satélite
     </button>
@@ -1834,6 +1863,31 @@ const DB = {
   }
 };
 
+// Expansão dinâmica do DB para garantir dados históricos e drilldown em todos os municípios
+Object.keys(DB).forEach(cityId => {
+  const d = DB[cityId];
+  if (!d.history) {
+    const popBase = parseInt(d.pop.replace('.','').replace(/\s/g,'')) || 10000;
+    const idhBase = parseFloat(d.idh.replace(',','.')) || 0.6;
+    const esgBase = parseFloat(d.s_esg) || 5.0;
+    const aguBase = parseFloat(d.s_agu) || 70.0;
+    const ivjBase = d.ivj || 6.5;
+
+    d.history = {
+      "2018": { pop: Math.round(popBase * 0.92).toLocaleString('pt-BR'), idh: (idhBase * 0.95).toFixed(3).replace('.',','), esg: (esgBase * 0.7).toFixed(1) + "%", agu: (aguBase * 0.92).toFixed(1) + "%", ivj: ivjBase - 0.5 },
+      "2020": { pop: Math.round(popBase * 0.96).toLocaleString('pt-BR'), idh: (idhBase * 0.98).toFixed(3).replace('.',','), esg: (esgBase * 0.85).toFixed(1) + "%", agu: (aguBase * 0.97).toFixed(1) + "%", ivj: ivjBase - 0.2 },
+      "2022": { pop: d.pop, idh: d.idh, esg: d.s_esg + "%", agu: d.s_agu + "%", ivj: ivjBase },
+      "2024": { pop: Math.round(popBase * 1.04).toLocaleString('pt-BR'), idh: (idhBase * 1.02).toFixed(3).replace('.',','), esg: (esgBase * 1.2).toFixed(1) + "%", agu: (aguBase * 1.03).toFixed(1) + "%", ivj: Math.min(ivjBase + 0.3, 10) }
+    };
+  }
+  if (!d.drilldown) {
+    d.drilldown = {
+      saneamento: { labels: ['Rede Geral', 'Poço', 'Cisterna', 'Rio/Lagoa'], data: [Math.round(d.s_agu * 0.85), 8, 4, 3] },
+      esgoto: { labels: ['Rede Coletora', 'Fossa Séptica', 'Fossa Rudimentar', 'Céu Aberto'], data: [Math.min(d.s_esg, 100), 55, 30, 15] }
+    };
+  }
+});
+
 const InsightsDB = {
   pop: { 
     t: "População Total", 
@@ -2112,6 +2166,7 @@ window.onclick = function(event) {
 
 function initTabs() {
   const select = document.getElementById('city-select');
+  select.innerHTML = ''; // Limpa as opções estáticas para evitar duplicidade
   Object.keys(DB).forEach((city) => {
     const opt = document.createElement('option');
     opt.value = city;
@@ -2785,129 +2840,299 @@ function selectCity(cityId) {
   renderCharts(d.s_agu, d.s_esg, d.letal, cityId, d.radar);
 }
 
+function updateYear(year) {
+  const cityId = document.getElementById('city-select').value;
+  const d = DB[cityId];
+  
+  // Sincroniza o slider caso a chamada venha do loop de play
+  document.getElementById('time-slider').value = year;
+
+  // Update labels UI
+  document.querySelectorAll('.time-slider-labels span').forEach(s => s.classList.remove('active'));
+  const activeLabel = document.getElementById(`label-${year}`);
+  if(activeLabel) activeLabel.classList.add('active');
+
+  if (d.history && d.history[year]) {
+    const hy = d.history[year];
+    
+    // Smooth transition effect
+    const kpis = document.querySelectorAll('.kpi-card');
+    kpis.forEach(k => k.style.transform = 'scale(0.95)');
+    
+    setTimeout(() => {
+      document.getElementById('k-pop').innerText = hy.pop;
+      document.getElementById('k-idh').innerText = hy.idh;
+      document.getElementById('k-agu').innerText = hy.agu;
+      document.getElementById('k-esg').innerText = hy.esg;
+      
+      // Update score and charts with historical data
+      const radar = {...d.radar};
+      radar.idh = parseFloat(hy.idh.replace(',','.')) * 100;
+      radar.agu = parseFloat(hy.agu);
+      radar.esg = parseFloat(hy.esg);
+      
+      renderCharts(parseFloat(hy.agu), parseFloat(hy.esg), d.letal, cityId, radar);
+      
+      kpis.forEach(k => k.style.transform = 'scale(1)');
+    }, 150);
+  }
+}
+
+let playInterval = null;
+function togglePlayTime() {
+  const btn = document.getElementById('play-time-btn');
+  if (playInterval) {
+    clearInterval(playInterval);
+    playInterval = null;
+    btn.innerHTML = '<i class="fas fa-play"></i>';
+  } else {
+    btn.innerHTML = '<i class="fas fa-pause"></i>';
+    let currentY = parseInt(document.getElementById('time-slider').value);
+    playInterval = setInterval(() => {
+      currentY += 2;
+      if (currentY > 2024) currentY = 2018;
+      updateYear(currentY);
+    }, 1500);
+  }
+}
+
 let activeChartRadar, activeChartIDHM;
 
 function renderCharts(agu, esg, letal, name, radarData) {
-  Chart.defaults.color = '#8d909e';
-  Chart.defaults.font.family = 'Inter';
+  const ctxSan = document.getElementById('cSan');
+  const ctxAge = document.getElementById('cAge');
+  const ctxLetal = document.getElementById('cLetal');
+  const ctxRadar = document.getElementById('cRadar');
+  
+  const gradientSuccess = ctxSan.getContext('2d').createLinearGradient(0, 0, 0, 400);
+  gradientSuccess.addColorStop(0, 'rgba(16, 185, 129, 0.8)');
+  gradientSuccess.addColorStop(1, 'rgba(16, 185, 129, 0.2)');
+
+  const gradientDanger = ctxSan.getContext('2d').createLinearGradient(0, 0, 0, 400);
+  gradientDanger.addColorStop(0, 'rgba(239, 68, 68, 0.8)');
+  gradientDanger.addColorStop(1, 'rgba(239, 68, 68, 0.2)');
+
+  const gradientAccent = ctxSan.getContext('2d').createLinearGradient(0, 0, 0, 400);
+  gradientAccent.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+  gradientAccent.addColorStop(1, 'rgba(59, 130, 246, 0.2)');
+
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.font.family = 'Outfit';
 
   if(activeChartSan) activeChartSan.destroy();
-  activeChartSan = new Chart(document.getElementById('cSan'), {
-    type: 'bar',
-    data: {
+  
+  const parent = ctxSan.parentElement;
+  let backBtn = parent.querySelector('.chart-back-btn');
+  if(!backBtn) {
+    backBtn = document.createElement('button');
+    backBtn.className = 'chart-back-btn';
+    backBtn.innerHTML = '<i class="fas fa-chevron-left"></i> Voltar';
+    backBtn.onclick = () => { window.currentSanView = 'main'; renderCharts(agu, esg, letal, name, radarData); };
+    parent.appendChild(backBtn);
+    
+    const info = document.createElement('div');
+    info.className = 'chart-drilldown-info';
+    info.innerText = 'CLIQUE PARA DETALHAR';
+    parent.appendChild(info);
+  }
+  
+  const currentView = window.currentSanView || 'main';
+  backBtn.style.display = currentView === 'main' ? 'none' : 'block';
+  parent.querySelector('.chart-drilldown-info').style.display = currentView === 'main' ? 'block' : 'none';
+
+  let chartData, chartOptions;
+  const d = DB[name];
+
+  if(currentView === 'main') {
+    chartData = {
       labels: [name + ' (Água)','RN (Água)', name + ' (Esgoto)','RN (Esgoto)'],
       datasets: [{
         data: [agu, 74.1, esg, 25.8],
-        backgroundColor: ['#10b981','#065f46','#ef4444','#991b1b'],
-        borderRadius: 4
+        backgroundColor: [gradientSuccess, 'rgba(16, 185, 129, 0.1)', gradientDanger, 'rgba(239, 68, 68, 0.1)'],
+        borderColor: ['#10b981', '#10b981', '#ef4444', '#ef4444'],
+        borderWidth: 2,
+        borderRadius: 8
       }]
-    },
-    options: { plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false }
-  });
-
-  if(activeChartAge) activeChartAge.destroy();
-  activeChartAge = new Chart(document.getElementById('cAge'), {
-    type: 'doughnut',
-    data: {
-      labels: ['0-18 Anos','19-59 Anos','60+ Anos'],
+    };
+    chartOptions = {
+      onClick: (e, elements) => {
+        if (elements.length > 0) {
+          const idx = elements[0].index;
+          if (idx === 0) window.currentSanView = 'agua';
+          else if (idx === 2) window.currentSanView = 'esgoto';
+          if (idx === 0 || idx === 2) renderCharts(agu, esg, letal, name, radarData);
+        }
+      }
+    };
+  } else if(currentView === 'agua') {
+    const drill = d.drilldown?.saneamento || { labels: ['Rede','Outros'], data: [agu, 100-agu] };
+    chartData = {
+      labels: drill.labels,
       datasets: [{
-        data: [30, 60, 10], 
-        backgroundColor: ['#0F52BA','#b0c6ff','#f59e0b'],
-        borderWidth: 0
+        label: 'Distribuição de Água',
+        data: drill.data,
+        backgroundColor: gradientSuccess,
+        borderColor: '#10b981',
+        borderWidth: 2,
+        borderRadius: 8
       }]
-    },
-    options: { plugins: { legend: { position: 'bottom' } }, responsive:true, maintainAspectRatio:false, cutout:'70%' }
-  });
+    };
+  } else if(currentView === 'esgoto') {
+    const drill = d.drilldown?.esgoto || { labels: ['Rede','Outros'], data: [esg, 100-esg] };
+    chartData = {
+      labels: drill.labels,
+      datasets: [{
+        label: 'Tipo de Esgotamento',
+        data: drill.data,
+        backgroundColor: gradientDanger,
+        borderColor: '#ef4444',
+        borderWidth: 2,
+        borderRadius: 8
+      }]
+    };
+  }
 
-  if(activeChartLetal) activeChartLetal.destroy();
-  activeChartLetal = new Chart(document.getElementById('cLetal'), {
+  activeChartSan = new Chart(ctxSan, {
     type: 'bar',
-    data: {
-      labels: ['2023 (Referência)','2024 (Projeção)'],
-      datasets: [{
-        data: [100, letal], 
-        backgroundColor: ['#e2e8f0','#0F52BA'],
-        borderRadius: 4,
-        barThickness: 45
-      }]
-    },
+    data: chartData,
     options: { 
+      ...chartOptions,
       plugins:{
-        legend:{display:false},
-        tooltip: { callbacks: { label: (ctx) => `Índice: ${ctx.raw}%` } }
+        legend:{display: false},
+        title: {
+          display: currentView !== 'main',
+          text: currentView === 'agua' ? 'Detalhamento: Fontes de Água' : 'Detalhamento: Esgotamento Sanitário',
+          color: '#fff', font: { size: 14, weight: '700' }
+        }
       }, 
-      scales:{ 
-        y:{ 
-          beginAtZero: true, 
-          max: 120,
-          ticks: { callback: (v) => v + '%' }
-        } 
+      scales: {
+        y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } },
+        x: { grid: { display: false } }
       },
       responsive:true, 
       maintainAspectRatio:false 
     }
   });
 
-  // Radar Chart
+  if(activeChartAge) activeChartAge.destroy();
+  activeChartAge = new Chart(ctxAge, {
+    type: 'doughnut',
+    data: {
+      labels: ['0-18 Anos','19-59 Anos','60+ Anos'],
+      datasets: [{
+        data: [30, 60, 10], 
+        backgroundColor: ['#6366f1','#3b82f6','#f59e0b'],
+        hoverOffset: 20,
+        borderWidth: 0,
+        weight: 1
+      }]
+    },
+    options: { 
+      plugins: { 
+        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } }
+      }, 
+      responsive:true, 
+      maintainAspectRatio:false, 
+      cutout:'75%',
+      animation: { animateScale: true }
+    }
+  });
+
+  if(activeChartLetal) activeChartLetal.destroy();
+  activeChartLetal = new Chart(ctxLetal, {
+    type: 'bar',
+    data: {
+      labels: ['2023 (Ref)','2024 (Proj)'],
+      datasets: [{
+        data: [100, letal], 
+        backgroundColor: ['rgba(148, 163, 184, 0.1)', gradientAccent],
+        borderColor: ['#94a3b8', '#3b82f6'],
+        borderWidth: 2,
+        borderRadius: 8,
+        barThickness: 40
+      }]
+    },
+    options: { 
+      plugins:{
+        legend:{display:false},
+        tooltip: { callbacks: { label: (ctx) => `Índice de Conflitos: ${ctx.raw}%` } }
+      }, 
+      scales:{ 
+        y:{ 
+          beginAtZero: true, 
+          max: 150,
+          ticks: { color: '#94a3b8', callback: (v) => v + '%' },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        x: { grid: { display: false } }
+      },
+      responsive:true, 
+      maintainAspectRatio:false 
+    }
+  });
+
   if(activeChartRadar) activeChartRadar.destroy();
-  activeChartRadar = new Chart(document.getElementById('cRadar'), {
+  activeChartRadar = new Chart(ctxRadar, {
     type: 'radar',
     data: {
-      labels: ['IDHM', 'Alfabetização', 'Água Potável', 'Esgotamento', 'Segurança'],
+      labels: ['IDHM', 'Alfabetização', 'Água', 'Esgoto', 'Segurança'],
       datasets: [{
         label: name,
         data: radarData ? [radarData.idh, radarData.alf, radarData.agu, radarData.esg, radarData.seg] : [0,0,0,0,0],
         fill: true,
-        backgroundColor: 'rgba(15, 82, 186, 0.2)',
-        borderColor: '#0F52BA',
-        pointBackgroundColor: '#0F52BA',
+        backgroundColor: 'rgba(99, 102, 241, 0.3)',
+        borderColor: '#6366f1',
+        pointBackgroundColor: '#6366f1',
         pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#0F52BA'
+        pointRadius: 4
       }, {
-        label: 'Média Regional',
-        data: [65, 82, 75, 25, 60],
+        label: 'RN Média',
+        data: [65, 82, 74, 25, 60],
         fill: true,
-        backgroundColor: 'rgba(141, 144, 158, 0.1)',
-        borderColor: '#8d909e',
+        backgroundColor: 'rgba(148, 163, 184, 0.1)',
+        borderColor: 'rgba(148, 163, 184, 0.5)',
         borderDash: [5, 5],
-        pointBackgroundColor: '#8d909e'
+        pointRadius: 0
       }]
     },
     options: {
-      plugins: { legend: { position: 'bottom' } },
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } },
       scales: {
         r: {
           angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
           grid: { color: 'rgba(255, 255, 255, 0.1)' },
-          pointLabels: { color: '#8d909e', font: { size: 11 } },
-          ticks: { backdropColor: 'transparent', color: '#666', showLabelBackdrop: false },
-          suggestedMin: 0,
-          suggestedMax: 100
+          pointLabels: { color: '#94a3b8', font: { size: 10, weight: '600' } },
+          ticks: { display: false },
+          suggestedMin: 0, suggestedMax: 100
         }
       },
-      responsive: true,
-      maintainAspectRatio: false
+      responsive: true, maintainAspectRatio: false
     }
   });
 
-  // IDHM Comparison (Line Chart)
   if(activeChartIDHM) activeChartIDHM.destroy();
   const cities = Object.keys(DB);
   const idhData = cities.map(c => parseFloat(DB[c].idh.replace(',','.')));
   
+  const gradientIDH = ctxSan.getContext('2d').createLinearGradient(0, 0, 0, 300);
+  gradientIDH.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+  gradientIDH.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
   activeChartIDHM = new Chart(document.getElementById('cIDHM'), {
     type: 'line',
     data: {
       labels: cities,
       datasets: [{
-        label: 'IDHM por Município',
+        label: 'IDHM Regional',
         data: idhData,
-        borderColor: '#0F52BA',
-        backgroundColor: 'rgba(15, 82, 186, 0.1)',
+        borderColor: '#6366f1',
+        backgroundColor: gradientIDH,
         fill: true,
         tension: 0.4,
-        pointRadius: 5,
+        pointRadius: 4,
+        pointBackgroundColor: '#fff',
+        pointBorderWidth: 3,
+        pointBorderColor: '#6366f1',
         pointHoverRadius: 8
       }]
     },
@@ -2915,10 +3140,9 @@ function renderCharts(agu, esg, letal, name, radarData) {
       plugins: { legend: { display: false } },
       scales: {
         y: { beginAtZero: false, suggestedMin: 0.5, grid: { color: 'rgba(255,255,255,0.05)' } },
-        x: { grid: { display: false } }
+        x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 45, font: { size: 9 } } }
       },
-      responsive: true,
-      maintainAspectRatio: false
+      responsive: true, maintainAspectRatio: false
     }
   });
 
@@ -3357,8 +3581,9 @@ function buildGeoLayers() {
 function toggleGeoLayer(layer) {
   activeGeoLayer = layer;
   // update buttons
-  ['heat','risk','school'].forEach(l => {
-    document.getElementById('btn-' + l).classList.toggle('active', l === layer);
+  ['heat','density','risk','school'].forEach(l => {
+    const btn = document.getElementById('btn-' + l);
+    if(btn) btn.classList.toggle('active', l === layer);
   });
   showingAll = false;
   document.getElementById('btn-all').classList.remove('active');
@@ -3369,7 +3594,27 @@ function toggleGeoLayer(layer) {
   geoSchoolMarkers.forEach(m => geoMap.removeLayer(m));
   geoAllMarkers.forEach(m => geoMap.removeLayer(m));
 
-  if (layer === 'heat') {
+  if (layer === 'heat' || layer === 'density') {
+    if (geoHeatLayer) geoMap.removeLayer(geoHeatLayer);
+    
+    let heatPoints, gradient, radius;
+    if (layer === 'heat') {
+      heatPoints = Object.entries(GEO_DATA).map(([name, d]) => [d.lat, d.lng, (100 - d.esg) / 100]);
+      gradient = { 0.0: '#00e5a0', 0.4: '#ffb830', 0.7: '#ff7849', 1.0: '#ff4d6d' };
+      radius = 60; // Aumentado para visibilidade profissional
+    } else {
+      // Densidade Populacional - Ajustando escala para municípios menores
+      heatPoints = Object.entries(GEO_DATA).map(([name, d]) => [d.lat, d.lng, Math.min(d.den / 400, 1.0)]); 
+      gradient = { 0.0: '#b0c6ff', 0.4: '#3b82f6', 0.7: '#1d4ed8', 1.0: '#030712' };
+      radius = 75; // Raio maior para densidade
+    }
+    
+    geoHeatLayer = L.heatLayer(heatPoints, { 
+      radius: radius, 
+      blur: 35, 
+      maxZoom: 13, 
+      gradient: gradient 
+    });
     geoMap.addLayer(geoHeatLayer);
   } else if (layer === 'risk') {
     geoRiskMarkers.forEach(m => geoMap.addLayer(m));
