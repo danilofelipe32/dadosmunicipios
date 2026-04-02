@@ -2217,7 +2217,7 @@ function runSimulation() {
   document.getElementById('sim-san-val').innerText = `+${addSan}%`;
   document.getElementById('sim-edu-val').innerText = `+${addEdu}%`;
   
-  const baseIdh = source.idh || 0.700;
+  const baseIdh = parseFloat(String(source.idh).replace(',', '.')) || 0.700;
   const impactSan = (addSan / 100) * 0.050; // 100% saneamento = +0.050 no IDH (saúde)
   const impactEdu = (addEdu / 100) * 0.080; // 100% metas educacionais = +0.080 no IDH
   
