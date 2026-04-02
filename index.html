@@ -838,7 +838,7 @@
               <span class="active" id="label-2018">2018</span>
               <span id="label-2020">2020</span>
               <span id="label-2022">2022</span>
-              <span id="label-2024">Agora</span>
+              <span id="label-2024">Valor estimado</span>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
               <button id="play-time-btn" onclick="togglePlayTime()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:18px;"><i class="fas fa-play"></i></button>
@@ -1490,7 +1490,7 @@ let activeChartLetal = null;
 
 const DB = {
   "Parnamirim": {
-    pop:"252.716", dom:"116.679", idh:"0,766", pib:"R$ 30.107", alf:"94,9%", den:"2.037,9", bf:"21.600", agu:"94,7%", esg:"7,1%", gra:"20,7%",
+    pop:"252.716", dom:"116.679", idh:"0,766", pib:"R$ 30.107,02", alf:"94,9%", den:"2.037,9", bf:"21.600", agu:"94,7%", esg:"7,1%", gra:"20,7%",
     ivj: 6.81, ivj_trend: "down", ivj_trend_text: "↓ Redução de 5% (2021 vs 2019)", evasao: "18%", evasao_val: 18,
     ivj_insight: "Parnamirim concentra o maior IVJ da região (6,81), reflexo direto da violência urbana em bairros como Cohabinal e Nova Esperança, onde confrontos armados geram evasão escolar estimada em 18%. A taxa de gravidez de 20,7% supera em 48% a média nacional (14%), indicando falha sistêmica no acesso à educação sexual e saúde reprodutiva.",
     ts_cadunico: "116.679 domicílios. Maior polo urbano metropolitano analisado.",
@@ -1872,6 +1872,7 @@ Object.keys(DB).forEach(cityId => {
     const esgBase = parseFloat(d.s_esg) || 5.0;
     const aguBase = parseFloat(d.s_agu) || 70.0;
     const ivjBase = d.ivj || 6.5;
+    const pibBase = parseFloat(d.pib.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0;
 
     d.history = {
       "2018": { 
@@ -1881,7 +1882,7 @@ Object.keys(DB).forEach(cityId => {
         agu: (aguBase * 0.92).toFixed(1) + "%", 
         ivj: ivjBase - 0.5,
         dom: Math.round(parseInt(d.dom.replace(/[^0-9]/g,'')) * 0.94).toLocaleString('pt-BR'),
-        pib: "R$ " + Math.round(parseInt(d.pib.replace(/[^0-9]/g,'')) * 0.88).toLocaleString('pt-BR'),
+        pib: "R$ " + (pibBase * 0.88).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: (parseFloat(d.alf.replace(',','.')) * 0.95).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.9).toLocaleString('pt-BR'),
         gra: (parseFloat(d.gra.replace(',','.')) * 1.1).toFixed(1) + "%"
@@ -1893,7 +1894,7 @@ Object.keys(DB).forEach(cityId => {
         agu: (aguBase * 0.97).toFixed(1) + "%", 
         ivj: ivjBase - 0.2,
         dom: Math.round(parseInt(d.dom.replace(/[^0-9]/g,'')) * 0.97).toLocaleString('pt-BR'),
-        pib: "R$ " + Math.round(parseInt(d.pib.replace(/[^0-9]/g,'')) * 0.95).toLocaleString('pt-BR'),
+        pib: "R$ " + (pibBase * 0.95).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: (parseFloat(d.alf.replace(',','.')) * 0.98).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.98).toLocaleString('pt-BR'),
         gra: (parseFloat(d.gra.replace(',','.')) * 1.05).toFixed(1) + "%"
@@ -1909,7 +1910,7 @@ Object.keys(DB).forEach(cityId => {
         agu: (aguBase * 1.03).toFixed(1) + "%", 
         ivj: Math.min(ivjBase + 0.3, 10),
         dom: Math.round(parseInt(d.dom.replace(/[^0-9]/g,'')) * 1.06).toLocaleString('pt-BR'),
-        pib: "R$ " + Math.round(parseInt(d.pib.replace(/[^0-9]/g,'')) * 1.05).toLocaleString('pt-BR'),
+        pib: "R$ " + (pibBase * 1.05).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.02).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.05).toLocaleString('pt-BR'),
         gra: (parseFloat(d.gra.replace(',','.')) * 0.95).toFixed(1) + "%"
