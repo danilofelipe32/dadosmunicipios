@@ -1874,10 +1874,46 @@ Object.keys(DB).forEach(cityId => {
     const ivjBase = d.ivj || 6.5;
 
     d.history = {
-      "2018": { pop: Math.round(popBase * 0.92).toLocaleString('pt-BR'), idh: (idhBase * 0.95).toFixed(3).replace('.',','), esg: (esgBase * 0.7).toFixed(1) + "%", agu: (aguBase * 0.92).toFixed(1) + "%", ivj: ivjBase - 0.5 },
-      "2020": { pop: Math.round(popBase * 0.96).toLocaleString('pt-BR'), idh: (idhBase * 0.98).toFixed(3).replace('.',','), esg: (esgBase * 0.85).toFixed(1) + "%", agu: (aguBase * 0.97).toFixed(1) + "%", ivj: ivjBase - 0.2 },
-      "2022": { pop: d.pop, idh: d.idh, esg: d.s_esg + "%", agu: d.s_agu + "%", ivj: ivjBase },
-      "2024": { pop: Math.round(popBase * 1.04).toLocaleString('pt-BR'), idh: (idhBase * 1.02).toFixed(3).replace('.',','), esg: (esgBase * 1.2).toFixed(1) + "%", agu: (aguBase * 1.03).toFixed(1) + "%", ivj: Math.min(ivjBase + 0.3, 10) }
+      "2018": { 
+        pop: Math.round(popBase * 0.92).toLocaleString('pt-BR'), 
+        idh: (idhBase * 0.95).toFixed(3).replace('.',','), 
+        esg: (esgBase * 0.7).toFixed(1) + "%", 
+        agu: (aguBase * 0.92).toFixed(1) + "%", 
+        ivj: ivjBase - 0.5,
+        dom: Math.round(parseInt(d.dom.replace(/[^0-9]/g,'')) * 0.94).toLocaleString('pt-BR'),
+        pib: "R$ " + Math.round(parseInt(d.pib.replace(/[^0-9]/g,'')) * 0.88).toLocaleString('pt-BR'),
+        alf: (parseFloat(d.alf.replace(',','.')) * 0.95).toFixed(1) + "%",
+        bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.9).toLocaleString('pt-BR'),
+        gra: (parseFloat(d.gra.replace(',','.')) * 1.1).toFixed(1) + "%"
+      },
+      "2020": { 
+        pop: Math.round(popBase * 0.96).toLocaleString('pt-BR'), 
+        idh: (idhBase * 0.98).toFixed(3).replace('.',','), 
+        esg: (esgBase * 0.85).toFixed(1) + "%", 
+        agu: (aguBase * 0.97).toFixed(1) + "%", 
+        ivj: ivjBase - 0.2,
+        dom: Math.round(parseInt(d.dom.replace(/[^0-9]/g,'')) * 0.97).toLocaleString('pt-BR'),
+        pib: "R$ " + Math.round(parseInt(d.pib.replace(/[^0-9]/g,'')) * 0.95).toLocaleString('pt-BR'),
+        alf: (parseFloat(d.alf.replace(',','.')) * 0.98).toFixed(1) + "%",
+        bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.98).toLocaleString('pt-BR'),
+        gra: (parseFloat(d.gra.replace(',','.')) * 1.05).toFixed(1) + "%"
+      },
+      "2022": { 
+        pop: d.pop, idh: d.idh, esg: d.s_esg + "%", agu: d.s_agu + "%", ivj: ivjBase,
+        dom: d.dom, pib: d.pib, alf: d.alf, bf: d.bf, gra: d.gra
+      },
+      "2024": { 
+        pop: Math.round(popBase * 1.04).toLocaleString('pt-BR'), 
+        idh: (idhBase * 1.02).toFixed(3).replace('.',','), 
+        esg: (esgBase * 1.2).toFixed(1) + "%", 
+        agu: (aguBase * 1.03).toFixed(1) + "%", 
+        ivj: Math.min(ivjBase + 0.3, 10),
+        dom: Math.round(parseInt(d.dom.replace(/[^0-9]/g,'')) * 1.06).toLocaleString('pt-BR'),
+        pib: "R$ " + Math.round(parseInt(d.pib.replace(/[^0-9]/g,'')) * 1.05).toLocaleString('pt-BR'),
+        alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.02).toFixed(1) + "%",
+        bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.05).toLocaleString('pt-BR'),
+        gra: (parseFloat(d.gra.replace(',','.')) * 0.95).toFixed(1) + "%"
+      }
     };
   }
   if (!d.drilldown) {
@@ -2001,18 +2037,30 @@ const REF_NATAL = { alf: "94%", agu: "98%", esg: "46%", ivj: 5.8 }; // Referênc
 const REF_MEDIA_RN = { alf: "85%", agu: "74%", esg: "25%", ivj: 6.5 }; // Média Estadual
 
 function calculateScoreValue(d) {
-  const edu = parseInt(d.alf.replace('%','')) || 0;
-  const agu = parseFloat(d.agu.toString().replace(',','.')) || 0;
-  const esg = parseFloat(d.esg.toString().replace(',','.')) || 0;
-  const san = Math.round((agu + esg) / 2);
+  if (!d) return 0;
+  const alfClean = d.alf ? d.alf.toString().replace('%','').replace(',','.') : "0";
+  const edu = Math.round(parseFloat(alfClean)) || 0;
+  
+  const aguNum = d.agu ? parseFloat(d.agu.toString().replace('%','').replace(',','.')) : 0;
+  const esgNum = d.esg ? parseFloat(d.esg.toString().replace('%','').replace(',','.')) : 0;
+  const san = Math.round((aguNum + esgNum) / 2);
+  
   const ivj = d.ivj || 0;
   const seg = Math.round(Math.max(0, 100 - (ivj * 10)));
+  
   return Math.round((edu + san + seg) / 3);
 }
 
-function updateBenchmark(cityId) {
-  const currentScore = calculateScoreValue(DB[cityId]);
-  const allScores = Object.keys(DB).map(id => ({ id, score: calculateScoreValue(DB[id]) }));
+function updateBenchmark(cityId, data) {
+  const year = document.getElementById('time-slider').value;
+  const currentData = data || (DB[cityId].history ? DB[cityId].history[year] : DB[cityId]);
+  const currentScore = calculateScoreValue(currentData);
+  
+  // Para um benchmark justo, calculamos o score de todos os municípios no MESMO ano selecionado
+  const allScores = Object.keys(DB).map(id => {
+    const cityData = (DB[id].history && DB[id].history[year]) ? DB[id].history[year] : DB[id];
+    return { id, score: calculateScoreValue(cityData) };
+  });
   
   // Sort descending
   allScores.sort((a,b) => b.score - a.score);
@@ -2263,12 +2311,17 @@ function updateRecommendations(cityId) {
   });
 }
 
-function updateSocioDashScore(cityId) {
-  const d = DB[cityId];
-  const eduVal = parseInt(d.alf.replace('%','')) || 0;
-  const aguVal = parseFloat(d.agu.replace(',','.')) || 0;
-  const esgVal = parseFloat(d.esg.replace(',','.')) || 0;
+function updateSocioDashScore(cityId, data) {
+  const year = document.getElementById('time-slider').value;
+  const d = data || (DB[cityId].history ? DB[cityId].history[year] : DB[cityId]);
+  
+  const alfClean = d.alf ? d.alf.toString().replace('%','').replace(',','.') : "0";
+  const eduVal = Math.round(parseFloat(alfClean)) || 0;
+  
+  const aguVal = d.agu ? parseFloat(d.agu.toString().replace('%','').replace(',','.')) : 0;
+  const esgVal = d.esg ? parseFloat(d.esg.toString().replace('%','').replace(',','.')) : 0;
   const sanVal = Math.round((aguVal + esgVal) / 2);
+  
   const ivjVal = d.ivj || 0;
   const segVal = Math.round(Math.max(0, 100 - (ivjVal * 10)));
   const totalVal = calculateScoreValue(d);
@@ -2821,23 +2874,17 @@ function selectCity(cityId) {
     `<strong>⚠️ Diagnóstico de Vulnerabilidade Juvenil — ${cityId}:</strong> ${d.ivj_insight || 'Análise disponível após seleção do município.'}`;
 
   updateRecommendations(cityId);
-  updateSocioDashScore(cityId);
-  updateBenchmark(cityId);
-
-  // Educação SIGEduc
+  
+  // Sincronizar painel educacional básico antes do updateYear
   document.getElementById('edu-nee').innerText = d.edu_nee || "-";
   document.getElementById('edu-eja').innerText = d.edu_eja || "-";
   document.getElementById('edu-auto').innerText = d.edu_auto || "-";
-  
-  // Geopanel Educ
-  if(document.getElementById('gval-nee')) {
-    document.getElementById('gval-nee').innerText = d.edu_nee || "-";
-  }
-  if(document.getElementById('gval-eja')) {
-    document.getElementById('gval-eja').innerText = d.edu_eja || "-";
-  }
+  if(document.getElementById('gval-nee')) document.getElementById('gval-nee').innerText = d.edu_nee || "-";
+  if(document.getElementById('gval-eja')) document.getElementById('gval-eja').innerText = d.edu_eja || "-";
 
-  renderCharts(d.s_agu, d.s_esg, d.letal, cityId, d.radar);
+  // Delegar atualização de todos os outros KPIs e scores ao updateYear para manter sincronia com o slider
+  const currentYear = document.getElementById('time-slider').value;
+  updateYear(currentYear);
 }
 
 function updateYear(year) {
@@ -2856,24 +2903,63 @@ function updateYear(year) {
     const hy = d.history[year];
     
     // Smooth transition effect
-    const kpis = document.querySelectorAll('.kpi-card');
-    kpis.forEach(k => k.style.transform = 'scale(0.95)');
+    const kpis = document.querySelectorAll('.card-premium, .ivj-card, .assist-card');
+    kpis.forEach(k => k.style.transform = 'scale(0.98)');
+    kpis.forEach(k => k.style.opacity = '0.7');
     
     setTimeout(() => {
+      // 1. Atualizar KPIs de Impacto (Topo)
       document.getElementById('k-pop').innerText = hy.pop;
       document.getElementById('k-idh').innerText = hy.idh;
       document.getElementById('k-agu').innerText = hy.agu;
       document.getElementById('k-esg').innerText = hy.esg;
       
-      // Update score and charts with historical data
+      // Sincronização completa de todos os cards
+      if (document.getElementById('k-pib')) document.getElementById('k-pib').innerText = hy.pib;
+      if (document.getElementById('k-alf')) document.getElementById('k-alf').innerText = hy.alf;
+      if (document.getElementById('k-dom')) document.getElementById('k-dom').innerText = hy.dom;
+      if (document.getElementById('k-bf')) document.getElementById('k-bf').innerText = hy.bf;
+      if (document.getElementById('k-gra')) document.getElementById('k-gra').innerText = hy.gra;
+      
+      // 2. Atualizar Tabelas de Detalhe (Socioeconômica + Saneamento)
+      if (document.getElementById('sa-agu')) document.getElementById('sa-agu').innerText = hy.agu;
+      if (document.getElementById('sa-esg')) document.getElementById('sa-esg').innerText = hy.esg;
+      
+      // 3. Atualizar Módulo IVJ (Valor Central + Barra de Gravidez)
+      if (hy.ivj !== undefined) {
+        const ivjVal = hy.ivj;
+        const ivjPct = Math.round((ivjVal / 10) * 100);
+        document.getElementById('ivj-val').innerText = ivjVal.toFixed(2);
+        document.getElementById('ivj-score-val').innerText = ivjVal.toFixed(1);
+        document.getElementById('ivj-ring').style.setProperty('--pct', ivjPct + '%');
+        
+        // Sincronizar gravidez no painel IVJ (mesmo valor do KPI principal)
+        document.getElementById('ivj-gra2').innerText = hy.gra || d.gra;
+      }
+
+      // 4. Calcular e Atualizar Score SocioDash™ e Radar
       const radar = {...d.radar};
       radar.idh = parseFloat(hy.idh.replace(',','.')) * 100;
-      radar.agu = parseFloat(hy.agu);
-      radar.esg = parseFloat(hy.esg);
+      radar.agu = parseFloat(hy.agu.replace('%',''));
+      radar.esg = parseFloat(hy.esg.replace('%',''));
       
-      renderCharts(parseFloat(hy.agu), parseFloat(hy.esg), d.letal, cityId, radar);
+      const aguNum = parseFloat(hy.agu.replace('%',''));
+      const esgNum = parseFloat(hy.esg.replace('%',''));
       
-      kpis.forEach(k => k.style.transform = 'scale(1)');
+      // 5. Re-renderizar Gráficos e Score Global (SocioDash + Benchmark)
+      updateSocioDashScore(cityId, hy);
+      updateBenchmark(cityId, hy);
+      renderCharts(aguNum, esgNum, d.letal, cityId, radar);
+      
+      // 6. Atualizar Painel de Mapa (GeoPanel)
+      if (document.getElementById('gval-pop')) document.getElementById('gval-pop').innerText = hy.pop;
+      if (document.getElementById('gval-agua')) document.getElementById('gval-agua').innerText = hy.agu;
+      if (document.getElementById('gval-esg')) document.getElementById('gval-esg').innerText = hy.esg;
+      
+      kpis.forEach(k => {
+        k.style.transform = 'scale(1)';
+        k.style.opacity = '1';
+      });
     }, 150);
   }
 }
