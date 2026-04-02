@@ -2238,16 +2238,16 @@ function exportDataCSV() {
   const cityId = document.getElementById('city-select').value;
   const city = DB[cityId];
   
-  let csv = "Ano,Populacao,PIB_Per_Capita,IDH,Fonte\n";
+  let csv = "Ano;Municipio;Populacao;PIB_Per_Capita;IDHM;Alfabetismo;Agua_Tratada;Esgotamento;Fonte\n";
   
   if (city.history) {
     Object.keys(city.history).sort().forEach(year => {
       const d = city.history[year];
-      const isProjected = parseInt(year) > 2024;
-      csv += `${year},${d.pop},"${d.pib}",${d.idh},${isProjected ? 'Projecao SocioDash' : 'Censo/IBGE'}\n`;
+      const isProjected = parseInt(year) > 2022;
+      csv += `${year};${cityId};${d.pop};"${d.pib}";${d.idh};${d.alf || city.alf};${d.agu};${d.esg};${isProjected ? 'Projecao SocioDash' : 'Censo IBGE 2022'}\n`;
     });
   } else {
-    csv += `2024,${city.pop},"${city.pib}",${city.idh},Estimado\n`;
+    csv += `2024;${cityId};${city.pop};"${city.pib}";${city.idh};${city.alf};${city.agu};${city.esg};Estimado\n`;
   }
   
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
