@@ -839,9 +839,24 @@
     font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px;
     cursor: pointer; transition: all 0.3s;
   }
-  .btn-export:hover { filter: brightness(1.1); transform: scale(1.02); box-shadow: 0 5px 15px rgba(108,99,255,0.4); }
   .btn-export:active { transform: scale(0.98); }
 
+  /* DOC MODAL STYLES */
+  .doc-info-btn { width: 32px !important; height: 32px !important; padding: 0 !important; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; background: rgba(108,99,255,0.15) !important; border: 1.5px solid rgba(108,99,255,0.3) !important; color: var(--primary) !important; }
+  .doc-modal-box { max-width: 900px !important; }
+  .doc-section { margin-bottom: 35px; border-left: 3px solid var(--primary); padding-left: 20px; }
+  .doc-title { font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .doc-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85rem; background: rgba(255,255,255,0.02); border-radius: 12px; overflow: hidden; }
+  .doc-table th { background: rgba(108,99,255,0.1); color: var(--primary); text-align: left; padding: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .doc-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e0e0e0; }
+  .doc-bubble { padding: 15px; border-radius: 16px; margin: 10px 0; font-size: 0.88rem; line-height: 1.5; }
+  .bubble-info { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.2); color: #c7c2ff; }
+  .bubble-warn { background: rgba(255,184,48,0.1); border: 1px solid rgba(255,184,48,0.2); color: #ffe4b3; }
+  .bubble-success { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.2); color: #b3ffe9; }
+  .doc-list { list-style: none; padding: 0; }
+  .doc-list li { margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; }
+  .doc-list li::before { content: '•'; color: var(--primary); font-weight: bold; font-size: 1.2rem; line-height: 0.8; }
+  .doc-step { display: inline-block; width: 24px; height: 24px; background: var(--primary); color: #fff; border-radius: 50%; text-align: center; line-height: 24px; font-weight: 800; font-size: 0.75rem; margin-right: 10px; }
 </style>
 </head>
 <body>
@@ -870,6 +885,9 @@
     <button class="btn-pdf" onclick="generatePDF()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
       <span>Relatório</span>
+    </button>
+    <button class="btn-pdf doc-info-btn" onclick="openDocs()" title="Documentação e Ajuda">
+      <span style="font-weight: 900; font-family: 'serif'; font-size: 1.1rem;">i</span>
     </button>
   </div>
 </nav>
@@ -1607,6 +1625,77 @@
       <div id="svc-proximity-stats" style="font-size: 0.88rem; line-height: 1.5; color: var(--text-muted); font-style: italic;">
         Calculando cobertura populacional...
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE DOCUMENTAÇÃO -->
+<div id="docs-modal" class="geo-modal-overlay">
+  <div class="geo-modal-box doc-modal-box">
+    <button class="insight-close" onclick="closeDocs()">&times;</button>
+    
+    <div class="doc-title">📖 Guia do Usuário - SocioDash™ Pro</div>
+    
+    <div class="doc-bubble bubble-info">
+      <strong>O que é o SocioDash™?</strong><br>
+      É uma plataforma de Inteligência Territorial Estratégica desenvolvida para gestores públicos. Ela integra dados do Censo IBGE, bases do Governo Federal e modelos preditivos para auxiliar na tomada de decisão baseada em evidências.
+    </div>
+
+    <!-- Seção 1 -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:15px;">📊 1. Dashboard Estratégico</h3>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">Entenda os KPI's (Indicadores Chave de Performance):</p>
+      <table class="doc-table">
+        <thead>
+          <tr><th>Indicador</th><th>Descrição</th><th>Fonte</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>IDHM</td><td>Índice de Desenvolvimento Humano Municipal</td><td>PNUD/IPEA</td></tr>
+          <tr><td>Alfabetismo</td><td>Taxa de alfabetização (população > 15 anos)</td><td>Censo 2022</td></tr>
+          <tr><td>Pilar San.</td><td>Média entre cobertura de Água e Esgoto</td><td>SNIS 2024</td></tr>
+          <tr><td>Segurança</td><td>Média de crimes letais intencionais</td><td>SESED/RN</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Seção 2 -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:15px;">⏳ 2. Régua Temporal (Censo vs Projeção)</h3>
+      <div class="doc-bubble bubble-warn">
+        ⚠️ <strong>Ponto de Corte (2022):</strong> Os dados de 2018 a 2022 são <strong>Censitários</strong>. Os anos futuros (2024-2030) usam algoritmos de <strong>Forecasting</strong>.
+      </div>
+      <ul class="doc-list">
+        <li><span class="doc-step">A</span> Selecione o ano no slider inferior para atualizar o dashboard.</li>
+        <li><span class="doc-step">B</span> Anos em <span style="color:#ffb830">Dourado</span> indicam dados oficiais do IBGE.</li>
+        <li><span class="doc-step">C</span> Anos em <span style="color:var(--primary)">Azul</span> indicam projeções estimadas pelo SocioDash.</li>
+      </ul>
+    </div>
+
+    <!-- Seção 3 -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:15px;">🔍 3. Inteligência Geográfica</h3>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+        <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px;">
+          <h4 style="font-size:0.85rem; color:#fff; margin-bottom:8px;">📍 Mapas de Serviços</h4>
+          <p style="font-size:0.75rem; color:var(--text-muted);">Clique nos ícones para ver detalhes de contato e horários de UBS, CRAS e Conselhos.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px;">
+          <h4 style="font-size:0.85rem; color:#fff; margin-bottom:8px;">📡 Raio de Cobertura</h4>
+          <p style="font-size:0.75rem; color:var(--text-muted);">O sistema calcula automaticamente quantas pessoas vivem a menos de 2km de cada equipamento.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção 4 -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:15px;">🧮 4. Simulador e Impacto</h3>
+      <div class="doc-bubble bubble-success">
+        💡 <strong>Dica Pro:</strong> Use o "Simulador de Impacto" para prever como melhorias no saneamento ou segurança podem elevar o IDH Estimado do seu município para os próximos anos.
+      </div>
+    </div>
+
+    <div style="text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1);">
+      <p style="font-size:0.7rem; color:var(--text-muted);">SocioDash™ Version 2.4.2 | Inteligência para Políticas Públicas</p>
     </div>
   </div>
 </div>
@@ -2588,6 +2677,14 @@ function updateSocioDashScore(cityId, data) {
   const barSeg = document.getElementById('score-bar-seg');
   barSeg.style.width = segVal + '%';
   barSeg.className = 'score-bar-fill ' + getColorClass(segVal);
+}
+
+function openDocs() {
+  document.getElementById('docs-modal').classList.add('open');
+}
+
+function closeDocs() {
+  document.getElementById('docs-modal').classList.remove('open');
 }
 
 function generatePDF() {
