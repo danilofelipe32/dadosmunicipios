@@ -842,8 +842,29 @@
   .btn-export:active { transform: scale(0.98); }
 
   /* DOC MODAL STYLES */
-  .doc-info-btn { width: 32px !important; height: 32px !important; padding: 0 !important; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; background: rgba(108,99,255,0.15) !important; border: 1.5px solid rgba(108,99,255,0.3) !important; color: var(--primary) !important; }
   .doc-modal-box { max-width: 900px !important; }
+  .doc-info-btn { 
+    width: 38px !important; 
+    height: 38px !important; 
+    border-radius: 50% !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    background: rgba(108,99,255,0.15) !important; 
+    border: 1.5px solid rgba(108,99,255,0.4) !important; 
+    color: var(--primary) !important; 
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+  }
+  .doc-info-btn:hover {
+    background: var(--primary) !important;
+    color: #fff !important;
+    box-shadow: 0 0 15px rgba(108,99,255,0.4);
+    transform: scale(1.05);
+  }
   .doc-section { margin-bottom: 35px; border-left: 3px solid var(--primary); padding-left: 20px; }
   .doc-title { font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
   .doc-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85rem; background: rgba(255,255,255,0.02); border-radius: 12px; overflow: hidden; }
@@ -886,8 +907,8 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
       <span>Relatório</span>
     </button>
-    <button class="btn-pdf doc-info-btn" onclick="openDocs()" title="Documentação Completa">
-      <span style="font-weight: 900; font-family: 'serif'; font-size: 1.1rem;">?</span>
+    <button class="doc-info-btn" onclick="openDocs()" title="Documentação Completa">
+      <span>?</span>
     </button>
   </div>
 </nav>
@@ -1679,28 +1700,48 @@
 
     <!-- INTELIGÊNCIA TERRITORIAL -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🗺️ 4. Inteligência Territorial (Mapas)</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🗺️ 4. Inteligência Territorial e Riscos</h3>
       <div class="doc-bubble bubble-warn">
-        O sistema mapeia **vulnerabilidades geoespaciais** em tempo real.
+        O sistema mapeia **vulnerabilidades geoespaciais** e riscos sociais em tempo real, integrando bases da SESED e MPT.
       </div>
       <ul class="doc-list">
-        <li><strong>📍 Camada de Serviços:</strong> Exibe a rede física (UBS, CRAS). Clique para ver endereços e telefones reais.</li>
-        <li><strong>☢️ Camada de Risco:</strong> Identifica áreas de conflito, atuação de facções e vulnerabilidade social extrema.</li>
-        <li><strong>🛰️ Territory™ (Raio 2km):</strong> Calcula se a população está próxima aos serviços. Se uma UBS estiver a mais de 2km, o sistema alerta sobre um "Vazio Assistencial".</li>
+        <li><strong>📍 Camada de Serviços:</strong> Localização de UBS, CRAS, CREAS e Conselhos Tutelares. Clique nos ícones para detalhes institucionais.</li>
+        <li><strong>☢️ Risco Criminal e Facções:</strong> Mapeamento de áreas sob influência de grupos armados e conflitos territoriais históricos.</li>
+        <li><strong>🚨 Trabalho Infantil e Drogas:</strong> Identifica pontos críticos com denúncias de exploração de menores e tráfico ativo mapeado por inteligência local.</li>
+        <li><strong>🛰️ Territory™ (Raio 2km):</strong> Calcula se 80% ou mais da população está a menos de 2km de uma unidade de saúde.</li>
       </ul>
+    </div>
+
+    <!-- VULNERABILIDADE SOCIAL -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">🆘 5. Índices de Vulnerabilidade (IVJ)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Localizado no painel lateral de cada município:</p>
+      <ul class="doc-list">
+        <li><strong>IVJ (Índice de Vulnerabilidade Juvenil):</strong> Nota que cruza dados de homicídios, evasão escolar e renda. Quanto maior o índice, maior o risco para o jovem.</li>
+        <li><strong>Evasão Escolar:</strong> Porcentagem de alunos que abandonaram o ensino médio (Fonte: SIGEDUC).</li>
+        <li><strong>Gravidez na Adolescência:</strong> Taxa de partos em mães menores de 19 anos, correlacionada com evasão escolar.</li>
+      </ul>
+    </div>
+
+    <!-- RESUMO EXECUTIVO -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">🧠 6. Resumo Executivo e Insights de IA</h3>
+      <div class="doc-bubble bubble-info">
+        No final de cada página municipal, o **SocioDash™** gera um texto analítico automático. Ele não apenas lê os dados, mas correlaciona variáveis (ex: Como a falta de esgoto afeta o IDH em Parnamirim) para oferecer uma visão estratégica imediata ao gestor.
+      </div>
     </div>
 
     <!-- FERRAMENTAS BI -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🧮 5. Ferramentas de BI e Suporte à Decisão</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🧮 7. Ferramentas de BI e Suporte à Decisão</h3>
       <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
         <div class="doc-bubble bubble-success">
           <strong>Calculadora de Impacto (Simulador)</strong><br>
-          Permite ao gestor simular: "Se eu investir para elevar o esgotamento sanitário em 10%, qual será o meu novo IDH em 2030?". Excelente para planejamento de longo prazo.
+          Permite ao gestor simular cenários: "Se eu investir para elevar o esgotamento sanitário em 10%, qual será o meu novo IDH em 2030?".
         </div>
         <div class="doc-bubble bubble-info">
-          <strong>Exportação Delta (.csv)</strong><br>
-          Gera uma planilha estruturada com a série histórica completa, pronta para ser aberta no Excel ou integrada em outros sistemas de gestão municipal.
+          <strong>Exportação Master (.csv)</strong><br>
+          Gera uma planilha com a série histórica completa, incluindo dados de alfabetismo e fontes de cada indicador.
         </div>
       </div>
     </div>
