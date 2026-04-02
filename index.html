@@ -844,26 +844,23 @@
   /* DOC MODAL STYLES */
   .doc-modal-box { max-width: 900px !important; }
   .doc-info-btn { 
-    width: 38px !important; 
-    height: 38px !important; 
-    border-radius: 50% !important; 
-    display: flex !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    background: rgba(108,99,255,0.15) !important; 
-    border: 1.5px solid rgba(108,99,255,0.4) !important; 
+    background: transparent !important; 
+    border: none !important; 
     color: var(--primary) !important; 
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 15px;
     font-weight: 900;
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px !important;
   }
   .doc-info-btn:hover {
-    background: var(--primary) !important;
     color: #fff !important;
-    box-shadow: 0 0 15px rgba(108,99,255,0.4);
-    transform: scale(1.05);
+    text-shadow: 0 0 15px var(--primary);
+    transform: scale(1.1);
   }
   .doc-section { margin-bottom: 35px; border-left: 3px solid var(--primary); padding-left: 20px; }
   .doc-title { font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
@@ -1650,115 +1647,119 @@
   </div>
 </div>
 
-<!-- MODAL DE DOCUMENTAÇÃO COMPLETA -->
+<!-- MODAL DE DOCUMENTAÇÃO MASTER -->
 <div id="docs-modal" class="geo-modal-overlay">
-  <div class="geo-modal-box doc-modal-box">
+  <div class="geo-modal-box doc-modal-box" style="max-height: 85vh; overflow-y: auto;">
     <button class="insight-close" onclick="closeDocs()">&times;</button>
     
-    <div class="doc-title">📘 Documentação Oficial SocioDash™ Pro</div>
+    <div class="doc-title" style="border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px;">
+      <span>📘 GUIA DEFINITIVO: SocioDash™ Pro v2.4</span>
+    </div>
     
-    <div class="doc-bubble bubble-info">
-      <strong>Bem-vindo ao SocioDash™ Pro v2.4</strong><br>
-      Esta plataforma foi projetada para transformar dados brutos em inteligência municipal. Abaixo, detalhamos cada seção para que você possa extrair o máximo de insights para a gestão pública.
+    <div class="doc-bubble bubble-info" style="margin-bottom: 30px;">
+      <strong>O Futuro da Gestão Baseada em Dados</strong><br>
+      Esta documentação master serve como bússola para gestores e analistas da 2ª DIREC. O SocioDash™ não é apenas um visualizador, é uma ferramenta de **simulação estratégica** e **inteligência territorial**.
     </div>
 
-    <!-- NAVEGAÇÃO -->
+    <!-- SEÇÃO: METODOLOGIA -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🏙️ 1. Barra de Navegação e Controle</h3>
-      <ul class="doc-list">
-        <li><strong>Seletor de Municípios:</strong> Altera o contexto de dados para uma das 12 cidades da 2ª DIREC.</li>
-        <li><strong>Sincronizar:</strong> Atualiza os dados locais com as últimas bases de dados integradas.</li>
-        <li><strong>Relatório PDF:</strong> Gera um dossiê executivo completo para impressão ou compartilhamento via WhatsApp/E-mail.</li>
-      </ul>
-    </div>
-
-    <!-- DASHBOARD PRINCIPAL -->
-    <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">📉 2. Dashboard e Indicadores Core</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🧪 1. Metodologia e Fontes</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:10px;">Trabalhamos com o conceito de "Sincronização Delta", cruzando dados oficiais e modelos estatísticos:</p>
       <table class="doc-table">
         <thead>
-          <tr><th>Módulo</th><th>Descrição Detalhada</th></tr>
+          <tr><th>Fonte</th><th>Referência</th><th>Aplicação</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Score SocioDash</strong></td><td>Nota de 0 a 100 ponderada por Saúde, Educação e Segurança. É o termômetro de maturidade da cidade.</td></tr>
-          <tr><td><strong>Série Temporal</strong></td><td>Slider que permite navegar de 2018 até 2030. Os dados de 2022 estão em destaque por serem o último Censo IBGE.</td></tr>
-          <tr><td><strong>Cards de KPI</strong></td><td>Exibem dados de População, PIB Per Capita, Alfabetismo e Saneamento. Setas indicam a tendência (crescimento ou queda).</td></tr>
+          <tr><td><strong>IBGE (Censo)</strong></td><td>2022 (Oficial)</td><td>População, Alfabetismo, Domicílios</td></tr>
+          <tr><td><strong>DATASUS</strong></td><td>2023/24</td><td>Nascimentos, Óbitos e Rede de Saúde</td></tr>
+          <tr><td><strong>SNIS</strong></td><td>2023 (Base 2022)</td><td>Saneamento (Água e Esgoto)</td></tr>
+          <tr><td><strong>SESED / SSP-RN</strong></td><td>Tempo Real</td><td>Criminalidade e Áreas de Risco</td></tr>
+          <tr><td><strong>MDS / Gov.br</strong></td><td>Nov/2025</td><td>Bolsa Família e CadÚnico</td></tr>
+          <tr><td><strong>SIGEDUC / QEdu</strong></td><td>2023</td><td>EJA, NEE e Evasão Escolar</td></tr>
         </tbody>
       </table>
     </div>
 
-    <!-- ANÁLISE PREDITIVA -->
+    <!-- SEÇÃO: DASHBOARD -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">📈 3. Análise Preditiva (Forecasting)</h3>
-      <p style="font-size:0.88rem; color:var(--text-muted);">Localizada na aba "Análise Preditiva", esta seção usa regressão linear para projetar:</p>
-      <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin-top:10px;">
-        <p style="font-size:0.82rem; margin-bottom:5px;">🔵 <strong>Eixo X:</strong> Anos da série histórica e futura.</p>
-        <p style="font-size:0.82rem; margin-bottom:5px;">🔵 <strong>Eixo Y:</strong> Valores monetários ou percentuais.</p>
-        <p style="font-size:0.82rem; font-style:italic;">* Clique nas barras para ver o 'Insight Automatizado' sobre aquele ano específico.</p>
-      </div>
+      <h3 style="color:var(--primary); margin-bottom:10px;">📊 2. Dashboard Estratégico (Home)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Como interpretar os indicadores principais:</p>
+      <ul class="doc-list">
+        <li><strong>Score SocioDash:</strong> Média harmônica ponderada. Cidades com score abaixo de 50 necessitam de intervenção urgente em saneamento ou segurança.</li>
+        <li><strong>Régua Temporal:</strong> Slider 2018-2030. Os dados de 2022 são o "Ancoramento Real". Projeções futuras (2024-2030) utilizam regressão linear baseada na tendência dos últimos 5 anos.</li>
+        <li><strong>PIB Per Capita:</strong> Reflete a riqueza gerada por habitante. Importante para planejar a capacidade de arrecadação própria do município.</li>
+      </ul>
     </div>
 
-    <!-- INTELIGÊNCIA TERRITORIAL -->
+    <!-- SEÇÃO: MAPAS -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🗺️ 4. Inteligência Territorial e Riscos</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🗺️ 3. Inteligência Territorial (SIG)</h3>
       <div class="doc-bubble bubble-warn">
-        O sistema mapeia **vulnerabilidades geoespaciais** e riscos sociais em tempo real, integrando bases da SESED e MPT.
+        <strong>Geoprocessamento Crítico:</strong> O mapa não é estático. Ele reage ao contexto municipal selecionado.
       </div>
-      <ul class="doc-list">
-        <li><strong>📍 Camada de Serviços:</strong> Localização de UBS, CRAS, CREAS e Conselhos Tutelares. Clique nos ícones para detalhes institucionais.</li>
-        <li><strong>☢️ Risco Criminal e Facções:</strong> Mapeamento de áreas sob influência de grupos armados e conflitos territoriais históricos.</li>
-        <li><strong>🚨 Trabalho Infantil e Drogas:</strong> Identifica pontos críticos com denúncias de exploração de menores e tráfico ativo mapeado por inteligência local.</li>
-        <li><strong>🛰️ Territory™ (Raio 2km):</strong> Calcula se 80% ou mais da população está a menos de 2km de uma unidade de saúde.</li>
+      <ul class="doc-list" style="margin-top:15px;">
+        <li><strong>Rede de Assistência:</strong> Mapeamento georreferenciado de UBS (Unidades Básicas), CRAS (Assistência Social) e CREAS. Clique no ícone para ver o raio de atuação.</li>
+        <li><strong>Zonas de Risco Armado:</strong> Dados baseados em ocorrências de confrontos e atuação de facções (PCC/Sindicato). Essencial para planejar rotas escolares seguras.</li>
+        <li><strong>Territory™ (Raio 2km):</strong> Metodologia da OMS para acessibilidade primária. Mostra áreas onde a população caminha mais de 25 min para chegar a um médico.</li>
       </ul>
     </div>
 
-    <!-- VULNERABILIDADE SOCIAL -->
+    <!-- SEÇÃO: VULNERABILIDADE -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🆘 5. Índices de Vulnerabilidade (IVJ)</h3>
-      <p style="font-size:0.88rem; color:var(--text-muted);">Localizado no painel lateral de cada município:</p>
-      <ul class="doc-list">
-        <li><strong>IVJ (Índice de Vulnerabilidade Juvenil):</strong> Nota que cruza dados de homicídios, evasão escolar e renda. Quanto maior o índice, maior o risco para o jovem.</li>
-        <li><strong>Evasão Escolar:</strong> Porcentagem de alunos que abandonaram o ensino médio (Fonte: SIGEDUC).</li>
-        <li><strong>Gravidez na Adolescência:</strong> Taxa de partos em mães menores de 19 anos, correlacionada com evasão escolar.</li>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🆘 4. Painel de Vulnerabilidade (Social Insights)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Localizado na lateral inferior, este painel traz as feridas sociais do município:</p>
+      <table class="doc-table">
+        <tbody>
+          <tr><td><strong>IVJ</strong></td><td>Índice de Vulnerabilidade Juvenil. Cruza violência e falta de emprego.</td></tr>
+          <tr><td><strong>Trabalho Infantil</strong></td><td>Alertas baseados em resgates recentes ou denúncias no MPT-RN.</td></tr>
+          <li><strong>Evasão Escolar:</strong> Proporção de jovens fora da sala de aula, um preditor direto de aumento na criminalidade local.</li>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SEÇÃO: PREDIÇÃO -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">📈 5. Modelagem Preditiva (Forecasting)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Na aba 'Análise Preditiva', o sistema oferece:</p>
+      <div style="background:rgba(108,99,255,0.03); padding:15px; border-radius:12px;">
+        <p style="font-size:0.82rem; margin-bottom:8px;">📊 <strong>Gráficos de Tendência:</strong> Evolução histórica real comparada com o cenário provável de 2030.</p>
+        <p style="font-size:0.82rem; margin-bottom:8px;">💡 <strong>Insights de IA:</strong> Um analista virtual interpreta os números e descreve, em linguagem natural, os gargalos do município.</p>
+      </div>
+    </div>
+
+    <!-- SEÇÃO: SIMULADOR -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">🧮 6. Simulador de Impacto (Decision Support)</h3>
+      <div class="doc-bubble bubble-success">
+        <strong>Cenários Alternativos:</strong> O usuário pode "aumentar" artificialmente o saneamento ou a educação no slider e o sistema re-calcula o IDH Estimado em tempo real.
+      </div>
+    </div>
+
+    <!-- SEÇÃO: GLOSSÁRIO -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">📚 7. Glossário e Termos Técnicos</h3>
+      <ul class="doc-list" style="font-size:0.82rem;">
+        <li><strong>EJA:</strong> Educação de Jovens e Adultos.</li>
+        <li><strong>NEE:</strong> Necessidades Educacionais Especiais (Educação Inclusiva).</li>
+        <li><strong>Letalidade:</strong> Taxa de mortes violentas por cada 100 mil habitantes.</li>
+        <li><strong>Raio 2km:</strong> Padrão de distância caminhável para serviços de saúde primária.</li>
       </ul>
     </div>
 
-    <!-- RESUMO EXECUTIVO -->
+    <!-- SEÇÃO: FAQ -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🧠 6. Resumo Executivo e Insights de IA</h3>
-      <div class="doc-bubble bubble-info">
-        No final de cada página municipal, o **SocioDash™** gera um texto analítico automático. Ele não apenas lê os dados, mas correlaciona variáveis (ex: Como a falta de esgoto afeta o IDH em Parnamirim) para oferecer uma visão estratégica imediata ao gestor.
+      <h3 style="color:var(--primary); margin-bottom:10px;">❓ 8. Perguntas Frequentes (FAQ)</h3>
+      <div style="font-size:0.82rem; color:#e0e0e0;">
+        <p style="margin-bottom:10px;"><strong>Como atualizo os dados?</strong> Clique no botão 'Sincronizar' na barra superior.</p>
+        <p style="margin-bottom:10px;"><strong>Posso usar as projeções em editais?</strong> As projeções são estimativas estatísticas (Forecasting) e devem servir como suporte, nunca como dado censitário oficial.</p>
+        <p style="margin-bottom:10px;"><strong>O que é o destaque em Dourado?</strong> Refere-se ao Censo 2022, a base mais confiável antes das estimativas anuais.</p>
       </div>
     </div>
 
-    <!-- FERRAMENTAS BI -->
-    <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🧮 7. Ferramentas de BI e Suporte à Decisão</h3>
-      <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
-        <div class="doc-bubble bubble-success">
-          <strong>Calculadora de Impacto (Simulador)</strong><br>
-          Permite ao gestor simular cenários: "Se eu investir para elevar o esgotamento sanitário em 10%, qual será o meu novo IDH em 2030?".
-        </div>
-        <div class="doc-bubble bubble-info">
-          <strong>Exportação Master (.csv)</strong><br>
-          Gera uma planilha com a série histórica completa, incluindo dados de alfabetismo e fontes de cada indicador.
-        </div>
-      </div>
-    </div>
-
-    <!-- BENCHMARK -->
-    <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">⚖️ 6. Benchmark Regional</h3>
-      <p style="font-size:0.88rem; color:var(--text-muted);">Compara automaticamente o município atual com:</p>
-      <ol style="color:#e0e0e0; font-size:0.85rem; padding-left:20px; line-height:1.6;">
-        <li><strong>Natal (Capital):</strong> Referência de infraestrutura urbana máxima.</li>
-        <li><strong>Média RN:</strong> Linha de base para saber se o município está acima ou abaixo do estado.</li>
-      </ol>
-    </div>
-
-    <div style="text-align:center; padding:20px; background:rgba(108,99,255,0.05); border-radius:12px; margin-top:20px;">
-      <p style="font-size:0.85rem; font-weight:700; color:var(--primary);">SocioDash™ Pro - Inteligência para Políticas Públicas</p>
-      <p style="font-size:0.75rem; color:var(--text-muted);">Desenvolvido por Analistas de Dados em parceria com a 2ª DIREC.</p>
+    <div style="text-align:center; padding:30px 20px; background:rgba(108,99,255,0.08); border-radius:18px; margin-top:30px;">
+      <p style="font-size:0.9rem; font-weight:800; color:#fff; margin-bottom:5px;">SocioDash™ Pro - Inteligência Territorial</p>
+      <p style="font-size:0.75rem; color:var(--text-muted);">Plataforma de Suporte à Decisão Pública para os 12 municípios da 2ª DIREC.</p>
+      <p style="font-size:0.65rem; color:var(--text-muted); margin-top:10px;">v2.4.5 Build 2026</p>
     </div>
   </div>
 </div>
