@@ -876,20 +876,59 @@
   .doc-list li::before { content: '•'; color: var(--primary); font-weight: bold; font-size: 1.2rem; line-height: 0.8; }
   .doc-step { display: inline-block; width: 24px; height: 24px; background: var(--primary); color: #fff; border-radius: 50%; text-align: center; line-height: 24px; font-weight: 800; font-size: 0.75rem; margin-right: 10px; }
 
+  .insight-close {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255,255,255,0.5);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .insight-close:hover {
+    color: #fff;
+    transform: rotate(90deg);
+  }
+
   /* MOBILE DOC OPTIMIZATION */
   @media (max-width: 768px) {
     .doc-modal-box { 
-      width: 95% !important; 
-      padding: 25px 20px !important; 
-      border-radius: 18px !important;
+      width: 96% !important; 
+      margin: 10px auto !important;
+      max-height: 92vh !important;
+      padding: 35px 15px 20px !important; 
+      border-radius: 24px !important;
+      position: relative;
     }
-    .doc-title { font-size: 1.1rem !important; }
-    .doc-section { padding-left: 15px !important; margin-bottom: 25px !important; }
+    .doc-title { font-size: 1.15rem !important; margin-top: 10px !important; padding-right: 30px; }
+    .doc-section { padding-left: 12px !important; margin-bottom: 25px !important; }
     .doc-section h3 { font-size: 1rem !important; }
-    .doc-table { font-size: 0.75rem !important; display: block; overflow-x: auto; white-space: nowrap; }
-    .doc-bubble { padding: 12px !important; font-size: 0.8rem !important; }
-    .doc-list li { font-size: 0.8rem !important; }
-    .insight-close { top: 10px !important; right: 10px !important; width: 32px !important; height: 32px !important; font-size: 20px !important; }
+    .doc-table { 
+      display: block !important; 
+      width: 100% !important; 
+      overflow-x: auto !important; 
+      -webkit-overflow-scrolling: touch;
+      font-size: 0.72rem !important; 
+    }
+    .doc-table th, .doc-table td { padding: 10px 8px !important; }
+    .doc-bubble { padding: 12px !important; font-size: 0.8rem !important; border-radius: 14px !important; }
+    .doc-list li { font-size: 0.82rem !important; gap: 8px !important; }
+    .insight-close { 
+      top: 12px !important; 
+      right: 12px !important; 
+      font-size: 2.2rem !important; 
+      width: 40px !important; 
+      height: 40px !important; 
+      background: transparent !important;
+      opacity: 0.8;
+    }
   }
 </style>
 </head>
