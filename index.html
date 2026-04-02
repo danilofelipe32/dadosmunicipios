@@ -369,6 +369,15 @@
     #time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 3px solid #0f172a; box-shadow: 0 0 10px rgba(15, 82, 186, 0.5); }
     .time-slider-indicator { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
     
+    @media (max-width: 600px) {
+      .time-slider-container { min-width: 100%; padding: 10px 12px; }
+      .time-slider-labels span { font-size: 10px; }
+      .hide-mobile { display: none; }
+      #time-slider::-webkit-slider-thumb { width: 24px; height: 24px; }
+      #time-slider::-moz-range-thumb { width: 24px; height: 24px; }
+      #estimated-label { font-size: 0.58rem !important; }
+    }
+    
     .chart-drilldown-info { position: absolute; top: 15px; right: 20px; background: var(--accent); color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; pointer-events: none; animation: pulse 2s infinite; }
     @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
     .chart-back-btn { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.1); border: none; color: white; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; z-index: 10; display: none; }
@@ -895,7 +904,7 @@
             <div class="time-slider-labels">
               <span class="active" id="label-2018">2018</span>
               <span id="label-2020">2020</span>
-              <span id="label-2022">2022 (Último Censo IBGE)</span>
+              <span id="label-2022">2022 <small class="hide-mobile">(Último Censo IBGE)</small></span>
               <span id="label-2024">2024</span>
               <span id="label-2026">2026</span>
               <span id="label-2028">2028</span>
