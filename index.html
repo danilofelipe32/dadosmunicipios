@@ -157,18 +157,34 @@
   }
 
   /* KPI GRID */
-  .kpi-grid {
+   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 18px; margin-bottom: 32px;
   }
   .kpi-grid > .card-premium {
-    grid-column: span 3; /* Fileira de 4 cards (12 / 3 = 4) */
+    grid-column: span 3;
   }
-  /* Últimos 3 cards (9, 10, 11) para preencher a 3ª linha (12 / 4 = 3) */
   .kpi-grid > .card-premium:nth-child(n+9) {
     grid-column: span 4;
-    min-height: 210px; /* Leve aumento para preencher espaço proporcionalmente */
+    min-height: 210px;
+  }
+
+  @media (max-width: 1024px) {
+    .kpi-grid > .card-premium { grid-column: span 4; }
+    .kpi-grid > .card-premium:nth-child(n+9) { grid-column: span 6; }
+  }
+
+  @media (max-width: 768px) {
+    .kpi-grid { gap: 12px; }
+    .kpi-grid > .card-premium { grid-column: span 6; padding: 20px 16px; }
+    .kpi-grid > .card-premium:nth-child(n+9) { grid-column: span 12; min-height: auto; }
+    .kpi-val { font-size: 1.6rem; }
+    .section-title { font-size: 0.85rem; padding: 6px 12px; }
+  }
+
+  @media (max-width: 480px) {
+    .kpi-grid > .card-premium { grid-column: span 12; }
   }
   .kpi-card { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 16px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .kpi-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 15px 35px -10px rgba(59, 130, 246, 0.3); }
@@ -244,6 +260,15 @@
     border-radius: var(--radius); overflow: hidden;
     border: 1px solid var(--border); margin-bottom: 40px;
     overflow-x: auto; -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+  @media (max-width: 768px) {
+    .table-container::after {
+      content: '↔ Deslize lateral';
+      position: absolute; bottom: 4px; right: 8px;
+      font-size: 0.55rem; color: var(--text-dim);
+      opacity: 0.5; pointer-events: none;
+    }
   }
   table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
   th { padding: 14px 18px; background: rgba(108,99,255,0.07); color: var(--text-muted); font-size: 0.67rem; text-transform: uppercase; letter-spacing: 1.5px; white-space: nowrap; font-weight: 700; border-bottom: 1px solid var(--border); }
@@ -252,8 +277,12 @@
   #saneamento-section .table-container { border-color: rgba(0,212,255,0.15); }
   #saneamento-section th { background: rgba(0,212,255,0.06); border-bottom-color: rgba(0,212,255,0.15); }
 
-  /* CHARTS */
+   /* CHARTS */
   .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(370px, 1fr)); gap: 24px; margin-bottom: 80px; }
+  @media (max-width: 768px) {
+    .charts-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
+    .chart-card { padding: 20px 16px; }
+  }
   .chart-card {
     background: rgba(255,255,255,0.015); border-radius: var(--radius); padding: 28px;
     border: 1px solid var(--border); position: relative; transition: border-color 0.3s;
@@ -385,6 +414,17 @@
       #time-slider::-moz-range-thumb { width: 24px; height: 24px; }
       #estimated-label { font-size: 0.58rem !important; }
       #label-2022 { color: #ffb830 !important; font-weight: 900 !important; text-decoration: underline; }
+      
+      /* NAV MOBILE COMPACT */
+      .city-nav { padding: 10px 15px; }
+      .nav-logo { font-size: 0.85rem; margin-right: 10px; }
+      .nav-logo span { display: none; } /* Hide "SocioDash" text, keep icon if any */
+      .search-container { flex-direction: row; gap: 6px; justify-content: space-between; }
+      .city-select { padding: 8px 30px 8px 12px; font-size: 0.85rem; border-radius: 10px; height: 40px; }
+      .btn-pdf span, .btn-sync span { display: none; }
+      .btn-pdf svg, .btn-sync svg { margin: 0; min-width: 18px; height: 18px; }
+      .btn-sync { padding: 8px 12px !important; margin-right: 4px; border-radius: 10px; height: 40px; width: 40px; justify-content: center; }
+      .doc-info-btn { width: 40px; height: 40px; font-size: 0.9rem; }
     }
     
     .chart-drilldown-info { position: absolute; top: 15px; right: 20px; background: var(--accent); color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; pointer-events: none; animation: pulse 2s infinite; }
@@ -1129,7 +1169,7 @@
 
 <nav class="city-nav">
   <div class="search-container">
-    <div class="nav-logo"><div class="logo-dot"></div> SocioDash</div>
+    <div class="nav-logo"><div class="logo-dot"></div> <span>SocioDash</span></div>
     <select id="city-select" class="city-select" onchange="selectCity(this.value)">
       <option value="Parnamirim">Parnamirim</option>
       <option value="São José de Mipibu">São José de Mipibu</option>
@@ -2161,6 +2201,15 @@
 </div>
 
 <script>
+// CONFIGURAÇÃO GLOBAL CHART.JS PARA MOBILE
+if (window.innerWidth < 768) {
+  Chart.defaults.font.size = 10;
+  Chart.defaults.font.family = "'Outfit', sans-serif";
+  Chart.defaults.plugins.legend.labels.boxWidth = 10;
+  Chart.defaults.plugins.legend.labels.padding = 10;
+  Chart.defaults.plugins.legend.position = 'bottom';
+}
+
 let activeChartSan = null;
 let activeChartAge = null;
 let activeChartLetal = null;
