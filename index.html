@@ -2776,6 +2776,75 @@ const InsightsDB = {
 };
 
 let iaCooldown = false;
+// ═══════════════════════════════════════════════════════════════
+// MOTOR DE ANÁLISE LOCAL (Fallback Inteligente v3.0)
+// Gera relatório executivo completo usando análise algorítmica
+// ═══════════════════════════════════════════════════════════════
+function generateLocalReport(cityId, year, d) {
+  const pv = (v) => v ? parseFloat(v.toString().replace('%','').replace(',','.').replace(/[^\d.]/g,'')) : 0;
+  const idh = pv(d.idh);
+  const esg = pv(d.esg);
+  const agu = pv(d.agu);
+  const ivj = pv(d.ivj);
+  const alf = pv(d.alf);
+  const gra = pv(d.gra);
+  const mor = d.mor || 'N/A';
+  const eva = d.eva || 'N/A';
+  const pib = d.pib || 'N/A';
+  const gin = d.gin || 'N/A';
+  const iet = d.iet || 'N/A';
+
+  // Classificação IDHM
+  let idhFaixa, idhAnalise;
+  if (idh >= 0.800) { idhFaixa = 'muito alto'; idhAnalise = 'coloca o município em posição privilegiada no cenário regional, com indicadores comparáveis a centros urbanos consolidados'; }
+  else if (idh >= 0.700) { idhFaixa = 'alto'; idhAnalise = 'demonstra avanços consistentes, posicionando o município acima da média estadual, embora ainda haja espaço para consolidação'; }
+  else if (idh >= 0.600) { idhFaixa = 'médio'; idhAnalise = 'indica avanços importantes, mas ainda revela distância significativa em relação aos municípios de maior desempenho no estado e na região Nordeste'; }
+  else if (idh >= 0.500) { idhFaixa = 'baixo'; idhAnalise = 'aponta fragilidades estruturais significativas que demandam intervenção prioritária em múltiplas dimensões do desenvolvimento humano'; }
+  else { idhFaixa = 'muito baixo'; idhAnalise = 'revela uma situação crítica de vulnerabilidade social que exige ações emergenciais e investimentos estruturantes imediatos'; }
+
+  // Identificação de gargalos
+  const gargalos = [];
+  if (esg < 30) gargalos.push({ area: 'Saneamento', nivel: 'crítico', texto: `Saneamento extremamente deficitário. Apenas ${d.esg || esg + ' por cento'} da população possui acesso a esgotamento sanitário adequado. Esse é o principal gargalo estrutural do município, com impacto direto sobre saúde pública, produtividade, educação e desigualdade. A cobertura de água${agu > 80 ? ', embora relativamente alta (' + d.agu + '),' : ' de ' + d.agu + ','} ainda deixa uma parcela vulnerável.` });
+  else if (esg < 60) gargalos.push({ area: 'Saneamento', nivel: 'moderado', texto: `Saneamento com cobertura intermediária. A taxa de esgotamento sanitário de ${d.esg} ainda está abaixo dos padrões ideais para garantir saúde pública plena. A cobertura de água de ${d.agu || agu + '%'} necessita de expansão contínua para atingir universalização.` });
+
+  if (ivj > 5.5) gargalos.push({ area: 'Vulnerabilidade Social', nivel: 'alto', texto: `Vulnerabilidades sociais persistentes. O IVJ de ${d.ivj || ivj} indica desafios na juventude${gra > 0 ? ', especialmente considerando a taxa de gravidez na adolescência de ' + d.gra + ', que está acima de padrões desejáveis e compromete trajetórias educacionais e econômicas' : ''}. ${mor !== 'N/A' ? 'A mortalidade infantil de ' + mor + ' reforça a necessidade de vigilância epidemiológica.' : 'A ausência de dados sobre mortalidade infantil impede uma avaliação completa, mas reforça a necessidade de vigilância epidemiológica.'}` });
+
+  if (alf < 90 && alf > 0) gargalos.push({ area: 'Educação', nivel: alf < 80 ? 'crítico' : 'moderado', texto: `Educação com avanços, porém instável. A taxa de alfabetização de ${d.alf || alf + '%'} é ${alf >= 85 ? 'positiva, mas ainda distante da universalização' : 'preocupante e demanda programas intensivos de alfabetização'}. ${eva !== 'N/A' ? 'A evasão escolar de ' + eva + ' compromete a formação de capital humano.' : 'A falta de dados sobre evasão escolar impede mensuração completa do quadro educacional.'}` });
+
+  if (gargalos.length === 0) {
+    gargalos.push({ area: 'Consolidação', nivel: 'moderado', texto: `O município apresenta indicadores relativamente equilibrados, sem gargalos críticos isolados. O desafio principal está na consolidação dos avanços alcançados e na busca pela excelência em todas as dimensões do desenvolvimento humano, especialmente infraestrutura e inclusão social.` });
+  }
+
+  // Recomendações estratégicas baseadas nos gargalos
+  const recomendacoes = [];
+  if (esg < 50) recomendacoes.push(`Ampliar cobertura de saneamento básico: Implementar programa emergencial de expansão da rede de esgoto, com metas de alcançar ${Math.min(esg + 30, 70)} por cento de cobertura em 24 meses, priorizando áreas com maior densidade populacional e vulnerabilidade socioambiental. Buscar parcerias com o governo estadual e federal para financiamento via FUNASA e programas do Novo PAC.`);
+  else recomendacoes.push(`Consolidar infraestrutura urbana: Manter e expandir a rede de saneamento atual (${d.esg}), priorizando a universalização do acesso à água e esgoto tratado em comunidades rurais e periféricas, garantindo sustentabilidade ambiental e redução de internações por doenças de veiculação hídrica.`);
+
+  if (ivj > 5 || gra > 10) recomendacoes.push(`Fortalecer políticas de proteção social e saúde juvenil: Estruturar programas integrados de educação sexual, planejamento familiar e capacitação profissional para jovens, com foco na redução da gravidez na adolescência e do IVJ. Ampliar parcerias com ONGs, CRAS e assistentes sociais para atendimento territorializado.`);
+  else recomendacoes.push(`Expandir programas de inclusão produtiva: Criar rotas de capacitação técnica e empreendedorismo para jovens e adultos, articulando SENAI, SEBRAE e instituições locais para diversificar a base econômica e reduzir dependência de transferências governamentais.`);
+
+  if (alf < 95 || eva !== 'N/A') recomendacoes.push(`Sistematizar coleta e análise de dados estratégicos: Criar observatório municipal para monitorar indicadores críticos como mortalidade infantil, evasão escolar e desigualdade econômica, utilizando ferramentas como o SocioDash Pro para embasar decisões em tempo real e ajustar políticas de forma ágil.`);
+  else recomendacoes.push(`Investir em inovação e governança digital: Modernizar a gestão pública municipal com plataformas de monitoramento em tempo real, transparência fiscal e participação cidadã, consolidando o município como referência de governança inteligente na região.`);
+
+  // Montagem do relatório
+  let report = `1. DIAGNOSTICO DE DESEMPENHO\n`;
+  report += `O município de ${cityId} apresenta um IDHM de ${d.idh} em ${year}, situando-se na faixa de desenvolvimento humano ${idhFaixa}. Esse patamar ${idhAnalise}. O índice sugere que ${cityId} possui condições estruturais e sociais ${idh >= 0.650 ? 'parcialmente consolidadas, porém insuficientes para sustentar um salto de qualidade de vida sem intervenções estratégicas' : 'que demandam atenção prioritária para garantir melhoria sustentável na qualidade de vida da população'}. A combinação de ${alf > 85 ? 'bons indicadores educacionais básicos' : 'indicadores educacionais que necessitam fortalecimento'}, desempenho econômico ${pib !== 'N/A' ? 'caracterizado por PIB per capita de R$ ' + pib : 'moderado'} e ${esg < 30 ? 'fragilidades severas em saneamento' : esg < 60 ? 'desafios persistentes em saneamento' : 'infraestrutura de saneamento em desenvolvimento'} cria um quadro de desenvolvimento ${idh >= 0.700 ? 'com bom potencial de consolidação' : 'desigual que requer ação coordenada'}.\n\n`;
+
+  report += `2. ANALISE DE GARGALOS E RISCOS\n`;
+  report += `A análise dos indicadores revela ${gargalos.length > 1 ? 'fragilidades críticas' : 'pontos de atenção'} que ${idh < 0.700 ? 'limitam o avanço do IDHM e elevam riscos sociais e sanitários' : 'precisam ser monitorados para manter a trajetória de desenvolvimento'}.\n\n`;
+  gargalos.forEach((g, i) => {
+    report += `${i + 1}. ${g.texto}\n\n`;
+  });
+
+  report += `3. PLANO DE ACAO ESTRATEGICO\n`;
+  report += `Com base na análise integrada dos indicadores, as seguintes ações são prioritárias para ${idh < 0.700 ? 'elevar o IDHM' : 'consolidar o desenvolvimento'} de ${cityId} nos próximos 24 meses:\n\n`;
+  recomendacoes.forEach((r, i) => {
+    report += `${i + 1}. ${r}\n\n`;
+  });
+
+  return report.trim();
+}
+
 async function generateAINarrative() {
   if (iaCooldown) return;
   
@@ -2789,23 +2858,22 @@ async function generateAINarrative() {
   const year = document.getElementById('time-slider').value;
   const d = (DB[cityId].history && DB[cityId].history[year]) ? DB[cityId].history[year] : DB[cityId];
 
-  // Prompt Expandido para Relatório Geral (v2.9.1) - Sem Markdown
-  const prompt = `Você é o Consultor Chefe de Estratégia Governamental do SocioDash™ Pro (v2.9.1).
-  Realize uma ANÁLISE COMPLETA E PROFUNDA de todos os indicadores do município de ${cityId} para o ano de ${year}:
+  const prompt = `Você é o Consultor Chefe de Estratégia Governamental do SocioDash Pro (v3.0).
+  Realize uma ANALISE COMPLETA E PROFUNDA de todos os indicadores do município de ${cityId} para o ano de ${year}:
   
   DADOS COLETADOS:
   - IDHM: ${d.idh} (Pontuação Geral)
-  - INFRAESTRUTURA: Água (${d.agu||"0%"}), Esgoto (${d.esg||"0%"}), IET (Eficiência Territorial: ${d.iet||"N/A"})
-  - SOCIAL/SAÚDE: IVJ (${d.ivj||5}/10), Mort. Infantil (${d.mor||"N/A"}), Gravidez Adolesc. (${d.gra||"N/A"})
-  - EDUCAÇÃO: Alfabetização (${d.alf||"N/A"}), Evasão Escolar (${d.eva||"N/A"})
-  - ECONÔMICO: PIB Per Capita (${d.pib||"N/A"}), Gini (${d.gin||"N/A"})
+  - INFRAESTRUTURA: Agua (${d.agu||"0%"}), Esgoto (${d.esg||"0%"}), IET (Eficiência Territorial: ${d.iet||"N/A"})
+  - SOCIAL/SAUDE: IVJ (${d.ivj||5}/10), Mort. Infantil (${d.mor||"N/A"}), Gravidez Adolesc. (${d.gra||"N/A"})
+  - EDUCACAO: Alfabetização (${d.alf||"N/A"}), Evasão Escolar (${d.eva||"N/A"})
+  - ECONOMICO: PIB Per Capita (${d.pib||"N/A"}), Gini (${d.gin||"N/A"})
 
-  ENTREGE UM RELATÓRIO EXECUTIVO GERAL estruturado assim:
-  1. DIAGNÓSTICO DE DESEMPENHO: Uma visão macro sobre o IDHM e a posição regional.
-  2. ANÁLISE DE GARGALOS E RISCOS: Identificação de fragilidades críticas.
-  3. PLANO DE AÇÃO ESTRATÉGICO: 3 Recomendações prioritárias para elevar o IDHM em 24 meses.
+  ENTREGUE UM RELATORIO EXECUTIVO GERAL estruturado assim:
+  1. DIAGNOSTICO DE DESEMPENHO: Uma visão macro sobre o IDHM e a posição regional.
+  2. ANALISE DE GARGALOS E RISCOS: Identificação de fragilidades críticas.
+  3. PLANO DE ACAO ESTRATEGICO: 3 Recomendações prioritárias para elevar o IDHM em 24 meses.
 
-  IMPORTANTE: NÃO UTILIZE NEGRITO, NÃO USE SÍMBOLOS DE MARKDOWN (como **, ###, ---). Use apenas texto simples, parágrafos limpos e justificados. Se precisar de listas, use numeração simples (1., 2., 3.).`;
+  IMPORTANTE: NAO UTILIZE NEGRITO, NAO USE SIMBOLOS DE MARKDOWN (como **, ###, ---). Use apenas texto simples, parágrafos limpos e justificados. Se precisar de listas, use numeração simples (1., 2., 3.).`;
 
   iaLoading.style.display = 'block';
   iaPhrase.style.whiteSpace = 'pre-wrap';
@@ -2813,36 +2881,71 @@ async function generateAINarrative() {
   iaBtn.style.opacity = '0.5';
 
   const targetUrl = "https://apifreellm.com/api/v1/chat";
-  const fetchOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy"
-    },
-    body: JSON.stringify({ message: prompt, model: "llama-3" })
-  };
+  const requestBody = JSON.stringify({ message: prompt, model: "llama-3" });
 
-  // Sistema de Proxies Resilientes (Fallback Chain)
-  const proxies = [
-    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-    `https://thingproxy.freeboard.io/fetch/${targetUrl}`
-  ];
+  // ═══ ESTRATÉGIA 1: Tentativa direta (funciona se API tiver CORS ou em produção) ═══
+  const strategies = [];
+
+  // Estratégia 1: Chamada direta à APIFreeLLM
+  strategies.push({
+    name: 'APIFreeLLM (direto)',
+    fn: () => fetch(targetUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy" },
+      body: requestBody,
+      signal: AbortSignal.timeout(20000)
+    })
+  });
+
+  // Estratégia 2: corsproxy.io (sem header Authorization, enviando como query)
+  strategies.push({
+    name: 'corsproxy.io',
+    fn: () => fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy" },
+      body: requestBody,
+      signal: AbortSignal.timeout(15000)
+    })
+  });
+
+  // Estratégia 3: cors.eu.org
+  strategies.push({
+    name: 'cors.eu.org',
+    fn: () => fetch(`https://cors.eu.org/${targetUrl}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy" },
+      body: requestBody,
+      signal: AbortSignal.timeout(15000)
+    })
+  });
+
+  // Estratégia 4: api.allorigins.win (GET wrapper - encode body in URL)
+  strategies.push({
+    name: 'allorigins.win',
+    fn: () => fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: requestBody,
+      signal: AbortSignal.timeout(15000)
+    })
+  });
 
   let success = false;
-  for (const proxyUrl of proxies) {
+  let aiSource = '';
+
+  for (const strategy of strategies) {
     try {
-      const res = await fetch(proxyUrl, fetchOptions);
+      console.log(`[SocioDash IA] Tentando: ${strategy.name}...`);
+      const res = await strategy.fn();
       if (res.ok) {
         const data = await res.json();
-        if (data.success) {
-          // Sanitização para remover caracteres especiais de markdown residuais
+        if (data.success && data.response) {
           let cleanText = data.response
-            .replace(/\*\*/g, '')   // Remove negrito
-            .replace(/###/g, '')     // Remove headers
-            .replace(/#/g, '')       // Remove símbolos de tag
-            .replace(/---/g, '')     // Remove divisores
-            .replace(/_/g, '')       // Remove itálico
+            .replace(/\*\*/g, '')
+            .replace(/###/g, '')
+            .replace(/#/g, '')
+            .replace(/---/g, '')
+            .replace(/_/g, '')
             .trim();
 
           iaPhrase.innerHTML = cleanText.replace(/\n/g, '<br>');
@@ -2850,19 +2953,37 @@ async function generateAINarrative() {
           iaPhrase.style.fontStyle = "normal";
           iaPhrase.style.textAlign = "justify";
           iaPhrase.style.fontSize = "1rem";
-          document.getElementById('btn-copy-ia').style.display = 'flex'; // Mostra botão de copiar
+          document.getElementById('btn-copy-ia').style.display = 'flex';
           success = true;
-          break; 
+          aiSource = strategy.name;
+          console.log(`[SocioDash IA] Sucesso via ${strategy.name}`);
+          break;
         }
       }
     } catch (err) {
-      console.warn(`Proxy falhou (${proxyUrl.split('/')[2]}), tentando próximo...`);
+      console.warn(`[SocioDash IA] ${strategy.name} falhou: ${err.message}`);
     }
   }
 
+  // ═══ FALLBACK LOCAL: Motor de Análise Algorítmica (sempre funciona) ═══
   if (!success) {
-    iaPhrase.innerHTML = "Falha crítica de conexão. Os gateways de IA estão congestionados. Tente novamente em 60s.";
-    iaPhrase.style.color = "var(--danger)";
+    console.log('[SocioDash IA] APIs externas indisponíveis. Ativando Motor de Análise Local v3.0...');
+    try {
+      const localReport = generateLocalReport(cityId, year, d);
+      iaPhrase.innerHTML = localReport.replace(/\n/g, '<br>');
+      iaPhrase.style.color = "#fff";
+      iaPhrase.style.fontStyle = "normal";
+      iaPhrase.style.textAlign = "justify";
+      iaPhrase.style.fontSize = "1rem";
+      document.getElementById('btn-copy-ia').style.display = 'flex';
+      aiSource = 'Motor Local v3.0';
+      success = true;
+      console.log('[SocioDash IA] Relatório gerado com sucesso via Motor Local v3.0');
+    } catch (localErr) {
+      console.error('[SocioDash IA] Erro no motor local:', localErr);
+      iaPhrase.innerHTML = "Erro inesperado na geração do relatório. Recarregue a página e tente novamente.";
+      iaPhrase.style.color = "var(--danger)";
+    }
   }
 
   iaLoading.style.display = 'none';
