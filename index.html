@@ -2791,7 +2791,7 @@ async function generateAINarrative() {
   const ivj = d.ivj || 5;
   const pib = d.pib || "N/A";
 
-  const prompt = `Você é um consultor sênior de políticas públicas do SocioDash™ Pro (v2.7.5).
+  const prompt = `Você é um consultor sênior de políticas públicas do SocioDash™ Pro (v2.8.0).
   Analise os dados do município de ${cityId} em ${year}:
   - IDHM: ${idh}
   - Cobertura de Água: ${agu}
@@ -2807,40 +2807,40 @@ async function generateAINarrative() {
   iaBtn.style.opacity = '0.5';
 
   try {
-    // Tentando endpoint OpenAI direto (geralmente mais permissível com CORS em ferramentas dev)
-    const targetUrl = "https://apifreellm.com/api/v1/chat/completions";
-
-    const res = await fetch(targetUrl, {
+    // Agora apontamos para nossa Vercel Serverless Function interna (/api/chat)
+    // que injeta a API_KEY com segurança no servidor
+    const res = await fetch("/api/chat", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3",
-        messages: [{role: "user", content: prompt}]
+        message: prompt,
+        model: "llama-3"
       })
     });
 
     const body = await res.json();
     let aiResponse = "";
     
-    // Tratando formato OpenAI (choices) e formato simplificado
+    // Tratando formato OpenAI (choices), formato simplificado e erros internos
     if (body.choices && body.choices[0] && body.choices[0].message) {
        aiResponse = body.choices[0].message.content;
-    } else if (body.success && body.response) {
+    } else if (body.success !== false && body.response) {
        aiResponse = body.response;
+    } else if (body.success === false) {
+       aiResponse = `Erro IA: ${body.response}`;
     }
 
     if (aiResponse) {
       iaPhrase.innerHTML = `"${aiResponse}"`;
       iaPhrase.style.color = "#fff";
     } else {
-      iaPhrase.innerHTML = "Ocorreu um erro ao comunicar com a IA. Tente novamente em breve.";
+      iaPhrase.innerHTML = "Ocorreu um erro ao comunicar com a IA (Verifique a Variável de Ambiente).";
       iaPhrase.style.color = "var(--danger)";
     }
   } catch (err) {
-    iaPhrase.innerHTML = "Falha na conexão com os servidores da SocioDash™ IA.";
+    iaPhrase.innerHTML = "Falha na conexão com o Gateway SocioDash™ IA.";
     iaPhrase.style.color = "var(--danger)";
   } finally {
     iaLoading.style.display = 'none';
