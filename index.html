@@ -2783,11 +2783,26 @@ async function generateAINarrative() {
   const year = document.getElementById('time-slider').value;
   const d = (DB[cityId].history && DB[cityId].history[year]) ? DB[cityId].history[year] : DB[cityId];
 
-  const prompt = `Você é um consultor sênior de políticas públicas do SocioDash™ Pro (v2.8.4).
-  Analise os dados de ${cityId} em ${year}: IDHM ${d.idh}, Água ${d.agu||"0%"}, Esgoto ${d.esg||"0%"}, Alfabetização ${d.alf||"N/A"}, IVJ ${d.ivj||5}, PIB ${d.pib||"N/A"}.
-  Gere UMA única frase estratégica (máx 250 carac) em tom executivo sobre a maior prioridade de investimento para elevar o IDHM local.`;
+  // Prompt Expandido para Relatório Geral (v2.9.1) - Sem Markdown
+  const prompt = `Você é o Consultor Chefe de Estratégia Governamental do SocioDash™ Pro (v2.9.1).
+  Realize uma ANÁLISE COMPLETA E PROFUNDA de todos os indicadores do município de ${cityId} para o ano de ${year}:
+  
+  DADOS COLETADOS:
+  - IDHM: ${d.idh} (Pontuação Geral)
+  - INFRAESTRUTURA: Água (${d.agu||"0%"}), Esgoto (${d.esg||"0%"}), IET (Eficiência Territorial: ${d.iet||"N/A"})
+  - SOCIAL/SAÚDE: IVJ (${d.ivj||5}/10), Mort. Infantil (${d.mor||"N/A"}), Gravidez Adolesc. (${d.gra||"N/A"})
+  - EDUCAÇÃO: Alfabetização (${d.alf||"N/A"}), Evasão Escolar (${d.eva||"N/A"})
+  - ECONÔMICO: PIB Per Capita (${d.pib||"N/A"}), Gini (${d.gin||"N/A"})
+
+  ENTREGE UM RELATÓRIO EXECUTIVO GERAL estruturado assim:
+  1. DIAGNÓSTICO DE DESEMPENHO: Uma visão macro sobre o IDHM e a posição regional.
+  2. ANÁLISE DE GARGALOS E RISCOS: Identificação de fragilidades críticas.
+  3. PLANO DE AÇÃO ESTRATÉGICO: 3 Recomendações prioritárias para elevar o IDHM em 24 meses.
+
+  IMPORTANTE: NÃO UTILIZE NEGRITO, NÃO USE SÍMBOLOS DE MARKDOWN (como **, ###, ---). Use apenas texto simples, parágrafos limpos e justificados. Se precisar de listas, use numeração simples (1., 2., 3.).`;
 
   iaLoading.style.display = 'block';
+  iaPhrase.style.whiteSpace = 'pre-wrap';
   iaBtn.disabled = true;
   iaBtn.style.opacity = '0.5';
 
@@ -2815,10 +2830,22 @@ async function generateAINarrative() {
       if (res.ok) {
         const data = await res.json();
         if (data.success) {
-          iaPhrase.innerHTML = `"${data.response}"`;
+          // Sanitização para remover caracteres especiais de markdown residuais
+          let cleanText = data.response
+            .replace(/\*\*/g, '')   // Remove negrito
+            .replace(/###/g, '')     // Remove headers
+            .replace(/#/g, '')       // Remove símbolos de tag
+            .replace(/---/g, '')     // Remove divisores
+            .replace(/_/g, '')       // Remove itálico
+            .trim();
+
+          iaPhrase.innerHTML = cleanText.replace(/\n/g, '<br>');
           iaPhrase.style.color = "#fff";
+          iaPhrase.style.fontStyle = "normal";
+          iaPhrase.style.textAlign = "justify";
+          iaPhrase.style.fontSize = "1rem";
           success = true;
-          break; // Sucesso! Sai do loop
+          break; 
         }
       }
     } catch (err) {
