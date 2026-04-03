@@ -1416,6 +1416,11 @@
   <section id="comparativo-section">
     <div class="section-title"><span class="s-icon">📊</span> Análise Comparativa Regional (IDHM)</div>
     <div class="chart-card">
+       <div style="position: absolute; top: 15px; left: 20px; z-index: 10; display: flex; gap: 10px; align-items: center;">
+         <button id="toggle-mean-btn" class="geo-btn" onclick="toggleIDHMMean()" style="padding: 6px 14px; font-size: 0.72rem; border-radius: 8px;">
+           <span>📊</span> Média: OFF
+         </button>
+       </div>
        <div class="info-btn" onclick="showInsight('cIDHM')">i</div>
        <div class="chart-wrap" style="height: 350px;"><canvas id="cIDHM"></canvas></div>
     </div>
@@ -3488,6 +3493,20 @@ function togglePlayTime() {
 }
 
 let activeChartRadar, activeChartIDHM;
+window.showIDHMMean = false;
+
+function toggleIDHMMean() {
+  window.showIDHMMean = !window.showIDHMMean;
+  const btn = document.getElementById('toggle-mean-btn');
+  if(btn) {
+    btn.classList.toggle('active', window.showIDHMMean);
+    btn.innerHTML = window.showIDHMMean ? '<span>📊</span> Média: ON' : '<span>📊</span> Média: OFF';
+  }
+  
+  const currentCity = document.getElementById('city-select').value;
+  const currentYear = document.getElementById('time-slider').value;
+  updateYear(currentYear);
+}
 
 function renderCharts(agu, esg, letal, name, radarData) {
   const ctxSan = document.getElementById('cSan');
@@ -3705,30 +3724,56 @@ function renderCharts(agu, esg, letal, name, radarData) {
   const cities = Object.keys(DB);
   const idhData = cities.map(c => parseFloat(DB[c].idh.replace(',','.')));
   
+  // Cálculo da Média Regional
+  const idhSum = idhData.reduce((a, b) => a + b, 0);
+  const idhMean = idhSum / idhData.length;
+  const meanData = new Array(cities.length).fill(idhMean);
+
   const gradientIDH = ctxSan.getContext('2d').createLinearGradient(0, 0, 0, 300);
   gradientIDH.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
   gradientIDH.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
+  const datasets = [{
+    label: 'IDHM Regional',
+    data: idhData,
+    borderColor: '#6366f1',
+    backgroundColor: gradientIDH,
+    fill: true,
+    tension: 0.4,
+    pointRadius: 4,
+    pointBackgroundColor: '#fff',
+    pointBorderWidth: 3,
+    pointBorderColor: '#6366f1',
+    pointHoverRadius: 8
+  }];
+
+  if (window.showIDHMMean) {
+    datasets.push({
+      label: 'Média Regional (12 Municípios)',
+      data: meanData,
+      borderColor: '#f59e0b',
+      borderWidth: 2,
+      borderDash: [6, 6],
+      pointRadius: 0,
+      fill: false,
+      tension: 0
+    });
+  }
 
   activeChartIDHM = new Chart(document.getElementById('cIDHM'), {
     type: 'line',
     data: {
       labels: cities,
-      datasets: [{
-        label: 'IDHM Regional',
-        data: idhData,
-        borderColor: '#6366f1',
-        backgroundColor: gradientIDH,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 3,
-        pointBorderColor: '#6366f1',
-        pointHoverRadius: 8
-      }]
+      datasets: datasets
     },
     options: {
-      plugins: { legend: { display: false } },
+      plugins: { 
+        legend: { 
+          display: window.showIDHMMean,
+          position: 'top',
+          labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 15 }
+        } 
+      },
       scales: {
         y: { beginAtZero: false, suggestedMin: 0.5, grid: { color: 'rgba(255,255,255,0.05)' } },
         x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 45, font: { size: 9 } } }
