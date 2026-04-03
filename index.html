@@ -2807,25 +2807,33 @@ async function generateAINarrative() {
   iaBtn.style.opacity = '0.5';
 
   try {
-    // Usando corsproxy.io para contornar bloqueio de CORS no frontend direto
-    const targetUrl = "https://apifreellm.com/api/v1/chat";
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    // Tentando endpoint OpenAI direto (geralmente mais permissível com CORS em ferramentas dev)
+    const targetUrl = "https://apifreellm.com/api/v1/chat/completions";
 
-    const res = await fetch(proxyUrl, {
+    const res = await fetch(targetUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy"
       },
       body: JSON.stringify({
-        message: prompt,
-        model: "llama-3"
+        model: "llama-3",
+        messages: [{role: "user", content: prompt}]
       })
     });
 
-    const data = await res.json();
-    if (data.success) {
-      iaPhrase.innerHTML = `"${data.response}"`;
+    const body = await res.json();
+    let aiResponse = "";
+    
+    // Tratando formato OpenAI (choices) e formato simplificado
+    if (body.choices && body.choices[0] && body.choices[0].message) {
+       aiResponse = body.choices[0].message.content;
+    } else if (body.success && body.response) {
+       aiResponse = body.response;
+    }
+
+    if (aiResponse) {
+      iaPhrase.innerHTML = `"${aiResponse}"`;
       iaPhrase.style.color = "#fff";
     } else {
       iaPhrase.innerHTML = "Ocorreu um erro ao comunicar com a IA. Tente novamente em breve.";
