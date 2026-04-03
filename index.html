@@ -2390,6 +2390,7 @@ Object.keys(DB).forEach(cityId => {
     const aguBase = parseFloat(d.s_agu) || 70.0;
     const ivjBase = d.ivj || 6.5;
     const pibBase = parseFloat(d.pib.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0;
+    const evasaoBase = d.evasao_val || 15;
 
     d.history = {
       "2018": { 
@@ -2402,7 +2403,8 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 0.88).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: (parseFloat(d.alf.replace(',','.')) * 0.95).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.9).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 1.1).toFixed(1) + "%"
+        gra: (parseFloat(d.gra.replace(',','.')) * 1.1).toFixed(1) + "%",
+        evasao: Math.min(30, evasaoBase * 1.2).toFixed(1) + "%"
       },
       "2020": { 
         pop: Math.round(popBase * 0.96).toLocaleString('pt-BR'), 
@@ -2414,11 +2416,12 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 0.95).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: (parseFloat(d.alf.replace(',','.')) * 0.98).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.98).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 1.05).toFixed(1) + "%"
+        gra: (parseFloat(d.gra.replace(',','.')) * 1.05).toFixed(1) + "%",
+        evasao: Math.min(30, evasaoBase * 1.1).toFixed(1) + "%"
       },
       "2022": { 
         pop: d.pop, idh: d.idh, esg: d.s_esg + "%", agu: d.s_agu + "%", ivj: ivjBase,
-        dom: d.dom, pib: d.pib, alf: d.alf, bf: d.bf, gra: d.gra
+        dom: d.dom, pib: d.pib, alf: d.alf, bf: d.bf, gra: d.gra, evasao: d.evasao
       },
       "2024": { 
         pop: Math.round(popBase * 1.04).toLocaleString('pt-BR'), 
@@ -2430,7 +2433,8 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.05).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.02).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.05).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.95).toFixed(1) + "%"
+        gra: (parseFloat(d.gra.replace(',','.')) * 0.95).toFixed(1) + "%",
+        evasao: Math.max(0, evasaoBase * 0.9).toFixed(1) + "%"
       },
       "2026": { 
         pop: Math.round(popBase * 1.08).toLocaleString('pt-BR'), 
@@ -2442,7 +2446,8 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.12).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.04).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.10).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.92).toFixed(1) + "%"
+        gra: (parseFloat(d.gra.replace(',','.')) * 0.92).toFixed(1) + "%",
+        evasao: Math.max(0, evasaoBase * 0.82).toFixed(1) + "%"
       },
       "2028": { 
         pop: Math.round(popBase * 1.12).toLocaleString('pt-BR'), 
@@ -2454,7 +2459,8 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.20).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.06).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.15).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.88).toFixed(1) + "%"
+        gra: (parseFloat(d.gra.replace(',','.')) * 0.88).toFixed(1) + "%",
+        evasao: Math.max(0, evasaoBase * 0.75).toFixed(1) + "%"
       },
       "2030": { 
         pop: Math.round(popBase * 1.16).toLocaleString('pt-BR'), 
@@ -2466,7 +2472,8 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.30).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.08).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.20).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.85).toFixed(1) + "%"
+        gra: (parseFloat(d.gra.replace(',','.')) * 0.85).toFixed(1) + "%",
+        evasao: Math.max(0, evasaoBase * 0.7).toFixed(1) + "%"
       }
     };
   }
@@ -4542,7 +4549,7 @@ function renderCorrelationCharts(selectedCity, year) {
     const idh = parseFloat(historical.idh.replace(',', '.'));
     dataIDH.push({ x: sanAvg, y: idh, city: name });
     const ivj = historical.ivj || 0;
-    const evasao = historical.evasao_val || 0;
+    const evasao = historical.evasao_val || parseFloat(String(historical.evasao).replace('%','')) || 0;
     dataIVJ.push({ x: evasao, y: ivj, city: name });
   });
 
