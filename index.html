@@ -443,6 +443,7 @@
   .comp-bar-bg { height: 8px; background: rgba(255,255,255,0.04); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
   .comp-bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease-out; }
   .comp-bar-fill.main { background: var(--primary); box-shadow: 0 0 10px rgba(108,99,255,0.3); }
+  .comp-bar-fill.cluster { background: #3b82f6; opacity: 0.8; box-shadow: 0 0 10px rgba(59,130,246,0.2); }
   .comp-bar-fill.natal { background: #fff; opacity: 0.6; }
   .comp-bar-fill.rn { background: var(--accent); opacity: 0.5; }
 
@@ -977,6 +978,7 @@
     <span class="head-badge">🛡️ SSP-RN</span>
     <span class="head-badge">🎓 SIGEDUC</span>
     <span class="head-badge">📘 QEdu 2023</span>
+    <span class="head-badge" id="head-cluster" style="background:rgba(59,130,246,0.15); border-color:#3b82f6; color:#fff; font-weight:800;">Cluster: -</span>
     <span class="head-badge">2022 – 2026</span>
   </div>
 </header>
@@ -1054,10 +1056,17 @@
       <!-- Card Comparativo Direto -->
       <div class="benchmark-card">
         <div class="info-btn" onclick="showInsight('comp')">i</div>
+        <div id="cluster-insight-box" style="font-size:0.75rem; color:#e2e8f0; background:rgba(59,130,246,0.1); padding:10px; border-radius:10px; margin-bottom:15px; border-left:4px solid #3b82f6; display:none; line-height:1.4;">
+          <strong style="color:#60a5fa;">💡 Perfil do Cluster:</strong> <span id="cluster-insight-text">-</span>
+        </div>
         <div class="comp-bars">
           <div class="comp-item">
             <div class="comp-lbl-row"><span id="comp-name-main">Município</span> <span id="comp-val-main">0/100</span></div>
             <div class="comp-bar-bg"><div class="comp-bar-fill main" id="bar-comp-main"></div></div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-lbl-row">Média do Cluster <span id="comp-val-cluster">0/100</span></div>
+            <div class="comp-bar-bg"><div class="comp-bar-fill cluster" id="bar-comp-cluster"></div></div>
           </div>
           <div class="comp-item">
             <div class="comp-lbl-row">Natal (Capital/Referência) <span id="comp-val-natal">78/100</span></div>
@@ -1457,6 +1466,7 @@
     <button class="geo-btn" id="btn-density" onclick="toggleGeoLayer('density')"><span>👥</span> Densidade Pop.</button>
     <button class="geo-btn" id="btn-risk" onclick="toggleGeoLayer('risk')"><span>🛡️</span> Risco Armado</button>
     <button class="geo-btn" id="btn-school" onclick="toggleGeoLayer('school')"><span>🏫</span> Rotas Escolares</button>
+    <button class="geo-btn" id="btn-cluster" onclick="toggleGeoLayer('cluster')"><span>📂</span> Perfis/Clusters</button>
     <button class="geo-btn" id="btn-all" onclick="toggleAllCities()"><span>👁️</span> Visão Geral</button>
     <button class="geo-btn" id="btn-satellite" onclick="toggleSatellite()" style="margin-left:auto;border-color:rgba(255,184,48,.3);color:#ffb830;">
       <span>🛰️</span> Satélite
@@ -1841,6 +1851,31 @@
 let activeChartSan = null;
 let activeChartAge = null;
 let activeChartLetal = null;
+
+// DEFINIÇÃO DE CLUSTERS (PERFIS TERRITORIAIS)
+const CLUSTERS = {
+  "Polo Metropolitano": ["Parnamirim", "São José de Mipibu"],
+  "Desenvolvimento e Turismo": ["Nísia Floresta", "Canguaretama", "Goianinha", "Monte Alegre", "Tibau do Sul", "Baía Formosa"],
+  "Interior e Pequeno Porte": ["Arez", "Vera Cruz", "Senador G. Avelino", "Vila Flor"]
+};
+
+// Mapeamento reverso para busca rápida
+const CITY_TO_CLUSTER = {};
+Object.keys(CLUSTERS).forEach(cId => {
+  CLUSTERS[cId].forEach(city => CITY_TO_CLUSTER[city] = cId);
+});
+
+const CLUSTER_COLORS = {
+  "Polo Metropolitano": "#6c63ff",
+  "Desenvolvimento e Turismo": "#3b82f6",
+  "Interior e Pequeno Porte": "#10b981"
+};
+
+const CLUSTER_INSIGHTS = {
+  "Polo Metropolitano": "Motores econômicos com alta densidade. O principal desafio é a infraestrutura de saneamento para acompanhar o crescimento vertical.",
+  "Desenvolvimento e Turismo": "Cidades em acelerado desenvolvimento, impulsionadas pelo potencial turístico e logístico regional.",
+  "Interior e Pequeno Porte": "Municípios menores com maior coesão social, mas que enfrentam carência crítica de recursos e saneamento."
+};
 
 const DB = {
   "Parnamirim": {
@@ -2523,12 +2558,30 @@ function updateBenchmark(cityId, data) {
   const currentData = data || (DB[cityId].history ? DB[cityId].history[year] : DB[cityId]);
   const currentScore = calculateScoreValue(currentData);
   
+  // Atualiza Badge do Cluster no Header
+  const clusterName = CITY_TO_CLUSTER[cityId];
+  document.getElementById('head-cluster').innerText = `Cluster: ${clusterName}`;
+
+  // Atualiza Insight do Cluster
+  const clusterInsightBox = document.getElementById('cluster-insight-box');
+  const clusterInsightText = document.getElementById('cluster-insight-text');
+  if (clusterInsightBox && clusterInsightText) {
+    clusterInsightBox.style.display = 'block';
+    clusterInsightText.innerText = CLUSTER_INSIGHTS[clusterName] || "-";
+  }
+
   // Para um benchmark justo, calculamos o score de todos os municípios no MESMO ano selecionado
   const allScores = Object.keys(DB).map(id => {
     const cityData = (DB[id].history && DB[id].history[year]) ? DB[id].history[year] : DB[id];
     return { id, score: calculateScoreValue(cityData) };
   });
   
+  // Cálculo da Média do Cluster
+  const clusterCities = CLUSTERS[clusterName];
+  const clusterScores = allScores.filter(s => clusterCities.includes(s.id));
+  const clusterSum = clusterScores.reduce((acc, curr) => acc + curr.score, 0);
+  const clusterAverage = Math.round(clusterSum / clusterScores.length);
+
   // Sort descending
   allScores.sort((a,b) => b.score - a.score);
   
@@ -2549,6 +2602,10 @@ function updateBenchmark(cityId, data) {
   document.getElementById('comp-name-main').innerText = cityId;
   document.getElementById('comp-val-main').innerText = `${currentScore}/100`;
   document.getElementById('bar-comp-main').style.width = `${currentScore}%`;
+
+  // Média do Cluster
+  document.getElementById('comp-val-cluster').innerText = `${clusterAverage}/100`;
+  document.getElementById('bar-comp-cluster').style.width = `${clusterAverage}%`;
 
   const natalScore = calculateScoreValue(REF_NATAL);
   document.getElementById('comp-val-natal').innerText = `${natalScore}/100`;
@@ -4082,6 +4139,7 @@ let geoMap = null;
 let geoHeatLayer = null;
 let geoRiskMarkers = [];
 let geoSchoolMarkers = [];
+let geoClusterMarkers = [];
 let geoAllMarkers = [];
 let activeGeoLayer = 'heat';
 let showingAll = false;
@@ -4204,7 +4262,6 @@ function buildGeoLayers() {
         const sel = document.getElementById('city-select');
         sel.value = name;
         selectCity(name);
-        // Se houver dados de risco, abre o modal mesmo na visão geral
         if (GEO_DATA[name] && GEO_DATA[name].riskWhy) {
           openRiskModal(name);
         }
@@ -4212,50 +4269,64 @@ function buildGeoLayers() {
       });
     geoAllMarkers.push(m);
   });
+
+  // ── CLUSTER MARKERS ──────────────────────────────────────
+  Object.entries(GEO_DATA).forEach(([name, d]) => {
+    const cluster = CITY_TO_CLUSTER[name];
+    const color = CLUSTER_COLORS[cluster] || '#fff';
+    const icon = L.divIcon({
+      html: `<div style="
+        width:40px;height:40px;border-radius:50%;
+        background:${color}33;border:3.3px solid ${color};
+        display:flex;align-items:center;justify-content:center;
+        font-size:14px;box-shadow:0 0 15px ${color}55;
+      ">📍</div>`,
+      className: '', iconSize: [40, 40], iconAnchor: [20, 20]
+    });
+    const m = L.marker([d.lat, d.lng], { icon })
+      .bindTooltip(`<b>${name}</b><br>Cluster: ${cluster}`, { className: 'geo-tooltip' })
+      .on('click', () => {
+        updateGeoPanel(name);
+        selectCity(name);
+      });
+    geoClusterMarkers.push(m);
+  });
 }
 
 function toggleGeoLayer(layer) {
   activeGeoLayer = layer;
-  // update buttons
-  ['heat','density','risk','school'].forEach(l => {
+  ['heat','density','risk','school','cluster'].forEach(l => {
     const btn = document.getElementById('btn-' + l);
     if(btn) btn.classList.toggle('active', l === layer);
   });
   showingAll = false;
   document.getElementById('btn-all').classList.remove('active');
 
-  // remove all
   if (geoHeatLayer) geoMap.removeLayer(geoHeatLayer);
   geoRiskMarkers.forEach(m => geoMap.removeLayer(m));
   geoSchoolMarkers.forEach(m => geoMap.removeLayer(m));
+  geoClusterMarkers.forEach(m => geoMap.removeLayer(m));
   geoAllMarkers.forEach(m => geoMap.removeLayer(m));
 
   if (layer === 'heat' || layer === 'density') {
-    if (geoHeatLayer) geoMap.removeLayer(geoHeatLayer);
-    
     let heatPoints, gradient, radius;
     if (layer === 'heat') {
       heatPoints = Object.entries(GEO_DATA).map(([name, d]) => [d.lat, d.lng, (100 - d.esg) / 100]);
       gradient = { 0.0: '#00e5a0', 0.4: '#ffb830', 0.7: '#ff7849', 1.0: '#ff4d6d' };
-      radius = 60; // Aumentado para visibilidade profissional
+      radius = 60;
     } else {
-      // Densidade Populacional - Ajustando escala para municípios menores
       heatPoints = Object.entries(GEO_DATA).map(([name, d]) => [d.lat, d.lng, Math.min(d.den / 400, 1.0)]); 
       gradient = { 0.0: '#b0c6ff', 0.4: '#3b82f6', 0.7: '#1d4ed8', 1.0: '#030712' };
-      radius = 75; // Raio maior para densidade
+      radius = 75;
     }
-    
-    geoHeatLayer = L.heatLayer(heatPoints, { 
-      radius: radius, 
-      blur: 35, 
-      maxZoom: 13, 
-      gradient: gradient 
-    });
+    geoHeatLayer = L.heatLayer(heatPoints, { radius, blur: 35, maxZoom: 13, gradient });
     geoMap.addLayer(geoHeatLayer);
   } else if (layer === 'risk') {
     geoRiskMarkers.forEach(m => geoMap.addLayer(m));
   } else if (layer === 'school') {
     geoSchoolMarkers.forEach(m => geoMap.addLayer(m));
+  } else if (layer === 'cluster') {
+    geoClusterMarkers.forEach(m => geoMap.addLayer(m));
   }
 }
 
@@ -4267,6 +4338,7 @@ function toggleAllCities() {
   if (geoHeatLayer) geoMap.removeLayer(geoHeatLayer);
   geoRiskMarkers.forEach(m => geoMap.removeLayer(m));
   geoSchoolMarkers.forEach(m => geoMap.removeLayer(m));
+  geoClusterMarkers.forEach(m => geoMap.removeLayer(m));
   geoAllMarkers.forEach(m => geoMap.removeLayer(m));
 
   if (showingAll) {
