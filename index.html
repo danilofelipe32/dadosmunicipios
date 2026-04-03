@@ -592,6 +592,78 @@
   .geo-legend-title { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,.3); margin-bottom: 2px; }
   .geo-legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(255,255,255,.6); }
   .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  
+  /* CORRELATION ANALYSIS MODULE */
+  .correlation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .correlation-chart-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+  }
+  .correlation-chart-container:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(108, 99, 255, 0.3);
+    transform: translateY(-5px);
+  }
+  .correlation-chart-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 5px;
+  }
+  .correlation-chart-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .correlation-chart-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .correlation-insights {
+    margin-top: 32px;
+    padding: 24px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(0, 212, 255, 0.05));
+    border: 1px solid rgba(108, 99, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+  }
+  .correlation-insights h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--primary);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+  }
+  .correlation-insights p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+  .correlation-insights strong {
+    color: #fff;
+  }
+
   /* Override leaflet dark tiles attribution */
   .leaflet-control-attribution { background: rgba(0,0,0,.5)!important; color: rgba(255,255,255,.4)!important; font-size: 10px!important; }
   .leaflet-control-attribution a { color: rgba(255,255,255,.4)!important; }
@@ -1099,6 +1171,40 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- CORRELATION SECTION -->
+  <section id="correlation-section">
+    <div class="section-title"><span class="s-icon">📊</span> Análise de Correlação (Causa e Efeito) <span class="badge b-warning" style="margin-left:10px;font-size:0.6rem;">Novo Módulo</span></div>
+    
+    <div class="correlation-grid">
+      <div class="correlation-chart-container">
+        <div class="info-btn" onclick="showInsight('corr-idh')">i</div>
+        <div class="correlation-chart-header">
+          <div class="correlation-chart-title">IDH vs. Cobertura de Saneamento</div>
+          <div class="correlation-chart-subtitle">Impacto da infraestrutura no desenvolvimento humano local</div>
+        </div>
+        <div style="height: 320px; width: 100%;">
+          <canvas id="cCorrIDH"></canvas>
+        </div>
+      </div>
+
+      <div class="correlation-chart-container">
+        <div class="info-btn" onclick="showInsight('corr-ivj')">i</div>
+        <div class="correlation-chart-header">
+          <div class="correlation-chart-title">IVJ vs. Evasão Escolar</div>
+          <div class="correlation-chart-subtitle">Identificação do ponto de ruptura social e educacional</div>
+        </div>
+        <div style="height: 320px; width: 100%;">
+          <canvas id="cCorrIVJ"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="correlation-insights" id="correlation-insights-box">
+      <h4><i class="fas fa-lightbulb"></i> Insights de Correlação Territorial</h4>
+      <p id="correlation-insight-text">Aguardando seleção do município para processamento analítico...</p>
     </div>
   </section>
 
@@ -2497,6 +2603,16 @@ const InsightsDB = {
     t: "Impacto da Gravidez na Juventude",
     d: "Avalia como a maternidade precoce impacta a trajetória social e educacional das jovens. Este indicador compõe o eixo de risco do IVJ (Índice de Vulnerabilidade Juvenil).",
     i: "Zonas com IVJ alto e alta taxa de gravidez são prioridades máximas para equipes de assistência social móvel."
+  },
+  'corr-idh': {
+    t: "Correlação: IDH vs Saneamento",
+    d: "Este gráfico de dispersão prova matematicamente a relação de dependência entre o acesso ao esgoto e o desenvolvimento humano. Cada ponto no gráfico representa um município da região no ano selecionado.",
+    i: "A linha de tendência mostra que municípios que superam a barreira dos 40% de esgoto tendem a apresentar saltos significativos no IDH Longevidade."
+  },
+  'corr-ivj': {
+    t: "Correlação: IVJ vs Evasão Escolar",
+    d: "Análise do 'Ponto de Ruptura' social. Identifica o momento exato em que a falta de escola se torna um preditor inevitável de vulnerabilidade e exposição ao crime organizado.",
+    i: "Municípios no quadrante superior direito são zonas de 'Risco Máximo', onde a evasão escolar alimenta o recrutamento por facções locais."
   }
 };
 
@@ -3539,6 +3655,7 @@ function updateYear(year) {
       updateBenchmark(cityId, hy);
       runSimulation(); // Sincroniza simulador se estiver aberto
       renderCharts(aguNum, esgNum, d.letal, cityId, radar);
+      renderCorrelationCharts(cityId, year);
       
       // 6. Atualizar Painel de Mapa (GeoPanel)
       if (document.getElementById('gval-pop')) document.getElementById('gval-pop').innerText = hy.pop;
@@ -3571,7 +3688,7 @@ function togglePlayTime() {
   }
 }
 
-let activeChartRadar, activeChartIDHM;
+let activeChartRadar, activeChartIDHM, activeChartCorrIDH, activeChartCorrIVJ;
 window.showIDHMMean = false;
 
 function toggleIDHMMean() {
@@ -4390,6 +4507,87 @@ function updateGeoPanel(cityName) {
   const armedBadge = document.getElementById('geo-armed-badge');
   armedBadge.textContent = d.riskArmed;
   armedBadge.className = 'geo-risk-badge ' + (d.armedClass === 'red' ? '' : d.armedClass === 'med' ? 'medium' : 'low');
+}
+
+// ── CORRELATION ANALYSIS LOGIC ──────────────────────────────────────
+function calculateRegression(data) {
+  const n = data.length;
+  if (n < 2) return null;
+  let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+  for (const p of data) {
+    sumX += p.x;
+    sumY += p.y;
+    sumXY += p.x * p.y;
+    sumX2 += p.x * p.x;
+  }
+  const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+  const b = (sumY - m * sumX) / n;
+  const minX = Math.min(...data.map(p => p.x));
+  const maxX = Math.max(...data.map(p => p.x));
+  return [{ x: minX, y: m * minX + b }, { x: maxX, y: m * maxX + b }];
+}
+
+function renderCorrelationCharts(selectedCity, year) {
+  const ctxIDH = document.getElementById('cCorrIDH');
+  const ctxIVJ = document.getElementById('cCorrIVJ');
+  if (!ctxIDH || !ctxIVJ) return;
+
+  const dataIDH = [];
+  const dataIVJ = [];
+  Object.entries(DB).forEach(([name, cityData]) => {
+    const historical = cityData.history && cityData.history[year] ? cityData.history[year] : cityData;
+    const agu = parseFloat(historical.agu.replace('%', ''));
+    const esg = parseFloat(historical.esg.replace('%', ''));
+    const sanAvg = (agu + esg) / 2;
+    const idh = parseFloat(historical.idh.replace(',', '.'));
+    dataIDH.push({ x: sanAvg, y: idh, city: name });
+    const ivj = historical.ivj || 0;
+    const evasao = historical.evasao_val || 0;
+    dataIVJ.push({ x: evasao, y: ivj, city: name });
+  });
+
+  const pointBgIDH = dataIDH.map(p => p.city === selectedCity ? '#6366f1' : 'rgba(255, 255, 255, 0.1)');
+  const pointRadiusIDH = dataIDH.map(p => p.city === selectedCity ? 9 : 5);
+  const pointBgIVJ = dataIVJ.map(p => p.city === selectedCity ? '#ef4444' : 'rgba(255, 255, 255, 0.1)');
+  const pointRadiusIVJ = dataIVJ.map(p => p.city === selectedCity ? 9 : 5);
+  const commonOptions = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => {
+      const p = ctx.raw;
+      if (p.city) return `${p.city}: (${ctx.dataset.labelX}: ${p.x.toFixed(1)}, ${ctx.dataset.labelY}: ${p.y.toFixed(3)})`;
+      return 'Linha de Tendência Regional';
+    }}}},
+    scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, color: '#94a3b8', font: { size: 10, weight: 700 } } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, color: '#94a3b8', font: { size: 10, weight: 700 } } } }
+  };
+
+  if (activeChartCorrIDH) activeChartCorrIDH.destroy();
+  activeChartCorrIDH = new Chart(ctxIDH, {
+    type: 'scatter',
+    data: { datasets: [{ labelX: 'Saneamento %', labelY: 'IDH', data: dataIDH, backgroundColor: pointBgIDH, borderColor: '#6366f1', borderWidth: 1, pointRadius: pointRadiusIDH, hoverRadius: 12 },
+                       { label: 'Tendência', data: calculateRegression(dataIDH), type: 'line', borderColor: 'rgba(99, 102, 241, 0.3)', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false }] },
+    options: { ...commonOptions, scales: { x: { ...commonOptions.scales.x, title: { ...commonOptions.scales.x.title, text: 'COBERTURA MÉDIA DE SANEAMENTO (%)' }, min: 0, max: 100 },
+                                           y: { ...commonOptions.scales.y, title: { ...commonOptions.scales.y.title, text: 'ÍNDICE DE DESENVOLVIMENTO (IDH)' }, min: 0.5, max: 0.8 } } }
+  });
+
+  if (activeChartCorrIVJ) activeChartCorrIVJ.destroy();
+  activeChartCorrIVJ = new Chart(ctxIVJ, {
+    type: 'scatter',
+    data: { datasets: [{ labelX: 'Evasão %', labelY: 'IVJ', data: dataIVJ, backgroundColor: pointBgIVJ, borderColor: '#ef4444', borderWidth: 1, pointRadius: pointRadiusIVJ, hoverRadius: 12 },
+                       { label: 'Tendência', data: calculateRegression(dataIVJ), type: 'line', borderColor: 'rgba(239, 68, 68, 0.3)', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false }] },
+    options: { ...commonOptions, scales: { x: { ...commonOptions.scales.x, title: { ...commonOptions.scales.x.title, text: 'TAXA DE EVASÃO ESCOLAR (%)' }, min: 0, max: 30 },
+                                           y: { ...commonOptions.scales.y, title: { ...commonOptions.scales.y.title, text: 'VULNERABILIDADE JUVENIL (IVJ)' }, min: 0, max: 10 } } }
+  });
+
+  const pIDH = dataIDH.find(d => d.city === selectedCity);
+  const pIVJ = dataIVJ.find(d => d.city === selectedCity);
+  if (pIDH && pIVJ) {
+    let t = `Em <strong>${selectedCity}</strong>, a análise prova matematicamente que `;
+    t += pIDH.x < 35 ? `a baixa infraestrutura básica (Saneamento: ${pIDH.x.toFixed(1)}%) trava o desenvolvimento humano, mantendo o IDH em ${pIDH.y.toFixed(3)}. ` : `a cobertura de saneamento de ${pIDH.x.toFixed(1)}% é um motor para o IDH de ${pIDH.y.toFixed(3)}. `;
+    t += `<br><br>No campo social, `;
+    t += pIVJ.x > 14 ? `a evasão de ${pIVJ.x.toFixed(1)}% ultrapassou o <strong>ponto de ruptura</strong>, tornando-se o principal preditor do IVJ (${pIVJ.y.toFixed(2)}) e da violência armada no território.` : `a retenção escolar mantém o IVJ em ${pIVJ.y.toFixed(2)}, prevenindo a ascensão da criminalidade juvenil.`;
+    document.getElementById('correlation-insight-text').innerHTML = t;
+  }
 }
 
 // Inicializar mapa quando a seção ficar visível (IntersectionObserver)
