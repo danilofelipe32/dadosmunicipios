@@ -1618,6 +1618,26 @@
     </div>
   </section>
 
+  <section id="ia-consultant-section">
+    <div class="section-title"><span class="s-icon">🤖</span> IA Consultora (Contexto Narrativo) <span class="badge b-primary" style="margin-left:10px; font-size:0.6rem;">Experimental</span></div>
+    <div class="exec-card" style="border-left-color: var(--accent); background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(108,99,255,0.04)); position: relative;">
+       <div class="info-btn" style="top:15px; right:15px;" onclick="showInsight('ia-consult')">i</div>
+       <div id="ia-loading" style="display:none; color:#a59bff; font-size:0.85rem; margin-bottom:12px; font-weight:700;">
+         <i class="fas fa-circle-notch fa-spin"></i> Processando diagnóstico via APIFreeLLM...
+       </div>
+       <p id="ia-phrase" style="font-style: italic; color: #fff; line-height: 1.7; font-size: 1.05rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">"Selecione um município e clique no botão abaixo para gerar uma recomendação estratégica baseada em inteligência artificial."</p>
+       
+       <div style="display:flex; align-items:center; gap:15px; margin-top:20px;">
+         <button id="btn-gen-ia" class="geo-btn active" onclick="generateAINarrative()" style="padding: 10px 22px;">
+           <i class="fas fa-magic" style="margin-right:8px;"></i> Gerar Diagnóstico IA
+         </button>
+         <div id="ia-timer-box" style="display:none; align-items:center; gap:8px; font-size:0.75rem; color:var(--warning);">
+           <i class="fas fa-clock"></i> Taxa de Limite: <span id="ia-countdown">25</span>s
+         </div>
+       </div>
+    </div>
+  </section>
+
   <section id="decision-section">
     <div class="section-title"><span class="s-icon">💡</span> Recomendações Estratégicas Automatizadas <span class="badge b-success" style="margin-left:10px; font-size:0.6rem;">Decision Intel</span></div>
     <div id="rec-container" class="rec-grid">
@@ -2741,8 +2761,102 @@ const InsightsDB = {
     t: "Correlação: IVJ vs Evasão Escolar",
     d: "Análise do 'Ponto de Ruptura' social. Identifica o momento exato em que a falta de escola se torna um preditor inevitável de vulnerabilidade e exposição ao crime organizado.",
     i: "Municípios no quadrante superior direito são zonas de 'Risco Máximo', onde a evasão escolar alimenta o recrutamento por facções locais."
+  },
+  'ia-consult': {
+    t: "IA Consultora (SocioDash™ Intel)",
+    d: "Módulo de Processamento de Linguagem Natural (NLP) via APIFreeLLM. Ele converte dados brutos em narrativa estratégica, interpretando o contexto socioeconômico do município em tempo real para sugerir ações prioritárias.",
+    i: "Esta IA foca em correlação: ela não apenas lê o saneamento baixo, mas explica como ele trava o crescimento do IDH do município."
   }
 };
+
+let iaCooldown = false;
+async function generateAINarrative() {
+  if (iaCooldown) return;
+  
+  const iaBtn = document.getElementById('btn-gen-ia');
+  const iaPhrase = document.getElementById('ia-phrase');
+  const iaLoading = document.getElementById('ia-loading');
+  const iaTimerBox = document.getElementById('ia-timer-box');
+  const iaCount = document.getElementById('ia-countdown');
+
+  const cityId = document.getElementById('city-select').value;
+  const year = document.getElementById('time-slider').value;
+  const d = (DB[cityId].history && DB[cityId].history[year]) ? DB[cityId].history[year] : DB[cityId];
+
+  // Coleta dados para o prompt
+  const idh = d.idh;
+  const alf = d.alf || "N/A";
+  const agu = d.agu || "0%";
+  const esg = d.esg || "0%";
+  const ivj = d.ivj || 5;
+  const pib = d.pib || "N/A";
+
+  const prompt = `Você é um consultor sênior de políticas públicas do SocioDash™ Pro (v2.7.5).
+  Analise os dados do município de ${cityId} em ${year}:
+  - IDHM: ${idh}
+  - Cobertura de Água: ${agu}
+  - Cobertura de Esgoto: ${esg}
+  - Taxa de Alfabetização: ${alf}
+  - Índice de Vulnerabilidade Juvenil (IVJ): ${ivj}/10
+  - PIB Per Capita: ${pib}
+
+  Gere UMA única frase de impacto estratégica (máximo 250 caracteres) em tom executivo, identificando qual desses indicadores é a maior "Alavanca de Crescimento" ou "Prioridade Crítica" para elevar o bem-estar social em ${cityId} este ano. Seja direto e prescritivo.`;
+
+  iaLoading.style.display = 'block';
+  iaBtn.disabled = true;
+  iaBtn.style.opacity = '0.5';
+
+  try {
+    const res = await fetch("https://apifreellm.com/api/v1/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy"
+      },
+      body: JSON.stringify({
+        message: prompt,
+        model: "llama-3"
+      })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      iaPhrase.innerHTML = `"${data.response}"`;
+      iaPhrase.style.color = "#fff";
+    } else {
+      iaPhrase.innerHTML = "Ocorreu um erro ao comunicar com a IA. Tente novamente em breve.";
+      iaPhrase.style.color = "var(--danger)";
+    }
+  } catch (err) {
+    iaPhrase.innerHTML = "Falha na conexão com os servidores da SocioDash™ IA.";
+    iaPhrase.style.color = "var(--danger)";
+  } finally {
+    iaLoading.style.display = 'none';
+    startIACooldown();
+  }
+}
+
+function startIACooldown() {
+  iaCooldown = true;
+  const iaTimerBox = document.getElementById('ia-timer-box');
+  const iaCount = document.getElementById('ia-countdown');
+  const iaBtn = document.getElementById('btn-gen-ia');
+  
+  iaTimerBox.style.display = 'flex';
+  let timeLeft = 25;
+  
+  const timer = setInterval(() => {
+    timeLeft--;
+    iaCount.innerText = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      iaCooldown = false;
+      iaTimerBox.style.display = 'none';
+      iaBtn.disabled = false;
+      iaBtn.style.opacity = '1';
+    }
+  }, 1000);
+}
 
 // --- BENCHMARK DATA & UTILS ---
 const REF_NATAL = { alf: "94%", agu: "98%", esg: "46%", ivj: 5.8 }; // Referência Capital
