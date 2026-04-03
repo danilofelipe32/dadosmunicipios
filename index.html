@@ -437,6 +437,26 @@
   .percentile-val { font-weight: 900; color: var(--success); font-size: 1rem; }
   .percentile-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
 
+  .card-img-preview { 
+    width: 100%; 
+    height: 100px; 
+    object-fit: cover; 
+    border-radius: 12px; 
+    margin-top: 5px; 
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0.85;
+    filter: brightness(1.1) saturate(1.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.4s ease;
+    background: rgba(0,0,0,0.2);
+    cursor: zoom-in;
+  }
+  .card-img-preview:hover { 
+    opacity: 1; transform: translateY(-3px); 
+    box-shadow: 0 8px 25px rgba(108,99,255,0.25);
+    border-color: rgba(108,99,255,0.3);
+  }
+
   .comp-bars { display: flex; flex-direction: column; gap: 12px; }
   .comp-item { display: flex; flex-direction: column; gap: 5px; }
   .comp-lbl-row { display: flex; justify-content: space-between; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: var(--text-muted); }
@@ -1052,6 +1072,7 @@
           <div class="percentile-val" id="rank-percentile">0%</div>
           <div class="percentile-lbl" id="rank-percentile-text">Melhor que os outros municípios analisados.</div>
         </div>
+        <img src="img/data-preview.png" alt="Dataset Preview" class="card-img-preview">
       </div>
       <!-- Card Comparativo Direto -->
       <div class="benchmark-card">
