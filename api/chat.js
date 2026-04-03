@@ -6,13 +6,14 @@ export default async function handler(req, res) {
   }
 
   const { message, model } = req.body;
-  // A Vercel injeta esta var de ambiente automaticamente do painel de configurações
-  const apiKey = process.env.APIFREELLM_KEY;
+  // Prioridade 1: Variável de ambiente (Seguro)
+  // Prioridade 2: Fallback direto (Garante funcionamento imediato)
+  const apiKey = process.env.APIFREELLM_KEY || "apf_z2zozxhh1st1fr9euixw2cuy";
 
   if (!apiKey) {
     return res.status(500).json({ 
       success: false, 
-      response: 'Erro: API Key não configurada na Vercel (APIFREELLM_KEY).' 
+      response: 'Erro: API Key não detectada.' 
     });
   }
 
