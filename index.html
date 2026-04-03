@@ -1622,17 +1622,23 @@
     <div class="section-title"><span class="s-icon">🤖</span> IA Consultora (Contexto Narrativo) <span class="badge b-primary" style="margin-left:10px; font-size:0.6rem;">Experimental</span></div>
     <div class="exec-card" style="border-left-color: var(--accent); background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(108,99,255,0.04)); position: relative;">
        <div class="info-btn" style="top:15px; right:15px;" onclick="showInsight('ia-consult')">i</div>
+       
        <div id="ia-loading" style="display:none; color:#a59bff; font-size:0.85rem; margin-bottom:12px; font-weight:700;">
-         <i class="fas fa-circle-notch fa-spin"></i> Processando diagnóstico via APIFreeLLM...
+         ⏳ Processando diagnóstico via APIFreeLLM...
        </div>
        <p id="ia-phrase" style="font-style: italic; color: #fff; line-height: 1.7; font-size: 1.05rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">"Selecione um município e clique no botão abaixo para gerar uma recomendação estratégica baseada em inteligência artificial."</p>
        
        <div style="display:flex; align-items:center; gap:15px; margin-top:20px;">
          <button id="btn-gen-ia" class="geo-btn active" onclick="generateAINarrative()" style="padding: 10px 22px;">
-           <i class="fas fa-magic" style="margin-right:8px;"></i> Gerar Diagnóstico IA
+           ✨ Gerar Diagnóstico IA
          </button>
+         
+         <button id="btn-copy-ia" class="geo-btn" onclick="copyIAReport()" style="display:none; padding: 10px 20px; background: rgba(108,99,255,0.15); border: 1.5px solid rgba(108,99,255,0.5); color: #fff; align-items:center; justify-content:center; cursor:pointer; gap:8px; font-size:0.88rem; font-weight:700; border-radius:12px; transition: all 0.3s;" title="Copiar Relatório Completo">
+            📋 Copiar
+          </button>
+
          <div id="ia-timer-box" style="display:none; align-items:center; gap:8px; font-size:0.75rem; color:var(--warning);">
-           <i class="fas fa-clock"></i> Taxa de Limite: <span id="ia-countdown">25</span>s
+           ⏳ Taxa de Limite: <span id="ia-countdown">25</span>s
          </div>
        </div>
     </div>
@@ -2844,6 +2850,7 @@ async function generateAINarrative() {
           iaPhrase.style.fontStyle = "normal";
           iaPhrase.style.textAlign = "justify";
           iaPhrase.style.fontSize = "1rem";
+          document.getElementById('btn-copy-ia').style.display = 'flex'; // Mostra botão de copiar
           success = true;
           break; 
         }
@@ -5105,6 +5112,31 @@ function closeGeoModal(modalId, event) {
   if (event.target === document.getElementById(modalId)) {
     document.getElementById(modalId).classList.remove('open');
   }
+}
+
+function copyIAReport() {
+  const phraseEl = document.getElementById('ia-phrase');
+  const btn = document.getElementById('btn-copy-ia');
+  
+  const text = phraseEl.innerText || phraseEl.textContent;
+  
+  navigator.clipboard.writeText(text).then(() => {
+    const oldHTML = btn.innerHTML;
+    btn.innerHTML = '<span style="font-size:1.1rem;">✅</span> Copiado!';
+    btn.style.background = 'rgba(0,229,160,0.2)';
+    btn.style.borderColor = 'rgba(0,229,160,0.5)';
+    btn.title = "Copiado!";
+    
+    setTimeout(() => {
+      btn.innerHTML = oldHTML;
+      btn.style.background = 'rgba(108,99,255,0.2)';
+      btn.style.borderColor = 'rgba(108,99,255,0.5)';
+      btn.title = "Copiar Relatório Completo";
+    }, 2500);
+  }).catch(err => {
+    console.error('Erro ao copiar: ', err);
+    alert('Erro ao copiar para o clipboard. Verifique as permissões do navegador.');
+  });
 }
 
 window.onload = initTabs;
