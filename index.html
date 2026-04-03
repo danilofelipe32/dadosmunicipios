@@ -1080,6 +1080,49 @@
       opacity: 0.8;
     }
   }
+
+  /* ── IA CONSULTANT BUTTONS MOBILE ─────────────────────── */
+  .ia-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .ia-actions-row {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .ia-actions-row .geo-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 14px 20px !important;
+      font-size: 0.92rem !important;
+      border-radius: 14px !important;
+      min-height: 50px;
+    }
+    .ia-actions-row #btn-gen-ia {
+      order: 1;
+    }
+    .ia-actions-row #btn-copy-ia {
+      order: 2;
+    }
+    .ia-actions-row #ia-timer-box {
+      order: 3;
+      justify-content: center;
+      width: 100%;
+    }
+    #ia-consultant-section .exec-card {
+      padding: 20px 16px;
+    }
+    #ia-phrase {
+      font-size: 0.92rem !important;
+      line-height: 1.6 !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1628,12 +1671,12 @@
        </div>
        <p id="ia-phrase" style="font-style: italic; color: #fff; line-height: 1.7; font-size: 1.05rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">"Selecione um município e clique no botão abaixo para gerar uma recomendação estratégica baseada em inteligência artificial."</p>
        
-       <div style="display:flex; align-items:center; gap:15px; margin-top:20px;">
+       <div class="ia-actions-row">
          <button id="btn-gen-ia" class="geo-btn active" onclick="generateAINarrative()" style="padding: 10px 22px;">
            ✨ Gerar Diagnóstico IA
          </button>
          
-         <button id="btn-copy-ia" class="geo-btn" onclick="copyIAReport()" style="display:none; padding: 10px 20px; background: rgba(108,99,255,0.15); border: 1.5px solid rgba(108,99,255,0.5); color: #fff; align-items:center; justify-content:center; cursor:pointer; gap:8px; font-size:0.88rem; font-weight:700; border-radius:12px; transition: all 0.3s;" title="Copiar Relatório Completo">
+         <button id="btn-copy-ia" class="geo-btn" onclick="copyIAReport()" style="display:none; padding: 10px 20px; background: rgba(108,99,255,0.15); border: 1.5px solid rgba(108,99,255,0.5); color: #fff; cursor:pointer; gap:8px; font-size:0.88rem; font-weight:700; border-radius:12px; transition: all 0.3s;" title="Copiar Relatório Completo">
             📋 Copiar
           </button>
 
