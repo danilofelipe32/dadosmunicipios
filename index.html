@@ -2783,69 +2783,56 @@ async function generateAINarrative() {
   const year = document.getElementById('time-slider').value;
   const d = (DB[cityId].history && DB[cityId].history[year]) ? DB[cityId].history[year] : DB[cityId];
 
-  // Coleta dados para o prompt
-  const idh = d.idh;
-  const alf = d.alf || "N/A";
-  const agu = d.agu || "0%";
-  const esg = d.esg || "0%";
-  const ivj = d.ivj || 5;
-  const pib = d.pib || "N/A";
-
-  const prompt = `Você é um consultor sênior de políticas públicas do SocioDash™ Pro (v2.8.0).
-  Analise os dados do município de ${cityId} em ${year}:
-  - IDHM: ${idh}
-  - Cobertura de Água: ${agu}
-  - Cobertura de Esgoto: ${esg}
-  - Taxa de Alfabetização: ${alf}
-  - Índice de Vulnerabilidade Juvenil (IVJ): ${ivj}/10
-  - PIB Per Capita: ${pib}
-
-  Gere UMA única frase de impacto estratégica (máximo 250 caracteres) em tom executivo, identificando qual desses indicadores é a maior "Alavanca de Crescimento" ou "Prioridade Crítica" para elevar o bem-estar social em ${cityId} este ano. Seja direto e prescritivo.`;
+  const prompt = `Você é um consultor sênior de políticas públicas do SocioDash™ Pro (v2.8.4).
+  Analise os dados de ${cityId} em ${year}: IDHM ${d.idh}, Água ${d.agu||"0%"}, Esgoto ${d.esg||"0%"}, Alfabetização ${d.alf||"N/A"}, IVJ ${d.ivj||5}, PIB ${d.pib||"N/A"}.
+  Gere UMA única frase estratégica (máx 250 carac) em tom executivo sobre a maior prioridade de investimento para elevar o IDHM local.`;
 
   iaLoading.style.display = 'block';
   iaBtn.disabled = true;
   iaBtn.style.opacity = '0.5';
 
-  try {
-    // Agora apontamos para nossa Vercel Serverless Function interna (/api/chat)
-    // que injeta a API_KEY com segurança no servidor
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: prompt,
-        model: "llama-3"
-      })
-    });
+  const targetUrl = "https://apifreellm.com/api/v1/chat";
+  const fetchOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer apf_z2zozxhh1st1fr9euixw2cuy"
+    },
+    body: JSON.stringify({ message: prompt, model: "llama-3" })
+  };
 
-    const body = await res.json();
-    let aiResponse = "";
-    
-    // Tratando formato OpenAI (choices), formato simplificado e erros internos
-    if (body.choices && body.choices[0] && body.choices[0].message) {
-       aiResponse = body.choices[0].message.content;
-    } else if (body.success !== false && body.response) {
-       aiResponse = body.response;
-    } else if (body.success === false) {
-       aiResponse = `Erro IA: ${body.response}`;
-    }
+  // Sistema de Proxies Resilientes (Fallback Chain)
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+    `https://thingproxy.freeboard.io/fetch/${targetUrl}`
+  ];
 
-    if (aiResponse) {
-      iaPhrase.innerHTML = `"${aiResponse}"`;
-      iaPhrase.style.color = "#fff";
-    } else {
-      iaPhrase.innerHTML = "Ocorreu um erro ao comunicar com a IA (Verifique a Variável de Ambiente).";
-      iaPhrase.style.color = "var(--danger)";
+  let success = false;
+  for (const proxyUrl of proxies) {
+    try {
+      const res = await fetch(proxyUrl, fetchOptions);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          iaPhrase.innerHTML = `"${data.response}"`;
+          iaPhrase.style.color = "#fff";
+          success = true;
+          break; // Sucesso! Sai do loop
+        }
+      }
+    } catch (err) {
+      console.warn(`Proxy falhou (${proxyUrl.split('/')[2]}), tentando próximo...`);
     }
-  } catch (err) {
-    iaPhrase.innerHTML = "Falha na conexão com o Gateway SocioDash™ IA.";
-    iaPhrase.style.color = "var(--danger)";
-  } finally {
-    iaLoading.style.display = 'none';
-    startIACooldown();
   }
+
+  if (!success) {
+    iaPhrase.innerHTML = "Falha crítica de conexão. Os gateways de IA estão congestionados. Tente novamente em 60s.";
+    iaPhrase.style.color = "var(--danger)";
+  }
+
+  iaLoading.style.display = 'none';
+  startIACooldown();
 }
 
 function startIACooldown() {
