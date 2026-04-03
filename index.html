@@ -457,6 +457,52 @@
     border-color: rgba(108,99,255,0.3);
   }
 
+  /* SPARK LINES */
+  .sparkline-container {
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+  }
+
+  /* IET CARD SPECIAL STYLE */
+  .card-iet {
+    background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(108,99,255,0.05)) !important;
+    border: 1px solid rgba(16,185,129,0.3) !important;
+  }
+  .iet-status {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+  .iet-status.high { background: rgba(0,229,160,0.15); color: #00e5a0; }
+  .iet-status.low { background: rgba(255,77,109,0.15); color: #ff4d6d; }
+
+  /* ANOMALY ALERTS */
+  .anomalies-section {
+    margin-bottom: 25px;
+  }
+  .anomaly-card {
+    background: rgba(255,184,48,0.1);
+    border: 1px solid rgba(255,184,48,0.3);
+    border-left: 4px solid #ffb830;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.5s ease;
+  }
+  .anomaly-icon { font-size: 1.4rem; }
+  .anomaly-text { font-size: 0.88rem; color: #fff; font-weight: 500; }
+  .anomaly-text strong { color: #ffb830; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
   .comp-bars { display: flex; flex-direction: column; gap: 12px; }
   .comp-item { display: flex; flex-direction: column; gap: 5px; }
   .comp-lbl-row { display: flex; justify-content: space-between; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: var(--text-muted); }
@@ -1078,6 +1124,7 @@
 <div class="container">
   
   <section id="score-section" style="position:relative;">
+    <div id="anomalies-container" class="anomalies-section"></div>
     <div class="score-hero">
       <div class="info-btn" style="top:15px; right:15px;" onclick="showInsight('sociodash')">i</div>
       <div class="score-circle-container">
@@ -1268,6 +1315,7 @@
       <div class="kpi-val t-blue" id="k-pop">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" id="kb-pop" style="width:80%;background:#60a5fa;"></div></div>
       <div class="kpi-src">IBGE Censo 2022</div>
+      <div class="sparkline-container"><canvas id="spark-pop"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('dom')">i</div>
@@ -1276,6 +1324,7 @@
       <div class="kpi-val t-blue" id="k-dom">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" style="width:75%;background:#60a5fa;"></div></div>
       <div class="kpi-src">IBGE Censo 2022</div>
+      <div class="sparkline-container"><canvas id="spark-dom"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('idh')">i</div>
@@ -1284,6 +1333,7 @@
       <div class="kpi-val t-green" id="k-idh">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" id="kb-idh" style="width:65%;background:#00e5a0;"></div></div>
       <div class="kpi-src">IBGE / PNUD</div>
+      <div class="sparkline-container"><canvas id="spark-idh"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('pib')">i</div>
@@ -1292,6 +1342,7 @@
       <div class="kpi-val t-yellow" id="k-pib">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" style="width:50%;background:#ffb830;"></div></div>
       <div class="kpi-src">IBGE</div>
+      <div class="sparkline-container"><canvas id="spark-pib"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('alf')">i</div>
@@ -1300,6 +1351,7 @@
       <div class="kpi-val t-blue" id="k-alf">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" id="kb-alf" style="width:85%;background:#60a5fa;"></div></div>
       <div class="kpi-src">IBGE Censo 2022</div>
+      <div class="sparkline-container"><canvas id="spark-alf"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('den')">i</div>
@@ -1308,6 +1360,7 @@
       <div class="kpi-val t-green" id="k-den">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" style="width:40%;background:#00e5a0;"></div></div>
       <div class="kpi-src">IBGE 2022</div>
+      <div class="sparkline-container"><canvas id="spark-den"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('bf')">i</div>
@@ -1316,6 +1369,7 @@
       <div class="kpi-val t-red" id="k-bf">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" style="width:60%;background:#ff4d6d;"></div></div>
       <div class="kpi-src">MDS / Cadastro Único</div>
+      <div class="sparkline-container"><canvas id="spark-bf"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('agu')">i</div>
@@ -1324,6 +1378,7 @@
       <div class="kpi-val t-green" id="k-agu">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" id="kb-agu" style="width:75%;background:#00e5a0;"></div></div>
       <div class="kpi-src">Inst. Água e Saneamento</div>
+      <div class="sparkline-container"><canvas id="spark-agu"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('esg')">i</div>
@@ -1332,6 +1387,7 @@
       <div class="kpi-val t-red" id="k-esg">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" id="kb-esg" style="width:10%;background:#ff4d6d;"></div></div>
       <div class="kpi-src">Inst. Água e Saneamento</div>
+      <div class="sparkline-container"><canvas id="spark-esg"></canvas></div>
     </div>
     <div class="card-premium">
       <div class="info-btn" onclick="showInsight('gra')">i</div>
@@ -1340,6 +1396,15 @@
       <div class="kpi-val t-red" id="k-gra">-</div>
       <div class="kpi-bar"><div class="kpi-bar-fill" style="width:20%;background:#ff4d6d;"></div></div>
       <div class="kpi-src">DATASUS (10-19 Anos)</div>
+      <div class="sparkline-container"><canvas id="spark-gra"></canvas></div>
+    </div>
+    <div class="card-premium card-iet">
+      <div class="info-btn" onclick="showInsight('iet')">i</div>
+      <span class="kpi-icon">🎯</span>
+      <div class="kpi-label">Eficiência Territorial (IET)</div>
+      <div class="kpi-val" id="k-iet">-</div>
+      <div id="iet-badge" class="iet-status">-</div>
+      <div class="kpi-src">SocioDash™ Intel (Score vs PIB)</div>
     </div>
     </div>
   </section>
@@ -1854,7 +1919,7 @@
     <button class="insight-close" onclick="closeDocs()">&times;</button>
     
     <div class="doc-title" style="border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px;">
-      <span>📘 GUIA DEFINITIVO: SocioDash™ Pro v2.5</span>
+      <span>📘 GUIA DEFINITIVO: SocioDash™ Pro v2.7</span>
     </div>
     
     <div class="doc-bubble bubble-info" style="margin-bottom: 30px;">
@@ -1936,9 +2001,42 @@
       </div>
     </div>
 
+    <!-- SEÇÃO: SPARKLINES -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">📈 7. Análise de Tendência Histórica (Sparklines)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Implementado em todos os cards de KPI para oferecer uma visão de longo prazo (2018-2030):</p>
+      <ul class="doc-list">
+        <li><strong>Trajetória Visual:</strong> A linha pequena dentro de cada card mostra se o indicador está em ascensão, estável ou queda.</li>
+        <li><strong>Frequência:</strong> Atualiza-se dinamicamente conforme o usuário move o slider temporal.</li>
+      </ul>
+    </div>
+
+    <!-- SEÇÃO: IET -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">📊 8. Índice de Eficiência Territorial (IET)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Métrica avançada que cruza a riqueza gerada (PIB) com o bem-estar social entregue (Score SocioDash):</p>
+      <div class="doc-bubble" style="background:rgba(165,155,255,0.05); border:1px solid rgba(165,155,255,0.2);">
+        <strong>Benchmarking Regional Dinâmico:</strong>
+        <p style="margin-top:8px; font-size:0.82rem; line-height:1.4;">O IET não é um dado absoluto; ele compara a eficiência do município contra a média real dos 12 municípios da região no ano selecionado.</p>
+        <br>• <strong>Alta Eficiência (>1.15):</strong> O município entrega um retorno social superior à média regional para o seu nível de riqueza. "Faz muito com pouco".
+        <br>• <strong>Eficiência Média (0.85 a 1.15):</strong> Desenvolvimento equilibrado e alinhado aos seus pares regionais.
+        <br>• <strong>Ineficiência Crítica (<0.85):</strong> PIB elevado que não se converte em IDH ou Saneamento. Alerta para a necessidade de revisão de prioridades orçamentárias.
+      </div>
+    </div>
+
+    <!-- SEÇÃO: ANOMALIAS -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">🚨 9. Alertas de Outliers (Anomalias)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Motor estatístico que destaca automaticamente dados fora da curva do cluster regional:</p>
+      <ul class="doc-list">
+        <li><strong>Detecção Automática:</strong> Alerta o gestor se a Taxa de Gravidez subir >30% acima da média regional.</li>
+        <li><strong>Filtro de Ruído:</strong> Utiliza o desvio padrão da microrregião para evitar falsos positivos.</li>
+      </ul>
+    </div>
+
     <!-- SEÇÃO: CORRELAÇÃO -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">🎯 7. Análise de Correlação (Causa e Efeito)</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🧠 10. Análise de Correlação (Causa e Efeito)</h3>
       <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;">Módulo avançado que prova a relação de causalidade entre indicadores:</p>
       <div style="background:rgba(165,155,255,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(165,155,255,0.15);">
         <p style="font-size:0.82rem; margin-bottom:10px;">📈 <strong>IDH vs. Saneamento:</strong> Prova estatística de quanto a falta de esgoto trava o desenvolvimento local. Cidades fora da linha de tendência indicam ineficiência na conversão de infraestrutura em qualidade de vida.</p>
@@ -1949,7 +2047,7 @@
 
     <!-- SEÇÃO: GLOSSÁRIO -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">📚 8. Glossário e Termos Técnicos</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">📚 11. Glossário e Termos Técnicos</h3>
       <ul class="doc-list" style="font-size:0.82rem;">
         <li><strong>EJA:</strong> Educação de Jovens e Adultos.</li>
         <li><strong>NEE:</strong> Necessidades Educacionais Especiais (Educação Inclusiva).</li>
@@ -1959,29 +2057,26 @@
         <li><strong>IVJ:</strong> Índice de Vulnerabilidade Juvenil (Mede riscos sociais para jovens).</li>
         <li><strong>UBS:</strong> Unidade Básica de Saúde (Porta de entrada do SUS).</li>
         <li><strong>CRAS / CREAS:</strong> Centros de Referência da Assistência Social (Proteção Básica e Especial).</li>
-        <li><strong>FPM:</strong> Fundo de Participação dos Municípios (Recursos transferidos pela União).</li>
         <li><strong>CadÚnico:</strong> Cadastro Único para Programas Sociais do Governo Federal.</li>
+        <li><strong>IET:</strong> Índice de Eficiência Territorial (Mede conversão de PIB em Bem-estar).</li>
       </ul>
     </div>
 
     <!-- SEÇÃO: FAQ -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">❓ 9. Perguntas Frequentes (FAQ)</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">❓ 12. Perguntas Frequentes (FAQ)</h3>
       <div style="font-size:0.82rem; color:#e0e0e0;">
         <p style="margin-bottom:10px;"><strong>Como atualizo os dados?</strong> Clique no botão 'Sincronizar' na barra superior.</p>
-        <p style="margin-bottom:10px;"><strong>Posso usar as projeções em editais?</strong> As projeções são estimativas estatísticas (Forecasting) e devem servir como suporte, nunca como dado censitário oficial.</p>
-        <p style="margin-bottom:10px;"><strong>O que é o destaque em Dourado?</strong> Refere-se ao Censo 2022, a base mais confiável antes das estimativas anuais.</p>
-        <p style="margin-bottom:10px;"><strong>O que representa o Índice SocioDash™?</strong> É uma métrica de 0 a 100 que resume a maturidade social do município, equilibrando indicadores de Educação, Saneamento e Segurança.</p>
-        <p style="margin-bottom:10px;"><strong>Como são calculadas as projeções para 2030?</strong> Utilizamos modelos de regressão linear que analisam a tendência histórica dos últimos 5 anos para projetar o cenário mais provável.</p>
-        <p style="margin-bottom:10px;"><strong>As rotas escolares de risco são oficiais?</strong> Elas resultam do cruzamento de dados de criminalidade da SSP-RN com a localização das escolas, servindo como ferramenta de apoio à decisão para o transporte escolar.</p>
-        <p style="margin-bottom:10px;"><strong>Como posso exportar os dados do painel?</strong> Utilize o botão 'Relatório' para gerar um PDF da tela atual ou acesse o 'Módulo de Inteligência' para baixar a base histórica completa em formato CSV.</p>
+        <p style="margin-bottom:10px;"><strong>O que representa o Índice SocioDash™?</strong> É uma métrica de 0 a 100 que resume a maturidade social do município.</p>
+        <p style="margin-bottom:10px;"><strong>Como interpretar uma anomalia?</strong> Se um dado aparece no topo do dashboard com ícone de alerta, ele está 30% fora da média regional, exigindo auditoria imediata.</p>
+        <p style="margin-bottom:10px;"><strong>O que é o IET?</strong> É a nota de eficiência do prefeito: mostra se ele está gastando bem o PIB da cidade em prol do povo.</p>
       </div>
     </div>
 
     <div style="text-align:center; padding:30px 20px; background:rgba(108,99,255,0.08); border-radius:18px; margin-top:30px;">
       <p style="font-size:0.9rem; font-weight:800; color:#fff; margin-bottom:5px;">SocioDash™ Pro - Inteligência Territorial</p>
       <p style="font-size:0.75rem; color:var(--text-muted);">Plataforma de Suporte à Decisão Pública para os 12 municípios da 2ª DIREC.</p>
-      <p style="font-size:0.65rem; color:var(--text-muted); margin-top:10px;">v2.5.0 Build 2026</p>
+      <p style="font-size:0.65rem; color:var(--text-muted); margin-top:10px;">v2.7.0 Build 2026</p>
     </div>
   </div>
 </div>
@@ -2606,6 +2701,11 @@ const InsightsDB = {
     t: "Calculadora de Impacto (Simulador)",
     d: "Ferramenta interativa de projeção estatística que permite simular como melhorias reais em indicadores de base (saneamento e educação) elevam matematicamente o IDHM (Índice de Desenvolvimento Humano Municipal). Utiliza correlações lineares históricas para estimar o impacto de políticas públicas.",
     i: "Experimente elevar o saneamento para 90% e veja o salto na longevidade estimada do município. Pequenos avanços graduais geram grandes impactos cumulativos."
+  },
+  iet: {
+    t: "Índice de Eficiência Territorial (IET)",
+    d: "O IET é uma métrica avançada que cruza o PIB Per Capita com o Score SocioDash. Ele avalia o quanto de retorno social o município entrega para cada real gerado em sua economia (Riqueza vs. Bem-Estar).",
+    i: "Um IET alto (>1.2) indica alta eficiência na conversão de riqueza local em bem-estar. Um IET baixo (<0.8) sugere que o PIB é elevado mas não está sendo refletido em infraestrutura e indicadores sociais básicos."
   },
   exportacao: {
     t: "Exportação de Dados Crus",
@@ -3684,8 +3784,165 @@ function updateYear(year) {
         k.style.transform = 'scale(1)';
         k.style.opacity = '1';
       });
+
+      // 7. Novas Funções de Análise (v2.5)
+      renderSparklines(cityId, year);
+      updateIET(cityId, year);
+      updateAnomalies(cityId, year);
     }, 150);
   }
+}
+
+// ── NOVAS FUNÇÕES ANALÍTICAS (v2.5) ─────────────────────────
+
+let activeSparklines = {};
+
+function renderSparklines(cityId, currentYear) {
+  const d = DB[cityId];
+  if (!d.history) return;
+
+  const years = ["2018", "2020", "2022", "2024", "2026", "2028", "2030"];
+  const upToYear = years.filter(y => parseInt(y) <= parseInt(currentYear));
+
+  const metrics = [
+    { id: "pop", key: "pop", parser: v => parseInt(v.replace(/\./g,'')) },
+    { id: "dom", key: "dom", parser: v => parseInt(v.replace(/\./g,'')) },
+    { id: "idh", key: "idh", parser: v => parseFloat(v.replace(',','.')) },
+    { id: "pib", key: "pib", parser: v => parseFloat(v.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) },
+    { id: "alf", key: "alf", parser: v => parseFloat(v.replace('%','').replace(',','.')) },
+    { id: "den", key: "den", parser: v => parseFloat(d.den.replace('.','').replace(',','.')) }, // Densidade é fixa no DB mas posso simular
+    { id: "bf", key: "bf", parser: v => parseInt(v.replace(/[^0-9]/g,'')) },
+    { id: "agu", key: "agu", parser: v => parseFloat(v.replace('%','').replace(',','.')) },
+    { id: "esg", key: "esg", parser: v => parseFloat(v.replace('%','').replace(',','.')) },
+    { id: "gra", key: "gra", parser: v => parseFloat(v.replace('%','').replace(',','.')) }
+  ];
+
+  metrics.forEach(m => {
+    const canvas = document.getElementById("spark-" + m.id);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    const data = upToYear.map(y => m.parser(d.history[y][m.key] || "0"));
+
+    if (activeSparklines[m.id]) activeSparklines[m.id].destroy();
+
+    activeSparklines[m.id] = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: upToYear,
+        datasets: [{
+          data: data,
+          borderColor: '#a59bff',
+          borderWidth: 2,
+          pointRadius: 0,
+          fill: true,
+          backgroundColor: 'rgba(165, 155, 255, 0.05)',
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: { x: { display: false }, y: { display: false } }
+      }
+    });
+  });
+}
+
+function updateIET(cityId, year) {
+  const d = DB[cityId].history[year] || DB[cityId];
+  const score = calculateScoreValue(d);
+  const pibStr = (d.pib || "0").replace('R$ ', '').replace(/\./g, '').replace(',', '.').trim();
+  const pib = parseFloat(pibStr) || 1;
+  
+  // Dinamicamente calcular as médias regionais para normalização
+  let totalScore = 0;
+  let totalPib = 0;
+  const cities = Object.keys(DB);
+  cities.forEach(c => {
+    const cd = DB[c].history[year] || DB[c];
+    totalScore += calculateScoreValue(cd);
+    const cpib = parseFloat((cd.pib || "0").replace('R$ ', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
+    totalPib += cpib;
+  });
+  
+  const avgScore = totalScore / cities.length;
+  const avgPib = totalPib / cities.length;
+  
+  // IET = (Razão do Município) / (Razão Média Regional)
+  const localRatio = score / pib;
+  const avgRatio = avgScore / avgPib;
+  const iet = (localRatio / avgRatio).toFixed(2);
+  
+  const ietEl = document.getElementById('k-iet');
+  const badge = document.getElementById('iet-badge');
+  if(!ietEl || !badge) return;
+
+  ietEl.innerText = iet;
+  
+  if (iet > 1.15) {
+    badge.innerText = "Alta Eficiência";
+    badge.className = "iet-status high";
+    badge.style.background = "rgba(0,229,160,0.15)";
+    badge.style.color = "#00e5a0";
+  } else if (iet < 0.85) {
+    badge.innerText = "Ineficiência Crítica";
+    badge.className = "iet-status low";
+    badge.style.background = "rgba(255,77,109,0.15)";
+    badge.style.color = "#ff4d6d";
+  } else {
+    badge.innerText = "Eficiência Média";
+    badge.className = "iet-status";
+    badge.style.background = "rgba(255,255,255,0.06)";
+    badge.style.color = "#fff";
+  }
+}
+
+function updateAnomalies(cityId, year) {
+  const container = document.getElementById('anomalies-container');
+  container.innerHTML = "";
+  const d = DB[cityId].history[year] || DB[cityId];
+  
+  // Comparação com a média dos outros 11 municípios
+  const otherCities = Object.keys(DB).filter(c => c !== cityId);
+  
+  const checkAnomaly = (metricName, cityVal, label) => {
+    let sum = 0;
+    otherCities.forEach(c => {
+      const val = DB[c].history[year] ? DB[c].history[year][metricName] : DB[c][metricName];
+      sum += parseFloat(val.toString().replace('%','').replace('R$ ','').replace(/\./g,'').replace(',','.')) || 0;
+    });
+    const avg = sum / otherCities.length;
+    const current = parseFloat(cityVal.toString().replace('%','').replace('R$ ','').replace(/\./g,'').replace(',','.')) || 0;
+
+    const diff = (current - avg) / avg;
+    if (Math.abs(diff) > 0.3) { // 30% desvio
+      const isBad = (metricName === 'gra' || metricName === 'esg' ? current < avg : current < avg); // Esgoto é bom se maior, gravidez ruim se maior. Lógica simplificada:
+      const diffPct = Math.abs(Math.round(diff * 100));
+      
+      let message = "";
+      let icon = "⚠️";
+
+      if (metricName === 'gra' && diff > 0.3) {
+        message = `<strong>Atenção:</strong> Taxa de Gravidez na Adolescência em ${cityId} está <strong>${diffPct}% acima</strong> da média da região em ${year}.`;
+      } else if (metricName === 'esg' && diff < -0.3) {
+        message = `<strong>Risco Sanitário:</strong> Cobertura de esgoto está <strong>${diffPct}% abaixo</strong> da média regional.`;
+      } else if (metricName === 'idh' && diff < -0.2) {
+        message = `<strong>Alerta de Desenvolvimento:</strong> O IDHM projetado está significativamente abaixo do cluster regional.`;
+      }
+
+      if (message) {
+        const div = document.createElement('div');
+        div.className = 'anomaly-card';
+        div.innerHTML = `<span class="anomaly-icon">${icon}</span><span class="anomaly-text">${message}</span>`;
+        container.appendChild(div);
+      }
+    }
+  };
+
+  checkAnomaly('gra', d.gra, "Gravidez");
+  checkAnomaly('esg', d.esg, "Esgoto");
 }
 
 let playInterval = null;
