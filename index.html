@@ -689,7 +689,173 @@
   .geo-legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(255,255,255,.6); }
   .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   
+  /* ── MATRIZ DE PRIORIZAÇÃO ORÇAMENTÁRIA ──────────────────── */
+  .priority-section-wrap {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    margin-top: 24px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .priority-section-wrap { grid-template-columns: 1fr; }
+  }
+  .priority-matrix-container {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .priority-matrix-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 80%, rgba(108,99,255,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,229,160,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .priority-canvas-wrap {
+    height: 400px;
+    width: 100%;
+    position: relative;
+  }
+  .priority-quadrant-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .pq-label {
+    position: absolute;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    opacity: 0.5;
+  }
+  .pq-gold   { top: 5px; right: 5px; background: rgba(0,229,160,0.1);    color: #00e5a0; border: 1px solid rgba(0,229,160,0.2); }
+  .pq-plan   { top: 5px; left: 5px;  background: rgba(108,99,255,0.1);   color: #a59bff; border: 1px solid rgba(108,99,255,0.2); }
+  .pq-watch  { bottom: 5px; right: 5px; background: rgba(255,184,48,0.1); color: #ffb830; border: 1px solid rgba(255,184,48,0.2); }
+  .pq-low    { bottom: 5px; left: 5px; background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.08); }
+
+  .priority-actions-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .priority-panel-title {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .priority-action-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .priority-action-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+  .pac-gold::before   { background: #00e5a0; }
+  .pac-purple::before { background: #a59bff; }
+  .pac-yellow::before { background: #ffb830; }
+  .pac-gray::before   { background: rgba(255,255,255,0.15); }
+  .priority-action-card:hover {
+    transform: translateX(4px);
+    border-color: rgba(108,99,255,0.3);
+  }
+  .pac-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .pac-quadrant-badge {
+    font-size: 0.55rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .qb-gold   { background: rgba(0,229,160,0.15);    color: #00e5a0; }
+  .qb-purple { background: rgba(108,99,255,0.15);   color: #a59bff; }
+  .qb-yellow { background: rgba(255,184,48,0.15);   color: #ffb830; }
+  .qb-gray   { background: rgba(255,255,255,0.06);  color: rgba(255,255,255,0.4); }
+  .pac-indicator-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .pac-recommendation {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .pac-roi {
+    margin-top: 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pac-roi-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .pac-roi-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .priority-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .pl-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .pl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  @media (max-width: 480px) {
+    .priority-matrix-container { padding: 16px 12px; }
+    .priority-canvas-wrap { height: 300px; }
+  }
+
   /* CORRELATION ANALYSIS MODULE */
+
   .correlation-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1369,6 +1535,46 @@
     <div class="correlation-insights" id="correlation-insights-box">
       <h4><i class="fas fa-lightbulb"></i> Insights de Correlação Territorial</h4>
       <p id="correlation-insight-text">Aguardando seleção do município para processamento analítico...</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MATRIZ DE PRIORIZAÇÃO ORÇAMENTÁRIA
+  ════════════════════════════════════════════════════════════ -->
+  <section id="priority-matrix-section">
+    <div class="section-title">
+      <span class="s-icon">🎯</span> Matriz de Priorização Orçamentária
+      <span class="badge" style="margin-left:10px;font-size:0.6rem;background:rgba(0,229,160,0.15);color:#00e5a0;border:1px solid rgba(0,229,160,0.3);">Decision Intelligence</span>
+    </div>
+    <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0; line-height:1.6;">
+      Onde investir primeiro? O sistema cruza <strong style="color:#fff">Impacto no IDHM</strong> vs. <strong style="color:#fff">Urgência Crítica</strong> para calcular a equação ótima de alocação de recursos públicos.
+    </p>
+
+    <div class="priority-section-wrap">
+      <!-- GRÁFICO DE QUADRANTES -->
+      <div class="priority-matrix-container">
+        <div class="priority-canvas-wrap" style="position:relative;">
+          <canvas id="cPriorityMatrix"></canvas>
+        </div>
+        <!-- Legenda -->
+        <div class="priority-legend">
+          <div class="pl-item"><div class="pl-dot" style="background:#00e5a0;"></div> Ação Imediata (Alto Impacto + Alta Urgência)</div>
+          <div class="pl-item"><div class="pl-dot" style="background:#a59bff;"></div> Planejamento Estratégico (Alto Impacto + Baixa Urgência)</div>
+          <div class="pl-item"><div class="pl-dot" style="background:#ffb830;"></div> Monitoramento Constante (Baixo Impacto + Alta Urgência)</div>
+          <div class="pl-item"><div class="pl-dot" style="background:rgba(255,255,255,0.25);"></div> Baixa Prioridade</div>
+        </div>
+      </div>
+
+      <!-- PAINEL LATERAL DE AÇÕES -->
+      <div class="priority-actions-panel">
+        <div class="priority-panel-title">📋 Plano de Ação Gerado</div>
+        <div id="priority-actions-container">
+          <!-- Gerado via JS -->
+          <div style="color:var(--text-muted); font-size:0.82rem; padding:20px; text-align:center; border:1px dashed rgba(255,255,255,0.1); border-radius:14px;">
+            Selecione um município para gerar o plano de ação otimizado.
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -4199,6 +4405,7 @@ function updateYear(year) {
       runSimulation(); // Sincroniza simulador se estiver aberto
       renderCharts(aguNum, esgNum, d.letal, cityId, radar);
       renderCorrelationCharts(cityId, year);
+      renderPriorityMatrix(cityId, year);
       
       // 6. Atualizar Painel de Mapa (GeoPanel)
       if (document.getElementById('gval-pop')) document.getElementById('gval-pop').innerText = hy.pop;
@@ -5432,7 +5639,196 @@ function copyIAReport() {
   });
 }
 
+
+// ════════════════════════════════════════════════════════════
+// MATRIZ DE PRIORIZAÇÃO ORÇAMENTÁRIA — Motor Analítico v1.0
+// ════════════════════════════════════════════════════════════
+let activeChartPriority = null;
+
+function renderPriorityMatrix(cityId, year) {
+  const ctx = document.getElementById('cPriorityMatrix');
+  if (!ctx) return;
+
+  const cityData = DB[cityId];
+  const d = (cityData.history && cityData.history[year]) ? cityData.history[year] : cityData;
+
+  // ── 1. Calcular métricas de cada indicador ─────────────────
+  // Para cada indicador: x = Urgência (0-10), y = Impacto no IDH (0-10)
+  // Urgência: quanto mais longe da meta, mais urgente
+  // Impacto: peso científico de cada indicador no IDHM
+
+  const esgPct  = parseFloat(String(d.esg).replace(/[^0-9.]/g, '')) || 0;
+  const aguPct  = parseFloat(String(d.agu).replace(/[^0-9.]/g, '')) || 0;
+  const alfPct  = parseFloat(String(d.alf).replace(/[^0-9.]/g, '')) || 0;
+  const ivjVal  = parseFloat(d.ivj) || 0;
+  const graVal  = parseFloat(String(d.gra || '0').replace(/[~%]/g, '').trim()) || 0;
+
+  // Urgência = % de deficiência em relação às metas
+  const urgEsg  = Math.min(10, ((60 - esgPct) / 60) * 10).toFixed(1);   // meta: 60%
+  const urgAgu  = Math.min(10, ((95 - aguPct) / 95) * 10).toFixed(1);   // meta: 95%
+  const urgAlf  = Math.min(10, ((98 - alfPct) / 98) * 10).toFixed(1);   // meta: 98%
+  const urgIvj  = Math.min(10, ((ivjVal / 10) * 10)).toFixed(1);         // IVJ direto = urgência
+  const urgGra  = Math.min(10, ((graVal - 14) / 14 * 10).toFixed(1) > 0 ? (graVal - 14) / 14 * 10 : 1).toFixed(1); // meta: 14%
+
+  // Impacto no IDH (literatura científica de pesos)
+  const impEsg  = 8.5;  // Saneamento tem impacto fortíssimo na Longevidade (IDHM)
+  const impAgu  = 7.0;  // Água impacta Saúde e Longevidade
+  const impAlf  = 9.2;  // Educação é a maior dimensão do IDHM
+  const impIvj  = 6.5;  // Segurança afeta Renda e Educação indiretamente
+  const impGra  = 7.8;  // Gravidez na adolescência impacta fortemente Educação
+
+  // Tamanho das bolhas = ROI proporcional (Impacto × Urgência / 10)
+  const sizeOf = (imp, urg) => Math.max(8, imp * parseFloat(urg) * 0.7);
+
+  const indicators = [
+    { label: 'Esgotamento Sanitário', urgency: parseFloat(urgEsg), impact: impEsg, size: sizeOf(impEsg, urgEsg),
+      icon: '🚽', value: esgPct.toFixed(1) + '%', meta: '60%',
+      rec: `Expandir a rede coletora. Cobertura atual de ${esgPct.toFixed(1)}% está ${(60-esgPct).toFixed(1)}pp abaixo da meta de 60%.` },
+    { label: 'Cobertura de Água', urgency: parseFloat(urgAgu), impact: impAgu, size: sizeOf(impAgu, urgAgu),
+      icon: '💧', value: aguPct.toFixed(1) + '%', meta: '95%',
+      rec: `Ampliar adutoras e reservatórios. ${aguPct.toFixed(1)}% de cobertura frente à meta de 95% do PLANSAB.` },
+    { label: 'Alfabetização (15+)', urgency: parseFloat(urgAlf), impact: impAlf, size: sizeOf(impAlf, urgAlf),
+      icon: '📚', value: alfPct.toFixed(1) + '%', meta: '98%',
+      rec: `Fortalecer programas de EJA. Ainda há ${(100-alfPct).toFixed(1)}% da população sem leitura plena.` },
+    { label: 'Vulnerabilidade Juvenil', urgency: parseFloat(urgIvj), impact: impIvj, size: sizeOf(impIvj, urgIvj),
+      icon: '🛡️', value: ivjVal.toFixed(2), meta: '< 5.0',
+      rec: `IVJ de ${ivjVal.toFixed(2)} (meta < 5.0). Implementar programas de primeiro emprego e centros de juventude.` },
+    { label: 'Gravidez Adolescente', urgency: parseFloat(urgGra), impact: impGra, size: sizeOf(impGra, urgGra),
+      icon: '👶', value: graVal.toFixed(1) + '%', meta: '14%',
+      rec: `${graVal.toFixed(1)}% acima da média nacional (14%). Ampliar educação sexual e atenção primária para jovens de 10-19 anos.` },
+  ];
+
+  // ── 2. Classificar quadrante de cada indicador ─────────────
+  const getQuadrant = (urg, imp) => {
+    if (urg >= 5 && imp >= 7) return 'gold';     // 🚀 Ação Imediata
+    if (urg <  5 && imp >= 7) return 'purple';   // 📈 Planejamento Estratégico
+    if (urg >= 5 && imp <  7) return 'yellow';   // 🛡️ Monitoramento Constante
+    return 'gray';                               // 📉 Baixa Prioridade
+  };
+
+  const colorMap = {
+    gold:   { bg: 'rgba(0,229,160,0.75)',   border: '#00e5a0',   badge: 'qb-gold',   label: '🚀 Ação Imediata',        card: 'pac-gold' },
+    purple: { bg: 'rgba(165,155,255,0.75)', border: '#a59bff',   badge: 'qb-purple', label: '📈 Planej. Estratégico', card: 'pac-purple' },
+    yellow: { bg: 'rgba(255,184,48,0.75)',  border: '#ffb830',   badge: 'qb-yellow', label: '🛡️ Monitoramento',       card: 'pac-yellow' },
+    gray:   { bg: 'rgba(255,255,255,0.2)',  border: 'rgba(255,255,255,0.3)', badge: 'qb-gray', label: '📉 Baixa Prior.', card: 'pac-gray' },
+  };
+
+  indicators.forEach(ind => { ind.quadrant = getQuadrant(ind.urgency, ind.impact); });
+  // Ordenar: gold primeiro
+  const order = { gold: 0, purple: 1, yellow: 2, gray: 3 };
+  indicators.sort((a,b) => order[a.quadrant] - order[b.quadrant]);
+
+  // ── 3. Renderizar Bubble Chart ──────────────────────────────
+  const datasets = indicators.map(ind => {
+    const c = colorMap[ind.quadrant];
+    return {
+      label: ind.label,
+      data: [{ x: ind.urgency, y: ind.impact, r: ind.size }],
+      backgroundColor: c.bg,
+      borderColor: c.border,
+      borderWidth: 2,
+      hoverBorderWidth: 3,
+    };
+  });
+
+  // Linhas de cruzamento (quadrantes)
+  const crossLinePlugin = {
+    id: 'crossLines',
+    afterDraw(chart) {
+      const { ctx: c, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      const xMid = x.getPixelForValue(5);
+      const yMid = y.getPixelForValue(7);
+      c.save();
+      c.setLineDash([6, 4]);
+      c.strokeStyle = 'rgba(255,255,255,0.1)';
+      c.lineWidth = 1;
+      c.beginPath(); c.moveTo(xMid, top); c.lineTo(xMid, bottom); c.stroke();
+      c.beginPath(); c.moveTo(left, yMid); c.lineTo(right, yMid); c.stroke();
+      c.restore();
+    }
+  };
+
+  if (activeChartPriority) activeChartPriority.destroy();
+  activeChartPriority = new Chart(ctx, {
+    type: 'bubble',
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: 10 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(10,14,26,0.95)',
+          titleColor: '#fff',
+          bodyColor: '#94a3b8',
+          titleFont: { size: 13, weight: 800 },
+          bodyFont: { size: 11 },
+          padding: 12,
+          cornerRadius: 10,
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          callbacks: {
+            title: (items) => items[0].dataset.label,
+            label: (item) => {
+              const ind = indicators.find(i => i.label === item.dataset.label);
+              if (!ind) return '';
+              return [
+                `Urgência: ${ind.urgency}/10`,
+                `Impacto no IDHM: ${ind.impact}/10`,
+                `Valor atual: ${ind.value}  |  Meta: ${ind.meta}`,
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          min: 0, max: 10,
+          title: { display: true, text: '← Baixa Urgência  |  Alta Urgência →', color: '#64748b', font: { size: 10, weight: 700 } },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#64748b', font: { size: 9 }, stepSize: 2 }
+        },
+        y: {
+          min: 0, max: 10,
+          title: { display: true, text: '↑ Alto Impacto no IDHM', color: '#64748b', font: { size: 10, weight: 700 } },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#64748b', font: { size: 9 }, stepSize: 2 }
+        }
+      },
+      animation: { duration: 800, easing: 'easeOutQuart' }
+    },
+    plugins: [crossLinePlugin]
+  });
+
+  // ── 4. Gerar Painel de Ações Estratégicas ─────────────────
+  const container = document.getElementById('priority-actions-container');
+  if (!container) return;
+
+  container.innerHTML = indicators.map(ind => {
+    const c = colorMap[ind.quadrant];
+    const roiScore = Math.round((ind.impact + parseFloat(ind.urgency)) / 2 * 10);
+    const roiColor = ind.quadrant === 'gold' ? '#00e5a0' : ind.quadrant === 'purple' ? '#a59bff' : ind.quadrant === 'yellow' ? '#ffb830' : 'rgba(255,255,255,0.2)';
+    return `
+      <div class="priority-action-card ${c.card}">
+        <div class="pac-header">
+          <span style="font-size:1.1rem;">${ind.icon}</span>
+          <span class="pac-quadrant-badge ${c.badge}">${c.label}</span>
+        </div>
+        <div class="pac-indicator-name">${ind.label}</div>
+        <div class="pac-recommendation">${ind.rec}</div>
+        <div class="pac-roi">
+          <span style="color:${roiColor}; white-space:nowrap;">ROI ${roiScore}%</span>
+          <div class="pac-roi-bar">
+            <div class="pac-roi-fill" style="width:${roiScore}%; background:${roiColor};"></div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
 window.onload = initTabs;
+
 
 </script>
 </body>
