@@ -692,20 +692,25 @@
   /* CORRELATION ANALYSIS MODULE */
   .correlation-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
     margin-top: 24px;
   }
   .correlation-chart-container {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 24px;
+    padding: 20px;
     transition: all 0.4s ease;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     position: relative;
+  }
+  @media (max-width: 480px) {
+    .correlation-chart-container {
+      padding: 15px 12px;
+    }
   }
   .correlation-chart-container:hover {
     background: rgba(255, 255, 255, 0.05);
@@ -729,16 +734,35 @@
     color: var(--text-muted);
     font-weight: 500;
   }
+  .correlation-canvas-wrap {
+    height: 320px;
+    width: 100%;
+  }
+  @media (max-width: 480px) {
+    .correlation-canvas-wrap {
+      height: 250px;
+    }
+  }
   .correlation-insights {
-    margin-top: 32px;
-    padding: 24px;
+    margin-top: 24px;
+    padding: 20px;
     border-radius: 18px;
     background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(0, 212, 255, 0.05));
     border: 1px solid rgba(108, 99, 255, 0.15);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     backdrop-filter: blur(10px);
+  }
+  @media (max-width: 480px) {
+    .correlation-insights {
+      margin-top: 16px;
+      padding: 16px;
+      gap: 8px;
+    }
+    .correlation-insights p {
+      font-size: 0.88rem !important;
+    }
   }
   .correlation-insights h4 {
     font-size: 0.85rem;
@@ -1325,7 +1349,7 @@
           <div class="correlation-chart-title">IDH vs. Cobertura de Saneamento</div>
           <div class="correlation-chart-subtitle">Impacto da infraestrutura no desenvolvimento humano local</div>
         </div>
-        <div style="height: 320px; width: 100%;">
+        <div class="correlation-canvas-wrap">
           <canvas id="cCorrIDH"></canvas>
         </div>
       </div>
@@ -1336,7 +1360,7 @@
           <div class="correlation-chart-title">IVJ vs. Evasão Escolar</div>
           <div class="correlation-chart-subtitle">Identificação do ponto de ruptura social e educacional</div>
         </div>
-        <div style="height: 320px; width: 100%;">
+        <div class="correlation-canvas-wrap">
           <canvas id="cCorrIVJ"></canvas>
         </div>
       </div>
@@ -2637,7 +2661,7 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 0.88).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: (parseFloat(d.alf.replace(',','.')) * 0.95).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.9).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 1.1).toFixed(1) + "%",
+        gra: (parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) * 1.1).toFixed(1) + "%",
         evasao: Math.min(30, evasaoBase * 1.2).toFixed(1) + "%"
       },
       "2020": { 
@@ -2650,7 +2674,7 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 0.95).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: (parseFloat(d.alf.replace(',','.')) * 0.98).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 0.98).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 1.05).toFixed(1) + "%",
+        gra: (parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) * 1.05).toFixed(1) + "%",
         evasao: Math.min(30, evasaoBase * 1.1).toFixed(1) + "%"
       },
       "2022": { 
@@ -2667,7 +2691,7 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.05).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.02).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.05).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.95).toFixed(1) + "%",
+        gra: (parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) * 0.95).toFixed(1) + "%",
         evasao: Math.max(0, evasaoBase * 0.9).toFixed(1) + "%"
       },
       "2026": { 
@@ -2680,7 +2704,7 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.12).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.04).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.10).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.92).toFixed(1) + "%",
+        gra: (parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) * 0.92).toFixed(1) + "%",
         evasao: Math.max(0, evasaoBase * 0.82).toFixed(1) + "%"
       },
       "2028": { 
@@ -2693,7 +2717,7 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.20).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.06).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.15).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.88).toFixed(1) + "%",
+        gra: (parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) * 0.88).toFixed(1) + "%",
         evasao: Math.max(0, evasaoBase * 0.75).toFixed(1) + "%"
       },
       "2030": { 
@@ -2706,7 +2730,7 @@ Object.keys(DB).forEach(cityId => {
         pib: "R$ " + (pibBase * 1.30).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         alf: Math.min(100, parseFloat(d.alf.replace(',','.')) * 1.08).toFixed(1) + "%",
         bf: "~ " + Math.round(parseInt(d.bf.replace(/[^0-9]/g,'')) * 1.20).toLocaleString('pt-BR'),
-        gra: (parseFloat(d.gra.replace(',','.')) * 0.85).toFixed(1) + "%",
+        gra: (parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) * 0.85).toFixed(1) + "%",
         evasao: Math.max(0, evasaoBase * 0.7).toFixed(1) + "%"
       }
     };
@@ -3110,11 +3134,11 @@ const REF_MEDIA_RN = { alf: "85%", agu: "74%", esg: "25%", ivj: 6.5 }; // Média
 
 function calculateScoreValue(d) {
   if (!d) return 0;
-  const alfClean = d.alf ? d.alf.toString().replace('%','').replace(',','.') : "0";
+  const alfClean = d.alf ? d.alf.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'') : "0";
   const edu = Math.round(parseFloat(alfClean)) || 0;
   
-  const aguNum = d.agu ? parseFloat(d.agu.toString().replace('%','').replace(',','.')) : 0;
-  const esgNum = d.esg ? parseFloat(d.esg.toString().replace('%','').replace(',','.')) : 0;
+  const aguNum = d.agu ? parseFloat(d.agu.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'')) : 0;
+  const esgNum = d.esg ? parseFloat(d.esg.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'')) : 0;
   const san = Math.round((aguNum + esgNum) / 2);
   
   const ivj = d.ivj || 0;
@@ -3406,8 +3430,8 @@ function updateRecommendations(cityId) {
   const recs = [];
 
   // Parse numeric values
-  const esgVal = parseFloat(d.esg.replace(',','.')) || 0;
-  const graVal = parseFloat(d.gra.replace(',','.')) || 0;
+  const esgVal = parseFloat(d.esg.replace(',','.').replace(/[^0-9.]/g,'')) || 0;
+  const graVal = parseFloat(d.gra.replace(',','.').replace(/[^0-9.]/g,'')) || 0;
   const alfVal = parseFloat(d.alf.replace(',','.')) || 0;
   const ivjVal = d.ivj || 0;
   const popVal = parseInt(d.pop.replace('.','')) || 0;
@@ -3489,11 +3513,11 @@ function updateSocioDashScore(cityId, data) {
   const year = document.getElementById('time-slider').value;
   const d = data || (DB[cityId].history ? DB[cityId].history[year] : DB[cityId]);
   
-  const alfClean = d.alf ? d.alf.toString().replace('%','').replace(',','.') : "0";
+  const alfClean = d.alf ? d.alf.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'') : "0";
   const eduVal = Math.round(parseFloat(alfClean)) || 0;
   
-  const aguVal = d.agu ? parseFloat(d.agu.toString().replace('%','').replace(',','.')) : 0;
-  const esgVal = d.esg ? parseFloat(d.esg.toString().replace('%','').replace(',','.')) : 0;
+  const aguVal = d.agu ? parseFloat(d.agu.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'')) : 0;
+  const esgVal = d.esg ? parseFloat(d.esg.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'')) : 0;
   const sanVal = Math.round((aguVal + esgVal) / 2);
   
   const ivjVal = d.ivj || 0;
@@ -4131,12 +4155,12 @@ function updateYear(year) {
 
       // 4. Calcular e Atualizar Score SocioDash™ e Radar
       const radar = {...d.radar};
-      radar.idh = parseFloat(hy.idh.replace(',','.')) * 100;
-      radar.agu = parseFloat(hy.agu.replace('%',''));
-      radar.esg = parseFloat(hy.esg.replace('%',''));
+      radar.idh = parseFloat(hy.idh.replace(',','.').replace(/[^0-9.]/g,'')) * 100;
+      radar.agu = parseFloat(hy.agu.replace(',','.').replace(/[^0-9.]/g,''));
+      radar.esg = parseFloat(hy.esg.replace(',','.').replace(/[^0-9.]/g,''));
       
-      const aguNum = parseFloat(hy.agu.replace('%',''));
-      const esgNum = parseFloat(hy.esg.replace('%',''));
+      const aguNum = parseFloat(hy.agu.replace(',','.').replace(/[^0-9.]/g,''));
+      const esgNum = parseFloat(hy.esg.replace(',','.').replace(/[^0-9.]/g,''));
       
       // 5. Re-renderizar Gráficos e Score Global (SocioDash + Benchmark)
       updateSocioDashScore(cityId, hy);
@@ -4177,14 +4201,14 @@ function renderSparklines(cityId, currentYear) {
   const metrics = [
     { id: "pop", key: "pop", parser: v => parseInt(v.replace(/\./g,'')) },
     { id: "dom", key: "dom", parser: v => parseInt(v.replace(/\./g,'')) },
-    { id: "idh", key: "idh", parser: v => parseFloat(v.replace(',','.')) },
-    { id: "pib", key: "pib", parser: v => parseFloat(v.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) },
-    { id: "alf", key: "alf", parser: v => parseFloat(v.replace('%','').replace(',','.')) },
-    { id: "den", key: "den", parser: v => parseFloat(d.den.replace('.','').replace(',','.')) }, // Densidade é fixa no DB mas posso simular
-    { id: "bf", key: "bf", parser: v => parseInt(v.replace(/[^0-9]/g,'')) },
-    { id: "agu", key: "agu", parser: v => parseFloat(v.replace('%','').replace(',','.')) },
-    { id: "esg", key: "esg", parser: v => parseFloat(v.replace('%','').replace(',','.')) },
-    { id: "gra", key: "gra", parser: v => parseFloat(v.replace('%','').replace(',','.')) }
+    { id: "idh", key: "idh", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
+    { id: "pib", key: "pib", parser: v => parseFloat(v.toString().replace('R$ ', '').replace(/\./g, '').replace(',', '.')) },
+    { id: "alf", key: "alf", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
+    { id: "den", key: "den", parser: v => parseFloat(v.toString().replace('.','').replace(',','.').replace(/[^0-9.]/g,'')) }, 
+    { id: "bf", key: "bf", parser: v => parseInt(v.toString().replace(/[^0-9]/g,'')) },
+    { id: "agu", key: "agu", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
+    { id: "esg", key: "esg", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
+    { id: "gra", key: "gra", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) }
   ];
 
   metrics.forEach(m => {
@@ -4233,7 +4257,7 @@ function updateIET(cityId, year) {
   cities.forEach(c => {
     const cd = DB[c].history[year] || DB[c];
     totalScore += calculateScoreValue(cd);
-    const cpib = parseFloat((cd.pib || "0").replace('R$ ', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
+    const cpib = parseFloat((cd.pib || "0").toString().replace('R$ ', '').replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g,'').trim()) || 0;
     totalPib += cpib;
   });
   
@@ -4281,10 +4305,10 @@ function updateAnomalies(cityId, year) {
     let sum = 0;
     otherCities.forEach(c => {
       const val = DB[c].history[year] ? DB[c].history[year][metricName] : DB[c][metricName];
-      sum += parseFloat(val.toString().replace('%','').replace('R$ ','').replace(/\./g,'').replace(',','.')) || 0;
+      sum += parseFloat(val.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0;
     });
     const avg = sum / otherCities.length;
-    const current = parseFloat(cityVal.toString().replace('%','').replace('R$ ','').replace(/\./g,'').replace(',','.')) || 0;
+    const current = parseFloat(cityVal.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0;
 
     const diff = (current - avg) / avg;
     if (Math.abs(diff) > 0.3) { // 30% desvio
@@ -5191,20 +5215,45 @@ function renderCorrelationCharts(selectedCity, year) {
     dataIVJ.push({ x: evasao, y: ivj, city: name });
   });
 
-  const pointBgIDH = dataIDH.map(p => p.city === selectedCity ? '#6366f1' : 'rgba(255, 255, 255, 0.1)');
-  const pointRadiusIDH = dataIDH.map(p => p.city === selectedCity ? 9 : 5);
-  const pointBgIVJ = dataIVJ.map(p => p.city === selectedCity ? '#ef4444' : 'rgba(255, 255, 255, 0.1)');
-  const pointRadiusIVJ = dataIVJ.map(p => p.city === selectedCity ? 9 : 5);
+  const isMobile = window.innerWidth < 768;
   const commonOptions = {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => {
-      const p = ctx.raw;
-      if (p.city) return `${p.city}: (${ctx.dataset.labelX}: ${p.x.toFixed(1)}, ${ctx.dataset.labelY}: ${p.y.toFixed(3)})`;
-      return 'Linha de Tendência Regional';
-    }}}},
-    scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, color: '#94a3b8', font: { size: 10, weight: 700 } } },
-              y: { grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, color: '#94a3b8', font: { size: 10, weight: 700 } } } }
+    padding: isMobile ? { top: 5, right: 5, bottom: 5, left: 5 } : 10,
+    plugins: { 
+      legend: { display: false }, 
+      tooltip: { 
+        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        titleFont: { size: 12, weight: 800 },
+        bodyFont: { size: 11 },
+        padding: 10,
+        cornerRadius: 8,
+        displayColors: false,
+        callbacks: { label: (ctx) => {
+          const p = ctx.raw;
+          if (p.city) return `${p.city}: (${ctx.dataset.labelX}: ${p.x.toFixed(1)}, ${ctx.dataset.labelY}: ${p.y.toFixed(3)})`;
+          return 'Linha de Tendência Regional';
+        }}
+      }
+    },
+    scales: { 
+      x: { 
+        grid: { color: 'rgba(255,255,255,0.05)' }, 
+        ticks: { font: { size: isMobile ? 8 : 10 }, color: '#94a3b8' },
+        title: { display: true, color: '#94a3b8', font: { size: isMobile ? 9 : 10, weight: 700 }, padding: { top: 10 } } 
+      },
+      y: { 
+        grid: { color: 'rgba(255,255,255,0.05)' }, 
+        ticks: { font: { size: isMobile ? 8 : 10 }, color: '#94a3b8' },
+        title: { display: true, color: '#94a3b8', font: { size: isMobile ? 9 : 10, weight: 700 }, padding: { bottom: 10 } } 
+      } 
+    }
   };
+
+  const pointRadius = isMobile ? 6 : 5;
+  const pointBgIDH = dataIDH.map(p => p.city === selectedCity ? '#6366f1' : 'rgba(255, 255, 255, 0.1)');
+  const pointRadiusIDH = dataIDH.map(p => p.city === selectedCity ? (isMobile ? 10 : 9) : pointRadius);
+  const pointBgIVJ = dataIVJ.map(p => p.city === selectedCity ? '#ef4444' : 'rgba(255, 255, 255, 0.1)');
+  const pointRadiusIVJ = dataIVJ.map(p => p.city === selectedCity ? (isMobile ? 10 : 9) : pointRadius);
 
   if (activeChartCorrIDH) activeChartCorrIDH.destroy();
   activeChartCorrIDH = new Chart(ctxIDH, {
