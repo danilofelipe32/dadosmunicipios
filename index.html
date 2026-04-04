@@ -1646,6 +1646,41 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       ANÁLISE PREDITIVA
+  ════════════════════════════════════════════════════════════ -->
+  <section id="predictive-section">
+    <div class="section-title">
+      <span class="s-icon">🔮</span> Análise Preditiva de Tendências
+      <span class="badge" style="margin-left:10px;font-size:0.6rem;background:rgba(108,99,255,0.15);color:#a59bff;border:1px solid rgba(108,99,255,0.3);">Regressão Linear Local</span>
+    </div>
+    
+    <div class="exec-card" style="border-left-color: #a59bff; display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+      <div style="flex: 1.5; min-width: 250px;">
+        <h3 style="color:#fff; margin-bottom:10px; font-size:1.1rem;">Motor Matemático Embarcado</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-bottom:15px; max-width: 90%;">
+          Este módulo projeta a tendência para o "ano seguinte" ao ano selecionado no slider. O cálculo utiliza regressão linear (Mínimos Quadrados) com base no histórico comportamental da sua região, processado localmente para garantir rapidez e privacidade.
+        </p>
+        <select id="pred-indicator" class="geo-btn" onchange="runPredictiveAnalysis()" style="width:100%; max-width: 330px; background:rgba(0,0,0,0.2); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:8px; outline:none; font-family:'Outfit', sans-serif;">
+          <option value="idh">🌟 IDHM (Índice de Desenvolvimento)</option>
+          <option value="esg">🚽 Esgotamento Sanitário (%)</option>
+          <option value="agu">💧 Cobertura de Água (%)</option>
+          <option value="pop">👥 População</option>
+          <option value="evasao">📚 Evasão Escolar (%)</option>
+          <option value="gra">👶 Gravidez na Adolescência (%)</option>
+        </select>
+      </div>
+      
+      <div style="flex: 1; min-width: 280px; background:rgba(255,255,255,0.03); border-radius:12px; padding:20px; border:1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -15px; right: -15px; width: 60px; height: 60px; background: radial-gradient(circle, rgba(165,155,255,0.2) 0%, transparent 70%);"></div>
+        <div id="pred-target-lbl" style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">Projeção: Ano Seguinte</div>
+        <div id="pred-next-year" style="font-size:2.8rem; font-weight:800; color:#fff; margin-bottom:10px; text-shadow: 0 0 20px rgba(108,99,255,0.3);">-</div>
+        <div id="pred-trend-wrap" style="padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; background:rgba(255,255,255,0.1);">-</div>
+        <div id="pred-formula" style="font-size:0.7rem; color:var(--text-muted); margin-top:15px; font-family: monospace;">Aguardando processamento...</div>
+      </div>
+    </div>
+  </section>
+
   <section id="tools-section">
     <div class="section-title"><span class="s-icon">🛠️</span> Módulo de Inteligência Estratégica <span class="badge b-primary" style="margin-left:10px;font-size:0.6rem;">BI Advanced</span></div>
     <div class="tools-grid">
@@ -2336,7 +2371,7 @@
     <button class="insight-close" onclick="closeDocs()">&times;</button>
     
     <div class="doc-title" style="border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px;">
-      <span>📘 GUIA DEFINITIVO: SocioDash™ Pro v2.7</span>
+      <span>📘 GUIA DEFINITIVO: SocioDash™ Pro v2.8</span>
     </div>
     
     <div class="doc-bubble bubble-info" style="margin-bottom: 30px;">
@@ -2402,11 +2437,12 @@
 
     <!-- SEÇÃO: PREDIÇÃO -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">📈 5. Modelagem Preditiva (Forecasting)</h3>
-      <p style="font-size:0.88rem; color:var(--text-muted);">Na aba 'Análise Preditiva', o sistema oferece:</p>
-      <div style="background:rgba(108,99,255,0.03); padding:15px; border-radius:12px;">
-        <p style="font-size:0.82rem; margin-bottom:8px;">📊 <strong>Gráficos de Tendência:</strong> Evolução histórica real comparada com o cenário provável de 2030.</p>
-        <p style="font-size:0.82rem; margin-bottom:8px;">💡 <strong>Insights de IA:</strong> Um analista virtual interpreta os números e descreve, em linguagem natural, os gargalos do município.</p>
+      <h3 style="color:var(--primary); margin-bottom:10px;">🔮 5. Regressão Linear & Análise Preditiva</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted);">O módulo estatístico roda cálculos em tempo real e projeta para o futuro com base em comportamento histórico:</p>
+      <div style="background:rgba(108,99,255,0.03); padding:15px; border-radius:12px; border: 1px solid rgba(165,155,255,0.15);">
+        <p style="font-size:0.82rem; margin-bottom:10px;">📊 <strong>Modelo Estatístico On-device:</strong> Utiliza regressão de Mínimos Quadrados para estimar o horizonte do <strong>ano seguinte</strong> acompanhando o tempo que você navega no slider (sem delays server-side!).</p>
+        <p style="font-size:0.82rem; margin-bottom:10px;">📈 <strong>Qualidade e Confiança:</strong> Expõe automaticamente e transparente a taxa R² ao gestor (ajustando a confiabilidade se está crescendo, em queda ou estável).</p>
+        <p style="font-size:0.82rem;">🔒 <strong>Privacidade Nativa:</strong> O cruzamento preditivo é "Liquid Glass" resolvido interativamente no próprio browser. Dados demográficos restritos não deixam o dashboard.</p>
       </div>
     </div>
 
@@ -4491,6 +4527,7 @@ function updateYear(year) {
       renderCharts(aguNum, esgNum, d.letal, cityId, radar);
       renderCorrelationCharts(cityId, year);
       renderPriorityMatrix(cityId, year);
+      runPredictiveAnalysis();
       
       // 6. Atualizar Painel de Mapa (GeoPanel)
       if (document.getElementById('gval-pop')) document.getElementById('gval-pop').innerText = hy.pop;
@@ -5925,7 +5962,173 @@ function renderPriorityMatrix(cityId, year) {
   }).join('');
 }
 
+// ════════════════════════════════════════════════════════════
+// ANÁLISE PREDITIVA — Regressão Linear Local
+// ════════════════════════════════════════════════════════════
+function runPredictiveAnalysis() {
+  const cityId = document.getElementById('city-select').value;
+  const indicatorKey = document.getElementById('pred-indicator').value;
+  const d = DB[cityId];
+  if (!d || !d.history) return;
+
+  const currentYear = parseInt(document.getElementById('time-slider').value) || 2024;
+  // Determinar todos os anos históricos disponíveis até o currentYear para calibração do modelo
+  const years = ["2018", "2020", "2022", "2024", "2026", "2028", "2030"];
+  const histYears = years.filter(y => parseInt(y) <= currentYear);
+  
+  if (histYears.length < 2) return;
+
+  let dataPoints = [];
+  const metricsParser = {
+    pop: v => parseInt(v.replace(/\./g,'')),
+    idh: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')),
+    agu: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')),
+    esg: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')),
+    evasao: v => parseFloat(v.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,'')),
+    gra: v => parseFloat(v.toString().replace('%','').replace(',','.').replace(/[^0-9.]/g,''))
+  };
+  
+  const parser = metricsParser[indicatorKey];
+
+  histYears.forEach(y => {
+    let rawVal;
+    if (indicatorKey === 'evasao') {
+      rawVal = d.history[y].evasao_val || d.history[y].evasao || d.evasao;
+    } else {
+      rawVal = d.history[y][indicatorKey];
+    }
+    
+    if (rawVal !== undefined && rawVal !== null) {
+      const val = parser(rawVal.toString() || "0");
+      if (!isNaN(val)) dataPoints.push({ x: parseInt(y), y: val });
+    }
+  });
+
+  if (dataPoints.length < 2) {
+    document.getElementById('pred-formula').innerText = "Dados insuficientes para regressão.";
+    return;
+  }
+
+  let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+  const n = dataPoints.length;
+  for (const p of dataPoints) {
+    sumX += p.x;
+    sumY += p.y;
+    sumXY += p.x * p.y;
+    sumX2 += p.x * p.x;
+  }
+  
+  let m = 0, b = 0;
+  const denom = (n * sumX2 - sumX * sumX);
+  if (denom !== 0) {
+    m = (n * sumXY - sumX * sumY) / denom;
+    b = (sumY - m * sumX) / n;
+  } else {
+    // Todos os X são iguais
+    b = sumY / n;
+  }
+  
+  // Calculate R²
+  const meanY = sumY / n;
+  let ssTot = 0, ssRes = 0;
+  for (const p of dataPoints) {
+    const yPred = m * p.x + b;
+    ssTot += Math.pow(p.y - meanY, 2);
+    ssRes += Math.pow(p.y - yPred, 2);
+  }
+  const r2 = ssTot === 0 ? 1 : 1 - (ssRes / ssTot);
+
+  const targetYear = currentYear + 1;
+  const prediction = m * targetYear + b;
+  
+  const formatter = {
+    pop: v => Math.round(v).toLocaleString('pt-BR'),
+    idh: v => v.toFixed(3),
+    agu: v => Math.min(100, Math.max(0, v)).toFixed(1) + '%',
+    esg: v => Math.min(100, Math.max(0, v)).toFixed(1) + '%',
+    evasao: v => Math.max(0, v).toFixed(1) + '%',
+    gra: v => Math.max(0, v).toFixed(1) + '%'
+  };
+  
+  document.getElementById('pred-target-lbl').innerText = `Projeção: Ano ${targetYear}`;
+  document.getElementById('pred-next-year').innerText = formatter[indicatorKey](prediction);
+  
+  const trendWrap = document.getElementById('pred-trend-wrap');
+  // Ajuste sutil para pequenos incrementos
+  if (m > 0.001) {
+    trendWrap.innerText = "↑ Tendência de Alta";
+    trendWrap.style.color = "#00e5a0";
+    trendWrap.style.background = "rgba(0,229,160,0.15)";
+  } else if (m < -0.001) {
+    trendWrap.innerText = "↓ Tendência de Baixa";
+    trendWrap.style.color = "#ff4d6d";
+    trendWrap.style.background = "rgba(255,77,109,0.15)";
+  } else {
+    trendWrap.innerText = "→ Estável";
+    trendWrap.style.color = "#a59bff";
+    trendWrap.style.background = "rgba(165,155,255,0.15)";
+  }
+
+  let mStr = m.toExponential(2);
+  if (Math.abs(m) > 0.1 || m === 0) mStr = m.toFixed(2);
+  
+  document.getElementById('pred-formula').innerText = `Modelo Linear R² = ${(r2*100).toFixed(1)}% | y = ${mStr}x ${b >= 0 ? '+' : ''} ${b.toFixed(0)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// EXPORTAÇÃO DE BASE HISTÓRICA CSV
+// ════════════════════════════════════════════════════════════
+function exportDataCSV() {
+  let csvContent = "Ano,Municipio,Populacao,Domicilios,Densidade,IDHM,PIB_Per_Capita,Alfabetismo,Agua_Tratada,Esgotamento,Bolsa_Familia,Gravidez_Adolescencia,Evasao_Escolar,Letalidade,IVJ,Alunos_NEE,Alunos_EJA,Fonte\n";
+  const anos = ["2018", "2020", "2022", "2024", "2026", "2028", "2030"];
+  
+  Object.keys(DB).forEach(cityName => {
+    const d = DB[cityName];
+    if (d && d.history) {
+      anos.forEach(ano => {
+        if (d.history[ano]) {
+          const hist = d.history[ano];
+          const pop = hist.pop || d.pop || "";
+          const dom = d.dom || "";
+          const den = d.den || "";
+          const pib = hist.pib || d.pib || "";
+          const idh = hist.idh || d.idh || "";
+          const alf = hist.alf || d.alf || "";
+          const agu = hist.agu || d.agu || "";
+          const esg = hist.esg || d.esg || "";
+          const bf = d.bf || "";
+          const gra = hist.gra || d.gra || "";
+          const evasao = hist.evasao || d.evasao || "";
+          const letal = d.letal || "";
+          const ivj = d.ivj || "";
+          const nee = d.edu_nee || "";
+          const eja = d.edu_eja || "";
+          const fonte = parseInt(ano) <= 2022 ? "Censo IBGE / Oficiais" : "Projecao SocioDash";
+          
+          const row = [
+            ano, cityName,
+            `"${pop}"`, `"${dom}"`, `"${den}"`, `"${idh}"`, `"${pib}"`, `"${alf}"`, `"${agu}"`, `"${esg}"`, 
+            `"${bf}"`, `"${gra}"`, `"${evasao}"`, `"${letal}"`, `"${ivj}"`, `"${nee}"`, `"${eja}"`,
+            `"${fonte}"`
+          ];
+          csvContent += row.join(",") + "\n";
+        }
+      });
+    }
+  });
+
+  const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `SocioDash_BaseGestao_Completa.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 window.onload = initTabs;
+
 
 
 </script>
