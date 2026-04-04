@@ -695,7 +695,7 @@
     grid-template-columns: 1fr 340px;
     gap: 24px;
     margin-top: 24px;
-    align-items: start;
+    align-items: stretch;
   }
   @media (max-width: 900px) {
     .priority-section-wrap { grid-template-columns: 1fr; }
@@ -707,6 +707,8 @@
     padding: 24px;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
   .priority-matrix-container::before {
     content: '';
@@ -745,8 +747,25 @@
   .priority-actions-panel {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    overflow: hidden;
   }
+  .priority-actions-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 4px;
+  }
+  .priority-actions-scroll::-webkit-scrollbar { width: 4px; }
+  .priority-actions-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 4px; }
+  .priority-actions-scroll::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.3); border-radius: 4px; }
+  .priority-actions-scroll::-webkit-scrollbar-thumb:hover { background: rgba(108,99,255,0.5); }
   .priority-panel-title {
     font-size: 0.65rem;
     text-transform: uppercase;
@@ -756,14 +775,15 @@
     margin-bottom: 4px;
   }
   .priority-action-card {
-    background: rgba(255,255,255,0.02);
+    background: rgba(255,255,255,0.025);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
+    border-radius: 12px;
+    padding: 11px 14px;
     transition: all 0.3s ease;
     cursor: default;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
   }
   .priority-action-card::before {
     content: '';
@@ -799,14 +819,14 @@
   .qb-yellow { background: rgba(255,184,48,0.15);   color: #ffb830; }
   .qb-gray   { background: rgba(255,255,255,0.06);  color: rgba(255,255,255,0.4); }
   .pac-indicator-name {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 800;
     color: #fff;
   }
   .pac-recommendation {
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.45;
   }
   .pac-roi {
     margin-top: 8px;
@@ -1553,22 +1573,22 @@
     <div class="priority-section-wrap">
       <!-- GRÁFICO DE QUADRANTES -->
       <div class="priority-matrix-container">
-        <div class="priority-canvas-wrap" style="position:relative;">
+        <div class="priority-canvas-wrap" style="position:relative; flex:1;">
           <canvas id="cPriorityMatrix"></canvas>
         </div>
         <!-- Legenda -->
         <div class="priority-legend">
-          <div class="pl-item"><div class="pl-dot" style="background:#00e5a0;"></div> Ação Imediata (Alto Impacto + Alta Urgência)</div>
-          <div class="pl-item"><div class="pl-dot" style="background:#a59bff;"></div> Planejamento Estratégico (Alto Impacto + Baixa Urgência)</div>
-          <div class="pl-item"><div class="pl-dot" style="background:#ffb830;"></div> Monitoramento Constante (Baixo Impacto + Alta Urgência)</div>
-          <div class="pl-item"><div class="pl-dot" style="background:rgba(255,255,255,0.25);"></div> Baixa Prioridade</div>
+          <div class="pl-item"><div class="pl-dot" style="background:#00e5a0;"></div> Ação Imediata</div>
+          <div class="pl-item"><div class="pl-dot" style="background:#a59bff;"></div> Planej. Estratégico</div>
+          <div class="pl-item"><div class="pl-dot" style="background:#ffb830;"></div> Monitoramento</div>
+          <div class="pl-item"><div class="pl-dot" style="background:rgba(255,255,255,0.25);"></div> Baixa Prior.</div>
         </div>
       </div>
 
       <!-- PAINEL LATERAL DE AÇÕES -->
       <div class="priority-actions-panel">
         <div class="priority-panel-title">📋 Plano de Ação Gerado</div>
-        <div id="priority-actions-container">
+        <div class="priority-actions-scroll" id="priority-actions-container">
           <!-- Gerado via JS -->
           <div style="color:var(--text-muted); font-size:0.82rem; padding:20px; text-align:center; border:1px dashed rgba(255,255,255,0.1); border-radius:14px;">
             Selecione um município para gerar o plano de ação otimizado.
