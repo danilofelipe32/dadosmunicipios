@@ -731,10 +731,10 @@
     position: relative;
   }
   @media (max-width: 768px) {
-    .priority-canvas-wrap { height: 320px; }
+    .priority-canvas-wrap { height: 350px; }
   }
   @media (max-width: 480px) {
-    .priority-canvas-wrap { height: 260px; }
+    .priority-canvas-wrap { height: 380px; }
   }
   .priority-quadrant-labels {
     position: absolute;
@@ -5763,9 +5763,9 @@ function renderPriorityMatrix(cityId, year) {
   const impIvj  = 6.5;  // Segurança afeta Renda e Educação indiretamente
   const impGra  = 7.8;  // Gravidez na adolescência impacta fortemente Educação
 
-  // Tamanho das bolhas = ROI proporcional (Impacto × Urgência) calibrado p/ tela
-  const bubbleScale = isMobile ? 0.38 : 0.7;
-  const sizeOf = (imp, urg) => Math.max(isMobile ? 5 : 8, imp * parseFloat(urg) * bubbleScale);
+  // Tamanho das bolhas calibrado p/ tela - Otimização mobile v2
+  const bubbleScale = isMobile ? 0.26 : 0.7;
+  const sizeOf = (imp, urg) => Math.max(isMobile ? 4 : 8, imp * parseFloat(urg) * bubbleScale);
 
   const indicators = [
     { label: 'Esgotamento Sanitário', urgency: parseFloat(urgEsg), impact: impEsg, size: sizeOf(impEsg, urgEsg),
