@@ -2473,58 +2473,75 @@
       </ul>
     </div>
 
+    <!-- SEÇÃO: MATRIZ DE PRIORIZAÇÃO -->
+    <div class="doc-section">
+      <h3 style="color:var(--primary); margin-bottom:10px;">🎯 12. Matriz de Priorização Orçamentária (Decision Engine)</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;">Ferramenta de inteligência para auxiliar o gestor na alocação de recursos públicos com o maior retorno social possível:</p>
+      <div style="background:rgba(0,229,160,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(0,229,160,0.15);">
+        <p style="font-size:0.82rem; margin-bottom:10px;">📐 <strong>Eixo Y (Impacto):</strong> Peso do indicador na melhoria real do IDHM (Alfabetização e Saneamento possuem os maiores pesos).</p>
+        <p style="font-size:0.82rem; margin-bottom:10px;">📐 <strong>Eixo X (Urgência):</strong> Distância do município em relação à meta (Meta Plansab p/ Água: 95%, Esgoto: 60%).</p>
+        <p style="font-size:0.82rem;">💰 <strong>Cálculo do ROI:</strong> Estimativa do retorno social por cada real investido, baseado na equação (Impacto × Urgência).</p>
+      </div>
+      <div class="doc-bubble" style="background:rgba(255,255,255,0.03); margin-top:10px; font-size:0.8rem;">
+        <strong>Interpretando os Quadrantes:</strong>
+        <br>• <span style="color:#00e5a0;">●</span> <strong>Ação Imediata:</strong> Gargalos críticos com alto potencial de alavancar o desenvolvimento humano regional.
+        <br>• <span style="color:#a59bff;">●</span> <strong>Planej. Estratégico:</strong> Temas de alto impacto, mas com indicadores estáveis ou próximos à meta. Mantenha os níveis.
+        <br>• <span style="color:#ffb830;">●</span> <strong>Monitoramento:</strong> Áreas com urgência latente, mas impacto menor no IDH imediato. Foco em políticas de base.
+      </div>
+    </div>
+
     <!-- SEÇÃO: GLOSSÁRIO -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">📚 12. Glossário e Termos Técnicos</h3>
+      <h3 style="color:var(--primary); margin-bottom:10px;">📚 13. Glossário e Termos Técnicos</h3>
       <ul class="doc-list" style="font-size:0.82rem;">
         <li><strong>EJA:</strong> Educação de Jovens e Adultos.</li>
         <li><strong>NEE:</strong> Necessidades Educacionais Especiais (Educação Inclusiva).</li>
         <li><strong>IET:</strong> Índice de Eficiência Territorial (Mede conversão de PIB em Bem-estar).</li>
         <li><strong>IVJ:</strong> Índice de Vulnerabilidade Juvenil (Mede riscos sociais para jovens).</li>
-        <li><strong>UBS / CRAS:</strong> Unidades de saúde e assistência (Proteção Básica).</li>
+        <li><strong>ROI Social:</strong> Retorno Social sobre Investimento (Métrica de prioridade orçamentária).</li>
         <li><strong>Anomalia:</strong> Desvio estatístico superior a 30% em relação à média regional do cluster.</li>
       </ul>
     </div>
 
     <!-- SEÇÃO: FAQ -->
     <div class="doc-section">
-      <h3 style="color:var(--primary); margin-bottom:10px;">❓ 13. Perguntas Frequentes (FAQ)</h3>
+      <h3 style="color:var(--primary); margin-bottom:15px;">❓ 14. Perguntas Frequentes (FAQ)</h3>
       <div style="font-size:0.83rem; color:#e0e0e0; line-height: 1.6;">
         <p style="margin-bottom:12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
-          <strong>1. Como atualizo os dados?</strong><br>
-          <span style="color:var(--text-muted);">Clique no botão 'Sincronizar' na barra superior para garantir que as fontes do Censo e DATASUS estejam alinhadas à última versão do banco de dados.</span>
+          <strong>1. Como atualizo os dados oficiais?</strong><br>
+          <span style="color:var(--text-muted);">Utilize o botão 'Sincronizar' na barra superior. Isso alinha as bases locais com os dados mais recentes do SIDRA/IBGE e DATASUS injetados no sistema.</span>
         </p>
         <p style="margin-bottom:12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
           <strong>2. O que representa o Índice SocioDash™?</strong><br>
-          <span style="color:var(--text-muted);">É uma nota de 0 a 100 que resume a saúde social da cidade. Índices abaixo de 50 indicam fragilidade estrutural grave.</span>
+          <span style="color:var(--text-muted);">É o termômetro social da cidade (0-100). Ele agrega saúde, educação, saneamento e segurança em uma única métrica de desempenho municipal.</span>
         </p>
         <p style="margin-bottom:12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
-          <strong>3. Como interpretar uma anomalia (alerta vermelho)?</strong><br>
-          <span style="color:var(--text-muted);">Alertas destacam dados que fogem do comportamento esperado para a região (outliers), servindo como aviso para possíveis erros de reporte ou crises localizadas.</span>
+          <strong>3. Como utilizar a Matriz de Priorização Orçamentária?</strong><br>
+          <span style="color:var(--text-muted);">Foque nos indicadores do quadrante "Ação Imediata" (Verde). São áreas onde o investimento público terá o ROI social mais rápido e transformador.</span>
         </p>
         <p style="margin-bottom:12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
-          <strong>4. O que é o IET e como usá-lo?</strong><br>
-          <span style="color:var(--text-muted);">O IET avalia se o município gasta bem. Um IET acima de 1.15 significa que a cidade entrega mais bem-estar do que o esperado para o tamanho de sua economia (PIB).</span>
+          <strong>4. O que é o IET (Eficiência Territorial)?</strong><br>
+          <span style="color:var(--text-muted);">O IET avalia a gestão. Se for superior a 1.0, o município está conseguindo entregar bem-estar social acima do esperado para o seu nível de PIB.</span>
         </p>
         <p style="margin-bottom:12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
-          <strong>5. Como funciona a linha de tendência (Sparklines)?</strong><br>
-          <span style="color:var(--text-muted);">As mini-linhas nos cards de KPI mostram a trajetória histórica entre 2018 e 2030, permitindo ver se um indicador está melhorando ou piorando ao longo do tempo.</span>
+          <strong>5. Como funcionam as Sparklines (linhas pequenas)?</strong><br>
+          <span style="color:var(--text-muted);">São micro-gráficos que mostram a trajetória do indicador de 2018 até 2030, permitindo identificar tendências de melhora ou declínio num relance.</span>
         </p>
         <p style="margin-bottom:12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
-          <strong>6. O simulador altera o banco de dados oficial?</strong><br>
-          <span style="color:var(--text-muted);">Não. O simulador é uma ferramenta de 'cenários hipotéticos' para planejar metas. Ele não substitui os dados reais registrados no sistema.</span>
+          <strong>6. O simulador de impacto altera os dados reais?</strong><br>
+          <span style="color:var(--text-muted);">Não. É um ambiente de "sandbox". Serve para gestores simularem como o IDH subiria se, por exemplo, o saneamento fosse expandido em 20%.</span>
         </p>
         <p style="margin-bottom:12px;">
-          <strong>7. Posso exportar as análises para apresentações?</strong><br>
-          <span style="color:var(--text-muted);">Sim. Você pode baixar a base de dados histórica via CSV (Módulo de Inteligência) ou gerar um Relatório Executivo em PDF com todos os gráficos formatados.</span>
+          <strong>7. Posso exportar os diagnósticos da IA Consultora?</strong><br>
+          <span style="color:var(--text-muted);">Sim. Clique no botão "Copiar" na seção de IA para obter o texto formatado e colá-lo em ofícios, apresentações ou planos plurianuais (PPA).</span>
         </p>
       </div>
     </div>
 
-    <div style="text-align:center; padding:30px 20px; background:rgba(108,99,255,0.08); border-radius:18px; margin-top:30px;">
-      <p style="font-size:0.9rem; font-weight:800; color:#fff; margin-bottom:5px;">SocioDash™ Pro - Inteligência Territorial</p>
-      <p style="font-size:0.75rem; color:var(--text-muted);">Plataforma de Suporte à Decisão Pública para os 12 municípios da 2ª DIREC.</p>
-      <p style="font-size:0.65rem; color:var(--text-muted); margin-top:10px;">v2.7.0 Build 2026</p>
+    <div style="text-align:center; padding:30px 20px; background:rgba(108,99,255,0.08); border-radius:18px; margin-top:30px; border: 1px solid rgba(108,99,255,0.15);">
+      <p style="font-size:0.95rem; font-weight:800; color:#fff; margin-bottom:5px;">SocioDash™ Pro v2.8</p>
+      <p style="font-size:0.78rem; color:var(--text-muted);">Inteligência Artificial e Gestão Pública Baseada em Evidências</p>
+      <p style="font-size:0.68rem; color:var(--text-muted); margin-top:10px; font-style: italic;">Build 2026.04.04 - Cluster 2ª DIREC</p>
     </div>
   </div>
 </div>
