@@ -4571,16 +4571,16 @@ function renderSparklines(cityId, currentYear) {
   const upToYear = years.filter(y => parseInt(y) <= parseInt(currentYear));
 
   const metrics = [
-    { id: "pop", key: "pop", parser: v => parseInt(v.replace(/\./g,'')) },
-    { id: "dom", key: "dom", parser: v => parseInt(v.replace(/\./g,'')) },
-    { id: "idh", key: "idh", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
-    { id: "pib", key: "pib", parser: v => parseFloat(v.toString().replace('R$ ', '').replace(/\./g, '').replace(',', '.')) },
-    { id: "alf", key: "alf", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
-    { id: "den", key: "den", parser: v => parseFloat(v.toString().replace('.','').replace(',','.').replace(/[^0-9.]/g,'')) }, 
-    { id: "bf", key: "bf", parser: v => parseInt(v.toString().replace(/[^0-9]/g,'')) },
-    { id: "agu", key: "agu", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
-    { id: "esg", key: "esg", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) },
-    { id: "gra", key: "gra", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) }
+    { id: "pop", key: "pop", parser: v => parseInt(v.toString().replace(/[^0-9]/g, '')) || 0 },
+    { id: "dom", key: "dom", parser: v => parseInt(v.toString().replace(/[^0-9]/g, '')) || 0 },
+    { id: "idh", key: "idh", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0 },
+    { id: "pib", key: "pib", parser: v => parseFloat(v.toString().replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0 },
+    { id: "alf", key: "alf", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0 },
+    { id: "den", key: "den", parser: v => parseFloat(v.toString().replace('.','').replace(',','.').replace(/[^0-9.]/g,'')) || 0 }, 
+    { id: "bf", key: "bf", parser: v => parseInt(v.toString().replace(/[^0-9]/g,'')) || 0 },
+    { id: "agu", key: "agu", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0 },
+    { id: "esg", key: "esg", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0 },
+    { id: "gra", key: "gra", parser: v => parseFloat(v.toString().replace(',','.').replace(/[^0-9.]/g,'')) || 0 }
   ];
 
   metrics.forEach(m => {
