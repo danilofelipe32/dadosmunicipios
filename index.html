@@ -6079,7 +6079,7 @@ function runPredictiveAnalysis() {
 // EXPORTAÇÃO DE BASE HISTÓRICA CSV
 // ════════════════════════════════════════════════════════════
 function exportDataCSV() {
-  let csvContent = "Ano,Municipio,Populacao,Domicilios,Densidade,IDHM,PIB_Per_Capita,Alfabetismo,Agua_Tratada,Esgotamento,Bolsa_Familia,Gravidez_Adolescencia,Evasao_Escolar,Letalidade,IVJ,Alunos_NEE,Alunos_EJA,Fonte\n";
+  let csvContent = "Ano;Municipio;Populacao;Domicilios;Densidade;IDHM;PIB_Per_Capita;Alfabetismo;Agua_Tratada;Esgotamento;Bolsa_Familia;Gravidez_Adolescencia;Evasao_Escolar;Letalidade;IVJ;Alunos_NEE;Alunos_EJA;Fonte\n";
   const anos = ["2018", "2020", "2022", "2024", "2026", "2028", "2030"];
   
   Object.keys(DB).forEach(cityName => {
@@ -6106,12 +6106,12 @@ function exportDataCSV() {
           const fonte = parseInt(ano) <= 2022 ? "Censo IBGE / Oficiais" : "Projecao SocioDash";
           
           const row = [
-            ano, cityName,
+            ano, `"${cityName}"`,
             `"${pop}"`, `"${dom}"`, `"${den}"`, `"${idh}"`, `"${pib}"`, `"${alf}"`, `"${agu}"`, `"${esg}"`, 
             `"${bf}"`, `"${gra}"`, `"${evasao}"`, `"${letal}"`, `"${ivj}"`, `"${nee}"`, `"${eja}"`,
             `"${fonte}"`
           ];
-          csvContent += row.join(",") + "\n";
+          csvContent += row.join(";") + "\n";
         }
       });
     }
