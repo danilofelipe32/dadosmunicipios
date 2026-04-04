@@ -1655,7 +1655,8 @@
       <span class="badge" style="margin-left:10px;font-size:0.6rem;background:rgba(108,99,255,0.15);color:#a59bff;border:1px solid rgba(108,99,255,0.3);">Regressão Linear Local</span>
     </div>
     
-    <div class="exec-card" style="border-left-color: #a59bff; display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+    <div class="exec-card" style="border-left-color: #a59bff; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; position: relative;">
+      <div class="info-btn" onclick="showInsight('predictive')">i</div>
       <div style="flex: 1.5; min-width: 250px;">
         <h3 style="color:#fff; margin-bottom:10px; font-size:1.1rem;">Motor Matemático Embarcado</h3>
         <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-bottom:15px; max-width: 90%;">
@@ -3196,6 +3197,11 @@ const InsightsDB = {
     t: "Ranking de Maturidade Regional",
     d: "Este ranking posiciona o município entre os 12 analisados na região, utilizando o Score SocioDash™ como critério de ordenação. O percentil de performance indica a porcentagem de municípios que possuem uma nota inferior à da cidade selecionada.",
     i: "A posição no ranking reflete o nível de competitividade territorial e ajuda a identificar onde o município se destaca na região."
+  },
+  predictive: {
+    t: "Análise Preditiva de Tendências",
+    d: "O módulo preditivo realiza cálculos matemáticos rodando localmente (sem depender de servidor externo). Utiliza o método de Regressão Linear (Equação da Reta) com Mínimos Quadrados. O 'R²' indica a confiabilidade da projeção: quanto mais próximo de 100%, mais linear e previsível tem sido o histórico do município.",
+    i: "Utilize esse dado para orçamentação e planejamento governamental: ao prever a tendência do próximo ano, a gestão pode se preparar para alocar recursos onde se mostrarem mais necessários (ex: se o saneamento aponta queda)."
   },
   comp: {
     t: "Comparativo de Performance Territorial",
