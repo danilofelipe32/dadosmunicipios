@@ -5734,6 +5734,7 @@ function renderPriorityMatrix(cityId, year) {
   const ctx = document.getElementById('cPriorityMatrix');
   if (!ctx) return;
 
+  const isMobile = window.innerWidth < 768;
   const cityData = DB[cityId];
   const d = (cityData.history && cityData.history[year]) ? cityData.history[year] : cityData;
 
@@ -5762,8 +5763,9 @@ function renderPriorityMatrix(cityId, year) {
   const impIvj  = 6.5;  // Segurança afeta Renda e Educação indiretamente
   const impGra  = 7.8;  // Gravidez na adolescência impacta fortemente Educação
 
-  // Tamanho das bolhas = ROI proporcional (Impacto × Urgência / 10)
-  const sizeOf = (imp, urg) => Math.max(8, imp * parseFloat(urg) * 0.7);
+  // Tamanho das bolhas = ROI proporcional (Impacto × Urgência) calibrado p/ tela
+  const bubbleScale = isMobile ? 0.38 : 0.7;
+  const sizeOf = (imp, urg) => Math.max(isMobile ? 5 : 8, imp * parseFloat(urg) * bubbleScale);
 
   const indicators = [
     { label: 'Esgotamento Sanitário', urgency: parseFloat(urgEsg), impact: impEsg, size: sizeOf(impEsg, urgEsg),
@@ -5833,7 +5835,6 @@ function renderPriorityMatrix(cityId, year) {
     }
   };
 
-  const isMobile = window.innerWidth < 768;
 
   if (activeChartPriority) activeChartPriority.destroy();
   activeChartPriority = new Chart(ctx, {
