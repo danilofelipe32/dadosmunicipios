@@ -1618,7 +1618,8 @@
       Onde investir primeiro? O sistema cruza <strong style="color:#fff">Impacto no IDHM</strong> vs. <strong style="color:#fff">Urgência Crítica</strong> para calcular a equação ótima de alocação de recursos públicos.
     </p>
 
-    <div class="priority-section-wrap">
+    <div class="priority-section-wrap" style="position:relative;">
+      <div class="info-btn" onclick="showInsight('matrix')">i</div>
       <!-- GRÁFICO DE QUADRANTES -->
       <div class="priority-matrix-container">
         <div class="priority-canvas-wrap" style="position:relative; flex:1;">
@@ -3202,6 +3203,11 @@ const InsightsDB = {
     t: "Análise Preditiva de Tendências",
     d: "O módulo preditivo realiza cálculos matemáticos rodando localmente (sem depender de servidor externo). Utiliza o método de Regressão Linear (Equação da Reta) com Mínimos Quadrados. O 'R²' indica a confiabilidade da projeção: quanto mais próximo de 100%, mais linear e previsível tem sido o histórico do município.",
     i: "Utilize esse dado para orçamentação e planejamento governamental: ao prever a tendência do próximo ano, a gestão pode se preparar para alocar recursos onde se mostrarem mais necessários (ex: se o saneamento aponta queda)."
+  },
+  matrix: {
+    t: "Matriz de Priorização Orçamentária",
+    d: "Um quadrante de Decision Intelligence que cruza o Eixo X (Urgência Crítica / Quão atrasado o município está) com o Eixo Y (Impacto no IDHM / Qual será a melhora global). Quanto mais à direita e acima um indicador estiver, maior a sua prioridade técnica de investimento.",
+    i: "A barra de 'Ação Imediata' indica problemas como baixíssimo Esgotamento Sanitário em áreas sensíveis. Olhar para a matriz antes de definir o orçamento evita desperdício de recursos públicos em ações de baixo impacto estrutural."
   },
   comp: {
     t: "Comparativo de Performance Territorial",
