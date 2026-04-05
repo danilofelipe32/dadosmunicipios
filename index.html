@@ -1122,9 +1122,15 @@
   /* ── IVJ SECTION ───────────────────────────────────────── */
   .ivj-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
     margin-bottom: 28px;
+  }
+  @media (max-width: 1200px) {
+    .ivj-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .ivj-grid { grid-template-columns: 1fr; }
   }
   .ivj-card {
     background: linear-gradient(135deg, rgba(255,77,109,0.06), rgba(255,184,48,0.03));
@@ -2265,6 +2271,18 @@
         <span class="badge b-danger" style="font-size:0.65rem;">🔴 Acima da média nacional</span>
       </div>
     </div>
+
+    <!-- Novo Card: Violência Contra a Mulher (VCM) -->
+    <div class="ivj-card" style="position:relative; background: linear-gradient(135deg, rgba(165,155,255,0.06), rgba(108,99,255,0.03)); border-color: rgba(108,99,255,0.25);">
+      <div class="info-btn" onclick="showInsight('vcm')" style="background:rgba(108,99,255,0.1);border-color:rgba(108,99,255,0.3);">i</div>
+      <div class="ivj-card-label" style="color: #a59bff;">💜 Violência Contra a Mulher (VCM)</div>
+      <div class="ivj-card-val t-blue" id="ivj-vcm-medidas">-</div>
+      <div class="ivj-card-sub">Medidas Protetivas Solicitadas (Anual)</div>
+      <div style="margin-top:14px; font-size: 0.72rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; font-weight: 600;">
+        <span id="ivj-vcm-deam-icon">🏢</span> <span id="ivj-vcm-deam-text">Delegacia da Mulher (DEAM): -</span>
+      </div>
+      <div class="kpi-src" style="margin-top:12px;">FBSP / IBGE Munic / TJ-RN</div>
+    </div>
   </div>
 
   <!-- Insight contextual IVJ -->
@@ -2625,9 +2643,9 @@ const CLUSTER_INSIGHTS = {
 
 const DB = {
   "Parnamirim": {
-    pop:"252.716", dom:"116.679", idh:"0,766", pib:"R$ 30.107,02", alf:"94,9%", den:"2.037,9", bf:"21.600", agu:"94,7%", esg:"7,1%", gra:"20,7%",
+    pop:"252.716", dom:"116.679", idh:"0,766", pib:"R$ 30.107,02", alf:"94,9%", den:"2.037,9", bf:"21.600", agu:"94,7%", esg:"7,1%", gra:"20,7%", vcm_medidas: 1245, vcm_deam: "Sim (DEAM)",
     ivj: 6.81, ivj_trend: "down", ivj_trend_text: "↓ Redução de 5% (2021 vs 2019)", evasao: "18%", evasao_val: 18,
-    ivj_insight: "Parnamirim concentra o maior IVJ da região (6,81), reflexo direto da violência urbana em bairros como Cohabinal e Nova Esperança, onde confrontos armados geram evasão escolar estimada em 18%. A taxa de gravidez de 20,7% supera em 48% a média nacional (14%), indicando falha sistêmica no acesso à educação sexual e saúde reprodutiva.",
+    ivj_insight: "Parnamirim concentra o maior IVJ da região (6,81) e o maior volume de Medidas Protetivas (1.245), sendo o único com DEAM. A correlação entre violência urbana e doméstica exige o fortalecimento da Patrulha Maria da Penha nos bairros Nova Esperança e Cohabinal, onde a vulnerabilidade feminina cruza com o domínio territorial de facções.",
     ts_cadunico: "116.679 domicílios. Maior polo urbano metropolitano analisado.",
     ts_bf_detalhe: "21.600 famílias (nov/2025 - Gov.br / MDS)",
     ts_desemprego: "Mercado formal em crescimento: +2.100 vagas (jan–out/2025). Saldo positivo desde 2020",
@@ -2656,7 +2674,7 @@ const DB = {
     }
   },
   "São José de Mipibu": {
-    pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%",
+    pop:"47.286", dom:"~ 16.000", idh:"0,611", pib:"R$ 23.357", alf:"84,2%", den:"162,5", bf:"~ 9.500", agu:"85,0%", esg:"~ 5,0%", gra:"~ 19,5%", vcm_medidas: 320, vcm_deam: "Não",
     ivj: 7.20, ivj_trend: "stable", ivj_trend_text: "→ Estagnado (sem redução)", evasao: "22%", evasao_val: 22,
     ivj_insight: "São José de Mipibu apresenta IVJ elevado (7,20) com estagnação no indicador. A combinação de rotas escolares rurais inseguras e alta dependência do Bolsa Família cria um ciclo onde jovens interrompem os estudos precocemente. A gravidez na adolescência (~19,5%) agrava o ciclo de pobreza intergeracional.",
     ts_cadunico: "~ 16.000 domicílios. Polo satélite agro e industrial.",
@@ -2687,7 +2705,7 @@ const DB = {
     }
   },
   "Nísia Floresta": {
-    pop:"31.942", dom:"~ 11.200", idh:"0,622", pib:"R$ 17.949", alf:"82,4%", den:"104,3", bf:"~ 7.200", agu:"79,0%", esg:"~ 3,0%", gra:"~ 18,2%",
+    pop:"31.942", dom:"~ 11.200", idh:"0,622", pib:"R$ 17.949", alf:"82,4%", den:"104,3", bf:"~ 7.200", agu:"79,0%", esg:"~ 3,0%", gra:"~ 18,2%", vcm_medidas: 215, vcm_deam: "Não",
     ivj: 7.80, ivj_trend: "up", ivj_trend_text: "↑ Agravamento (complexo carcerário)", evasao: "22%", evasao_val: 22,
     ivj_insight: "Nísia Floresta registra o IVJ mais alto da região (7,80), fortemente influenciado pela proximidade com o Complexo de Alcaçuz. A evasão escolar estimada de 22% é a maior do bloco. Crianças expostas ao ambiente prisional são recrutadas precocemente por facções, agravando a disrupção educacional.",
     ts_cadunico: "~ 11.200 domicílios. Crescimento populacional de 34% em 10 anos.",
@@ -2718,9 +2736,9 @@ const DB = {
     }
   },
   "Canguaretama": {
-    pop:"29.668", dom:"~ 10.100", idh:"0,579", pib:"R$ 20.761", alf:"78,1%", den:"120,4", bf:"~ 8.100", agu:"76,5%", esg:"~ 2,5%", gra:"~ 21,0%",
+    pop:"29.668", dom:"~ 10.100", idh:"0,579", pib:"R$ 20.761", alf:"78,1%", den:"120,4", bf:"~ 8.100", agu:"76,5%", esg:"~ 2,5%", gra:"~ 21,0%", vcm_medidas: 280, vcm_deam: "Não",
     ivj: 7.60, ivj_trend: "up", ivj_trend_text: "↑ Piora — dependência social extrema", evasao: "20%", evasao_val: 20,
-    ivj_insight: "Canguaretama tem a maior taxa de gravidez na adolescência do bloco (21%), combinada ao IVJ de 7,60. A extrema dependência do Bolsa Família expõe jovens ao aliciamento precoce. Rotas escolares controladas por facções geram absenteísmo crônico e perpetuam o ciclo de vulnerabilidade.",
+    ivj_insight: "Canguaretama apresenta IVJ crítico (7,60) e 280 medidas protetivas anuais sem DEAM local, configurando uma 'Zona de Risco Silencioso'. A extrema dependência do Bolsa Família e a gravidez adolescente (21%) indicam um ciclo de vulnerabilidade onde a ausência de rede de proteção especializada para mulheres agrava a disrupção familiar.",
     ts_cadunico: "~ 10.100 domicílios. Estruturas predominantemente carentes.",
     ts_bf_detalhe: "~ 8.100 famílias. Altíssima dependência governamental.",
     ts_desemprego: "Baixa formalidade. Usina afeta economia base.",
@@ -2749,7 +2767,7 @@ const DB = {
     }
   },
   "Goianinha": {
-    pop: "27.000", dom: "~9.200", idh: "0,640", pib: "R$ 22.100", alf: "85,5%", den: "145,2", bf: "~5.800", agu: "82,0%", esg: "8,0%", gra: "17,5%",
+    pop: "27.000", dom: "~9.200", idh: "0,640", pib: "R$ 22.100", alf: "85,5%", den: "145,2", bf: "~5.800", agu: "82,0%", esg: "8,0%", gra: "17,5%", vcm_medidas: 210, vcm_deam: "Não",
     ivj: 5.90, ivj_trend: "down", ivj_trend_text: "↓ Ligeira melhora — polo econômico", evasao: "12%", evasao_val: 12,
     ivj_insight: "Goianinha apresenta o melhor perfil do bloco (IVJ 5,90), favorecida pela atividade econômica mais dinâmica. A gravidez na adolescência (17,5%) ainda supera a média nacional. O desafio é conectar o crescimento econômico com programas de saúde reprodutiva para jovens da periferia.",
     ts_cadunico: "~9.200 domicílios. Polo dinâmico do litoral sul.",
@@ -2780,7 +2798,7 @@ const DB = {
     }
   },
   "Monte Alegre": {
-    pop:"23.031", dom:"~ 7.800", idh:"0,609", pib:"R$ 15.142", alf:"79,8%", den:"109,0", bf:"~ 4.200", agu:"74,0%", esg:"~ 3,0%", gra:"~ 16,8%",
+    pop:"23.031", dom:"~ 7.800", idh:"0,609", pib:"R$ 15.142", alf:"79,8%", den:"109,0", bf:"~ 4.200", agu:"74,0%", esg:"~ 3,0%", gra:"~ 16,8%", vcm_medidas: 95, vcm_deam: "Não",
     ivj: 6.40, ivj_trend: "stable", ivj_trend_text: "→ Estável — rural isolado", evasao: "15%", evasao_val: 15,
     ivj_insight: "Monte Alegre sofre com o isolamento geográfico que eleva a evasão escolar a 15%, especialmente em comunidades rurais remotas. O IVJ de 6,40 reflete a estagnação econômica que empurra jovens para o trabalho informal. A gravidez adolescente (16,8%) está levemente abaixo da média do bloco.",
     ts_cadunico: "~ 7.800 domicílios. Rendas entre as mais baixas do bloco.",
@@ -2811,7 +2829,7 @@ const DB = {
     }
   },
   "Tibau do Sul": {
-    pop:"16.929", dom:"~ 6.000", idh:"0,645", pib:"R$ 30.000 (est)", alf:"88,2%", den:"164,8", bf:"~ 2.500", agu:"89,0%", esg:"~ 15,0%", gra:"~ 14,0%",
+    pop:"16.929", dom:"~ 6.000", idh:"0,645", pib:"R$ 30.000 (est)", alf:"88,2%", den:"164,8", bf:"~ 2.500", agu:"89,0%", esg:"~ 15,0%", gra:"~ 14,0%", vcm_medidas: 154, vcm_deam: "Não",
     ivj: 6.10, ivj_trend: "down", ivj_trend_text: "↓ Leve queda — turismo gera oportunidades", evasao: "10%", evasao_val: 10,
     ivj_insight: "Tibau do Sul tem o paradoxo do turismo: a menor taxa de gravidez adolescente do bloco (14%, igual à nacional) e menor evasão (10%), mas o tráfico de sintéticas expõe jovens da periferia a riscos severos. O IVJ de 6,10 mascara a desigualdade brutal entre a área turística e a periferia.",
     ts_cadunico: "~ 6.000 domicílios. Turismo fortíssimo (Pipa).",
@@ -2842,7 +2860,7 @@ const DB = {
     }
   },
   "Arez": {
-    pop:"13.251", dom:"~ 4.500", idh:"0,606", pib:"R$ 15.000 (est)", alf:"77,5%", den:"114,8", bf:"~ 2.800", agu:"70,0%", esg:"~ 2,0%", gra:"~ 18,0%",
+    pop:"13.251", dom:"~ 4.500", idh:"0,606", pib:"R$ 15.000 (est)", alf:"77,5%", den:"114,8", bf:"~ 2.800", agu:"70,0%", esg:"~ 2,0%", gra:"~ 18,0%", vcm_medidas: 85, vcm_deam: "Não",
     ivj: 6.90, ivj_trend: "up", ivj_trend_text: "↑ Piora — ações orquestradas de facções", evasao: "17%", evasao_val: 17,
     ivj_insight: "Arez tem IVJ agravado (6,90) pelas ações coordenadas do SDC, que afetaram a infraestrutura pública e aumentaram o clima de insegurança. Crianças que trabalham como olheiros para o tráfico geram evasão de 17%. A gravidez adolescente (18%) agrava a ruptura do ciclo educacional.",
     ts_cadunico: "~ 4.500 domicílios. Economia fragilizada.",
@@ -2873,7 +2891,7 @@ const DB = {
     }
   },
   "Vera Cruz": {
-    pop:"10.735", dom:"~ 3.600", idh:"0,587", pib:"R$ 10.436", alf:"75,2%", den:"127,6", bf:"~ 2.400", agu:"68,0%", esg:"< 2,0%", gra:"~ 19,0%",
+    pop:"10.735", dom:"~ 3.600", idh:"0,587", pib:"R$ 10.436", alf:"75,2%", den:"127,6", bf:"~ 2.400", agu:"68,0%", esg:"< 2,0%", gra:"~ 19,0%", vcm_medidas: 62, vcm_deam: "Não",
     ivj: 7.10, ivj_trend: "up", ivj_trend_text: "↑ Piora — menor PIB do bloco", evasao: "12%", evasao_val: 12,
     ivj_insight: "Vera Cruz tem IVJ de 7,10, reflexo direto da maior miséria econômica do bloco (menor PIB per capita). Mesmo sem violência armada intensa, a invisibilidade infraestrutural e a ausência de oportunidades são fatores críticos. A gravidez adolescente (19%) indica ausência total de políticas de saúde reprodutiva.",
     ts_cadunico: "~ 3.600 domicílios. Menor PIB per capita diagnosticado.",
@@ -2904,7 +2922,7 @@ const DB = {
     }
   },
   "Baía Formosa": {
-    pop:"8.824", dom:"~ 3.000", idh:"0,609", pib:"R$ 38.064", alf:"84,0%", den:"35,6", bf:"~ 1.800", agu:"75,0%", esg:"~ 5,0%", gra:"~ 16,5%",
+    pop:"8.824", dom:"~ 3.000", idh:"0,609", pib:"R$ 38.064", alf:"84,0%", den:"35,6", bf:"~ 1.800", agu:"75,0%", esg:"~ 5,0%", gra:"~ 16,5%", vcm_medidas: 45, vcm_deam: "Não",
     ivj: 5.80, ivj_trend: "down", ivj_trend_text: "↓ Melhora — menor IVJ do bloco", evasao: "11%", evasao_val: 11,
     ivj_insight: "Baía Formosa tem o menor IVJ do bloco (5,80), beneficiada pelo PIB per capita mais alto e pela menor densidade populacional. A gravidez adolescente (16,5%) ainda é um alerta. O risco de expansão das facções pelo litoral pode reverter as melhorias conquistadas se não houver intervenção antecipada.",
     ts_cadunico: "~ 3.000 domicílios. Baixa densidade demográfica.",
@@ -2935,7 +2953,7 @@ const DB = {
     }
   },
   "Senador G. Avelino": {
-    pop:"4.065", dom:"~ 1.400", idh:"0,570", pib:"R$ 13.500", alf:"73,5%", den:"155,7", bf:"~ 1.100", agu:"65,0%", esg:"< 1,0%", gra:"~ 20,0%",
+    pop:"4.065", dom:"~ 1.400", idh:"0,570", pib:"R$ 13.500", alf:"73,5%", den:"155,7", bf:"~ 1.100", agu:"65,0%", esg:"< 1,0%", gra:"~ 20,0%", vcm_medidas: 35, vcm_deam: "Não",
     ivj: 6.70, ivj_trend: "stable", ivj_trend_text: "→ Estável — carência estrutural severa", evasao: "16%", evasao_val: 16,
     ivj_insight: "Senador Georgino Avelino tem IVJ de 6,70 impulsionado pela pobreza extrema (IDHM 0,570, o menor da região). A gravidez adolescente de 20% e evasão de 16% refletem a ausência de equipamentos públicos de saúde e educação. Apesar da baixa violência, a vulnerabilidade social é crítica.",
     ts_cadunico: "~ 1.400 domicílios. Menor extensão territorial do RN.",
@@ -4356,6 +4374,8 @@ function generateABNTReport() {
     <p>CONFEDERAÇÃO NACIONAL DE MUNICÍPIOS (CNM). <b>Portal Municipal</b>. Brasília, 2024.</p>
     <p>PROGRAMA DAS NAÇÕES UNIDAS PARA O DESENVOLVIMENTO (PNUD). <b>Índice de Desenvolvimento Humano Municipal</b>, 2021.</p>
     <p>RIO GRANDE DO NORTE. Secretaria de Segurança Pública e Defesa Social (SESED). <b>Relatórios de Crimes Violentos Letais Intencionais</b>. Natal, 2024.</p>
+    <p>FÓRUM BRASILEIRO DE SEGURANÇA PÚBLICA (FBSP). <b>Anuário Brasileiro de Segurança Pública</b>. São Paulo, 2024.</p>
+    <p>INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA (IBGE). <b>Perfil dos Municípios Brasileiros (MUNIC)</b>. Rio de Janeiro: IBGE, 2023.</p>
   `;
   content.appendChild(texto);
 
@@ -4433,9 +4453,21 @@ function selectCity(cityId) {
   else if (evasaoN <= 15) { evasaoTrend.className = 'ivj-trend stable'; evasaoTrend.innerText = '→ Acima da meta estadual (8%)'; }
   else { evasaoTrend.className = 'ivj-trend up'; evasaoTrend.innerText = '↑ Crítico: muito acima da meta (8%)'; }
 
-  document.getElementById('ivj-gra2').innerText = d.gra;
-  const graVal = parseFloat((d.gra || '0').replace(/[^0-9.]/g, '')) || 0;
   document.getElementById('ivj-gra-bar').style.width = Math.min(graVal * 3.5, 100) + '%';
+
+  // Update VCM Data
+  document.getElementById('ivj-vcm-medidas').innerText = d.vcm_medidas || '0';
+  const deamText = document.getElementById('ivj-vcm-deam-text');
+  const deamIcon = document.getElementById('ivj-vcm-deam-icon');
+  if (d.vcm_deam === 'Sim (DEAM)' || d.vcm_deam === 'Sim') {
+    deamText.innerText = 'Delegacia da Mulher (DEAM): PRESENTE';
+    deamText.style.color = '#00e5a0';
+    deamIcon.innerText = '✅';
+  } else {
+    deamText.innerText = 'Delegacia da Mulher (DEAM): NÃO DISPONÍVEL';
+    deamText.style.color = '#ff4d6d';
+    deamIcon.innerText = '❌';
+  }
 
   // Assistência Social
   if (d.as) {
