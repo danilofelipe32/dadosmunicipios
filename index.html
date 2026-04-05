@@ -4568,7 +4568,6 @@ function renderSparklines(cityId, currentYear) {
   if (!d.history) return;
 
   const years = ["2018", "2020", "2022", "2024", "2026", "2028", "2030"];
-  const upToYear = years.filter(y => parseInt(y) <= parseInt(currentYear));
 
   const metrics = [
     { id: "pop", key: "pop", parser: v => parseInt(v.toString().replace(/[^0-9]/g, '')) || 0 },
@@ -4588,14 +4587,14 @@ function renderSparklines(cityId, currentYear) {
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    const data = upToYear.map(y => m.parser(d.history[y][m.key] || "0"));
+    const data = years.map(y => m.parser(d.history[y][m.key] || "0"));
 
     if (activeSparklines[m.id]) activeSparklines[m.id].destroy();
 
     activeSparklines[m.id] = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: upToYear,
+        labels: years,
         datasets: [{
           data: data,
           borderColor: '#a59bff',
@@ -4610,7 +4609,8 @@ function renderSparklines(cityId, currentYear) {
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { enabled: false } },
-        scales: { x: { display: false }, y: { display: false } }
+        scales: { x: { display: false }, y: { display: false } },
+        layout: { padding: { top: 4, bottom: 4 } }
       }
     });
   });
